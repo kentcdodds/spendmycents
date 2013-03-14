@@ -8,7 +8,8 @@ var express = require('express')
   , products = require('./routes/products')
   , user = require('./routes/user')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , config = require('./config');
 
 var app = express();
 

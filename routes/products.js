@@ -1,5 +1,5 @@
-exports.search = function(req, res){
-	
+exports.search = function(req, res) {
+
   OperationHelper = require('apac').OperationHelper;
 
   var opHelper = new OperationHelper({
@@ -9,10 +9,10 @@ exports.search = function(req, res){
   });
 
   opHelper.execute('ItemSearch', {
-      'SearchIndex': 'All',
-      'Keywords': ' ',
-      'MaximumPrice': 12.50,
-      'MinimumPrice': 11.50,
+      'SearchIndex': req.query.searchIndex || 'All',
+      'Keywords': req.query.keywords || ' ',
+      'MaximumPrice': req.query.maxPrice || 10,
+      'MinimumPrice': req.query.minPrice || 0,
       'ResponseGroup': 'Medium'
   }, function(error, results) {
       if (error) {
