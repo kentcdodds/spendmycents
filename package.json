@@ -11,6 +11,7 @@
     "jade": "*",
     "stylus": "*",
     "passport": "*",
-    "apac": "*"
+    "apac": "*",
+    "passport-facebook": "*"
   }
 }
