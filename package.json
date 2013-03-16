@@ -12,6 +12,8 @@
     "stylus": "*",
     "passport": "*",
     "apac": "*",
-    "passport-facebook": "*"
+    "passport-facebook": "*",
+    "passport-twitter": "*",
+    "passport-google-oauth": "*"
   }
 }
