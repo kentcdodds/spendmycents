@@ -21,7 +21,7 @@ var app = express();
 app.configure(function(){
   var onLocalHost = !process.env.ENVIRONMENT;
   if (onLocalHost) {
-    require('./config').env.setupEnvironmentVariables();
+    require('./config.local').env.setupEnvironmentVariables();
   }
 
   app.set('port', process.env.PORT || 3000);
