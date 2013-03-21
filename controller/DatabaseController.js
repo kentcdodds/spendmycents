@@ -4,24 +4,28 @@ var DatabaseController = function() {
 
   var createClient = function() {
 
-    var services = JSON.parse(process.env.VCAP_SERVICES);
-    var dbInfo = services['mongodb-1.8'][0];
-    var server = new mongo.Server(dbInfo.credentials.host, dbInfo.credentials.port,  {auto_reconnect: false});
-    var client = new mongo.Db(dbInfo.name, server, {w:1, strict: true});
+    var services = JSON.parse(process.env.VCAP_SERVICES)
+    , dbInfo = services['mongodb-1.8'][0]
+    , server = new mongo.Server(dbInfo.credentials.host, dbInfo.credentials.port,  {auto_reconnect: false})
+    , client = new mongo.Db(dbInfo.name, server, {w:1, strict: true})
+    , openConnectionToCollection
+    , getOrCreateClient
+    , findOneObject
+    , testDB;
 
     // instanceClient.authenticate(dbInfo.credentials.username, dbInfo.credentials.password, null);
 
     return client;
   };
 
-  var getOrCreateClient = function() {
+  getOrCreateClient = function() {
     if (!this.instanceClient) {
         this.instanceClient = createClient();
     }
     return this.instanceClient;
   };
 
-  var testDB = function(req, res) {
+  testDB = function(req, res) {
     var client = getOrCreateClient();
     res.write('Client received\n\n');
     if (client) {
@@ -55,7 +59,7 @@ var DatabaseController = function() {
     }
   };
 
-  var openConnectionToCollection = function(collectionName, callback) {
+  openConnectionToCollection = function(collectionName, callback) {
     if (!collectionName) {
       throw 'collectionName must be defined!';
     }
@@ -66,7 +70,16 @@ var DatabaseController = function() {
       }
       callback(new mongo.Collection(client, collectionName));
     });
-  }
+  };
+
+  findOneObject = function(collectionName, query, callback) {
+    openConnectionToCollection(collectionName, function(collection) {
+      collection.findOne(query, function(error, doc) {
+        collection.db.close();
+        callback(error, doc);
+      });
+    });
+  };
 
   return {
     findAll: function(collectionName, callback) {
@@ -85,13 +98,11 @@ var DatabaseController = function() {
         });
       });
     },
-    findOneObject: function(collectionName, query, callback) {
-      openConnectionToCollection(collectionName, function(collection) {
-        collection.findOne(query, function(error, doc) {
-          collection.db.close();
-          callback(error, doc);
-        });
-      });
+    findOneObjectById: function(collectionName, idString, callback) {
+      findOneObject(collectionName, {_id: new mongo.ObjectID(idString)}, callback);
+    },
+    findOneObjectByQuery: function(collectionName, query, callback) {
+      findOneObject(collectionName, query, callback);
     },
     deleteObject: function(collectionName, query, callback) {
       openConnectionToCollection(collectionName, function(collection) {
