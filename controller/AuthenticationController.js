@@ -21,45 +21,7 @@ AuthenticationController = {
       });
     });
   },
- 
-  authenticate: function(req, res) {
-    var authFunction = authenticateTo[req.params.provider];
-    if (authFunction) {
-      authFunction(req, res);
-    }
-  },
- 
-  callback: function(req, res) {
-    var callbackFunction = callbackFrom[req.params.provider];
-    if (callbackFunction) {
-      callbackFunction(req, res);
-    }
-  }
-
-}
-
-authenticateTo = {
-  facebook: function(req, res) {
-    passport.authenticate('facebook');
-  },
-  
-  twitter: function(req, res) {
-
-  },
-  
-  google: function(req, res) {
-
-  }
 };
-
-callbackFrom = {
-  facebook: function(req, res) {
-    passport.authenticate('facebook', {
-        successRedirect: '/',
-        failureRedirect: '/'
-      });
-  }
-}
 
 configure = {
   facebook: function() {
