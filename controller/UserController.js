@@ -13,7 +13,7 @@ var UserController
   findUserWithProviderId = function(profile, callback) {
     var query = {};
     query[profile.provider + 'Id'] = profile.id;
-    DatabaseController.findOneObject(userCollectionName, query, callback);
+    DatabaseController.findOneObjectByQuery(userCollectionName, query, callback);
   };
 
   createNewUser = function(profile, callback) {
@@ -22,6 +22,7 @@ var UserController
       , (profile.provider.toLowerCase() === 'facebook' ? profile.id : null)
       , (profile.provider.toLowerCase() === 'twitter' ? profile.id : null)
       , (profile.provider.toLowerCase() === 'google' ? profile.id : null)
+      , 'user'
     );
     DatabaseController.saveObject(userCollectionName, user, callback);
   };
@@ -37,10 +38,14 @@ var UserController
   };
 
   findUserById = function(id, callback) {
-    DatabaseController.findOneObject(userCollectionName, {_id: id}, callback);
+    DatabaseController.findOneObjectById(userCollectionName, id, callback);
   }
 
   return {
+
+    getMe: function(req, res) {
+      res.json(req.user);
+    },
 
     getAllUsers: function(req, res) {
       DatabaseController.findAll(userCollectionName, function(error, results) {
@@ -50,10 +55,6 @@ var UserController
 
     getUser: function(req, res) {
       findUserById(req.params.id, function(error, user) {
-        console.log(JSON.stringify({
-          error: error,
-          user: user
-        }, null, 2));
         if (error || !user) {
           res.json(500, {
             msg: 'There was an error getting user with id: ' + req.params.id,
