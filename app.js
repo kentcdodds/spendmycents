@@ -15,6 +15,12 @@ var express = require('express')
 
   , AuthenticationRoutes = require('./routes/AuthenticationRoutes')
   , AuthenticationController = require('./controller/AuthenticationController')
+
+  , DatabaseRoutes = require('./routes/DatabaseRoutes')
+  , DatabaseController = require('./controller/DatabaseController')
+
+  , UserRoutes = require('./routes/UserRoutes')
+  , UserController = require('./controller/UserController')
   ;
 var app = express();
 
@@ -56,6 +62,8 @@ app.configure('development', function(){
 app.get('/', routes.index);
 ProductRoutes.setupRoutes(app, ProductController);
 AuthenticationRoutes.setupRoutes(app);
+DatabaseRoutes.setupRoutes(app);
+UserRoutes.setupRoutes(app);
 
 /*
  * Configure authentication

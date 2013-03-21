@@ -12,16 +12,16 @@ AuthenticationController = {
     configure.google();
 
     passport.serializeUser(function(user, done) {
-      done(null, user.id);
+      done(null, user._id);
     });
 
     passport.deserializeUser(function(id, done) {
-      UserController.findById(id, function(err, user) {
-        done(err, user);
+      UserController.findById(id, function(error, user) {
+        done(error, user);
       });
     });
   },
-
+ 
   authenticate: function(req, res) {
     var authFunction = authenticateTo[req.params.provider];
     if (authFunction) {
@@ -30,7 +30,6 @@ AuthenticationController = {
   },
  
   callback: function(req, res) {
-    res.send('hello');
     var callbackFunction = callbackFrom[req.params.provider];
     if (callbackFunction) {
       callbackFunction(req, res);
@@ -71,8 +70,11 @@ configure = {
         callbackURL: process.env.BASE_URL + "/auth/facebook/callback"
       },
       function(accessToken, refreshToken, profile, done) {
-        UserController.findOrCreate({id: profile.id, provider: profile.provider}, function(err, user) {
-          if (err) { return done(err); }
+        UserController.handleAuthenticatedUser(profile, function(error, user) {
+          if (error) {
+            console.log('There was an error with handling a Facebook Authenticated User!');
+            return done(error);
+          }
           done(null, user);
         });
       }
@@ -88,8 +90,11 @@ configure = {
         callbackURL: process.env.BASE_URL + "/auth/twitter/callback"
       },
       function(token, tokenSecret, profile, done) {
-        UserController.findOrCreate({id: profile.id, provider: profile.provider}, function(err, user) {
-          if (err) { return done(err); }
+        UserController.handleAuthenticatedUser(profile, function(error, user) {
+          if (error) {
+            console.log('There was an error with handling a Twitter Authenticated User!');
+            return done(error);
+          }
           done(null, user);
         });
       }
@@ -105,8 +110,11 @@ configure = {
       callbackURL: process.env.BASE_URL + "/auth/google/callback"
   },
   function(token, tokenSecret, profile, done) {
-        UserController.findOrCreate({id: profile.id, provider: profile.provider}, function(err, user) {
-          if (err) { return done(err); }
+        UserController.handleAuthenticatedUser(profile, function(error, user) {
+          if (error) {
+            console.log('There was an error with handling a Google Authenticated User!');
+            return done(error);
+          }
           done(null, user);
         });
       }
