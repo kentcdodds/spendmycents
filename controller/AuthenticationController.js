@@ -22,7 +22,66 @@ AuthenticationController = {
       });
     });
   },
+
+  authenticate: function(req, res, next) {
+    var authFunction = authenticateTo[req.params.provider];
+    if (authFunction) {
+      authFunction(req, res, next);
+    } else {
+      res.send('The third-party provider "' + req.params.provider + '" is not supported');
+    }
+  },
+ 
+  callback: function(req, res, next) {
+    var callbackFunction = callbackFrom[req.params.provider];
+    if (callbackFunction) {
+      callbackFunction(req, res, next);
+    } else {
+      res.send('The third-party provider "' + req.params.provider + '" is not supported');
+    }
+  }
 };
+
+authenticateTo = {
+  facebook: function(req, res, next) {
+    passport.authenticate('facebook')(req, res, next);
+  },
+  
+  twitter: function(req, res, next) {
+    passport.authenticate('twitter')(req, res, next);
+  },
+  
+  google: function(req, res, next) {
+    passport.authenticate('google', {
+      scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+      ]
+    })(req, res, next);
+  }
+};
+
+callbackFrom = {
+  facebook: function(req, res, next) {
+    passport.authenticate('facebook', {
+        successRedirect: '/facebook-success',
+        failureRedirect: '/facebook-failure'
+      })(req, res, next);
+  },
+  twitter: function(req, res, next) {
+    passport.authenticate('twitter', {
+        successRedirect: '/twitter-success',
+        failureRedirect: '/twitter-failure'
+      })(req, res, next);
+  },
+  google: function(req, res, next) {
+    passport.authenticate('google', {
+        successRedirect: '/google-success',
+        failureRedirect: '/google-failure'
+      })(req, res, next);
+  }
+}
+
 
 handleAuthenticatedUser = function(accessToken, refreshToken, profile, done) {
   UserController.handleAuthenticatedUser(profile, function(error, user) {
