@@ -91,14 +91,14 @@ var UserController
     },
 
     deleteUser: function(req, res) {
-      DatabaseController.deleteObject(userCollectionName, res.params.id, function(error, object) {
+      DatabaseController.deleteObjectById(userCollectionName, req.params.id, function(error, numberRemoved) {
         if (error) {
           res.json(500, {
-            msg: 'There was an error deleting user with id ' + res.params.id,
+            msg: 'There was an error deleting user with id ' + req.params.id,
             error: error
           });
         } else {
-          res.json({response: 'Success deleting user with id ' + res.params.id});
+          res.json({response: 'Success deleting user with id ' + req.params.id});
         }
       });
     }

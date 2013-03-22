@@ -3,7 +3,8 @@ var DatabaseController = function() {
   , mongo = require('mongodb')
   , openConnectionToCollection
   , getOrCreateClient
-  , findOneObject;
+  , findOneObject
+  , deleteObjectByQuery;
 
   var createClient = function() {
 
@@ -46,6 +47,15 @@ var DatabaseController = function() {
     });
   };
 
+  deleteObjectByQuery = function(collectionName, query, callback) {
+    openConnectionToCollection(collectionName, function(collection) {
+      collection.remove(query, {save: true}, function(error, numberRemoved) {
+        collection.db.close();
+        callback(error, numberRemoved);
+      });
+    });
+  };
+
   return {
     findAll: function(collectionName, callback) {
       openConnectionToCollection(collectionName, function(collection) {
@@ -69,17 +79,8 @@ var DatabaseController = function() {
     findOneObjectByQuery: function(collectionName, query, callback) {
       findOneObject(collectionName, query, callback);
     },
-    deleteObject: function(collectionName, query, callback) {
-      openConnectionToCollection(collectionName, function(collection) {
-        collection.findAndModify({
-          query: query,
-          remove: true,
-          callback: function(err, doc) {
-            collection.db.close();
-            callback(err, doc);
-          }
-        });
-      });
+    deleteObjectById: function(collectionName, idString, callback) {
+      deleteObjectByQuery(collectionName, {_id: new mongo.ObjectID(idString)}, callback);
     }
   };
 }();
