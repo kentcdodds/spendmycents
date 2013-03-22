@@ -32,7 +32,10 @@ var UserController
       if (!user) {
         createNewUser(profile, callback);
       } else {
-        callback(error, user);
+        user.lastLogin = new Date();
+        DatabaseController.saveObject(userCollectionName, user, function(error, updatedUser) {
+          callback(error, user);
+        });
       }
     });
   };
