@@ -19,9 +19,9 @@ var UserController
   createNewUser = function(profile, callback) {
     var user = new User(
       profile.displayName
-      , (profile.provider.toLowerCase() === 'facebook' ? profile.id : null)
-      , (profile.provider.toLowerCase() === 'twitter' ? profile.id : null)
-      , (profile.provider.toLowerCase() === 'google' ? profile.id : null)
+      , (profile.provider.toLowerCase() === 'facebook' ? profile.id.toString() : null)
+      , (profile.provider.toLowerCase() === 'twitter' ? profile.id.toString() : null)
+      , (profile.provider.toLowerCase() === 'google' ? profile.id.toString() : null)
       , 'user'
     );
     DatabaseController.saveObject(userCollectionName, user, callback);
