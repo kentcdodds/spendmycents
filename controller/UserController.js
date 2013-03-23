@@ -1,28 +1,32 @@
-var UserController
-, User = require('../model/User')
-, DatabaseController = require('./DatabaseController');
+var UserController,
+  User = require('../model/User')
+  , DatabaseController = require('./DatabaseController');
 
- UserController = (function() {
+UserController = (function() {
 
   var findUserWithProviderId
-  , createNewUser
-  , findOrCreateUserWithProviderId
-  , findUserById
-  , userCollectionName = 'SMC_USER';
+    , createNewUser
+    , findUserById
+    , userCollectionName = 'SMC_USER';
 
   findUserWithProviderId = function(profile, callback) {
     var query = {};
     query[profile.provider + 'Id'] = profile.id;
-    DatabaseController.findOneObjectByQuery(userCollectionName, query, callback);
+    DatabaseController.findOneObjectByQuery(userCollectionName, query, function(error, doc) {
+      var user = (doc ? new User(doc) : null);
+      callback(error, user);
+    });
   };
 
   createNewUser = function(profile, callback) {
     var user = new User(
-      profile.displayName
-      , (profile.provider.toLowerCase() === 'facebook' ? profile.id.toString() : null)
-      , (profile.provider.toLowerCase() === 'twitter' ? profile.id.toString() : null)
-      , (profile.provider.toLowerCase() === 'google' ? profile.id.toString() : null)
-      , 'user'
+      {
+        name: profile.displayName,
+        emails: (profile.emails && profile.emails[0] ? profile.emails : null),
+        facebookId: (profile.provider.toLowerCase() === 'facebook' ? profile.id.toString() : null),
+        twitterId: (profile.provider.toLowerCase() === 'twitter' ? profile.id.toString() : null),
+        googleId: (profile.provider.toLowerCase() === 'google' ? profile.id.toString() : null)
+      }
     );
     DatabaseController.saveObject(userCollectionName, user, callback);
   };
@@ -41,21 +45,21 @@ var UserController
   };
 
   findUserById = function(id, callback) {
-    DatabaseController.findOneObjectById(userCollectionName, id, callback);
+    DatabaseController.findOneObjectById(userCollectionName, id, function(error, doc) {
+      var user = new User(doc);
+      callback(error, user);
+    });
   }
 
   return {
-
     getMe: function(req, res) {
       res.json(req.user);
     },
-
     getAllUsers: function(req, res) {
       DatabaseController.findAll(userCollectionName, function(error, results) {
         res.json(results);
       });
     },
-
     getUser: function(req, res) {
       findUserById(req.params.id, function(error, user) {
         if (error || !user) {
@@ -69,27 +73,18 @@ var UserController
         }
       });
     },
-
     handleAuthenticatedUser: function(profile, callback) {
       findOrCreateUser(profile, callback);
     },
-
     findById: function(id, callback) {
       findUserById(id, callback);
     },
-
     saveUser: function(req, res) {
-      var user = new User({
-          name: req.body.name,
-          facebookId: req.body.facebookId,
-          twitterId: req.body.twitterId,
-          googleId: req.body.googleId
-        });
+      var user = new User(req.body);
       findOrCreateUser(user, function(error, newUser) {
         res.json(newUser);
       })
     },
-
     deleteUser: function(req, res) {
       DatabaseController.deleteObjectById(userCollectionName, req.params.id, function(error, numberRemoved) {
         if (error) {

@@ -15,6 +15,7 @@
     "passport-facebook": "*",
     "passport-twitter": "*",
     "passport-google-oauth": "*",
-    "mongodb": "*"
+    "mongodb": "*",
+    "jquery": "*"
   }
 }

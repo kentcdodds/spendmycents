@@ -1,31 +1,38 @@
-var ProductController = {
+var ProductController = (function() {
 
-  get: function(req, res) {
+  var OperationHelper = require('apac').OperationHelper
+    , ErrorController = require('./ErrorController')
+    , instanceOpHelper
+    , getOpHelper;
 
-    OperationHelper = require('apac').OperationHelper;
-
-    var opHelper = new OperationHelper({
+  getOpHelper = function() {
+    if (!instanceOpHelper) {
+      instanceOpHelper = new OperationHelper({
         awsId: process.env.AMZ_ACCESS_KEY_CODE,
         awsSecret: process.env.AMZ_SECRET_ACCESS_KEY,
         assocId: process.env.AMZ_ASSOCIATE_ID
-    });
-
-    opHelper.execute('ItemSearch', {
-        'SearchIndex': req.query.searchIndex || 'All',
-        'Keywords': req.query.keywords || ' ',
-        'MaximumPrice': req.query.price || req.query.maxPrice || req.query.minPrice || 1000,
-        'MinimumPrice': req.query.price || req.query.minPrice || req.query.maxPrice || 1000,
-        'ResponseGroup': req.query.responseGroup || 'Small,OfferSummary'
-    }, function(error, results) {
-        if (error) {
-         res.json(500, {
-          error: "Something weird happened!",
-          message: error
-        });
-       }
-       res.send(results);
-    });
+      });
+    }
+    return instanceOpHelper;
   }
-};
+
+  return {
+    getProducts: function(req, res) {
+      getOpHelper().execute('ItemSearch', {
+        SearchIndex: req.query.searchIndex || 'All',
+        Keywords: req.query.keywords || ' ',
+        MaximumPrice: req.query.price || req.query.maxPrice || req.query.minPrice || 1000,
+        MinimumPrice: req.query.price || req.query.minPrice || req.query.maxPrice || 1000,
+        ResponseGroup: req.query.responseGroup || 'Small,OfferSummary'
+      }, function(error, results) {
+        if (error) {
+          ErrorController.sendErrorJSON(res, 500, error);
+        } else {
+          res.send(results);
+        }
+      });
+    }
+  }
+})();
 
 module.exports = ProductController;
