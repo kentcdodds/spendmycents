@@ -54,7 +54,7 @@ UserRoutes = (function() {
       app.post('/users', saveUserRoute);
       app.put('/users', saveUserRoute);
 
-      app.del('/users/:id', function() {
+      app.del('/users/:id', function(req, res) {
         if (isPrivilaged(req, req.params.id)) {
           UserController.deleteUser(req, res);
         } else {
