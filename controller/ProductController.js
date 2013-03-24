@@ -26,7 +26,7 @@ var ProductController = (function() {
         ResponseGroup: req.query.responseGroup || 'Small,OfferSummary'
       }, function(error, results) {
         if (error) {
-          ErrorController.sendErrorJSON(res, 500, error);
+          ErrorController.sendErrorJson(res, 500, error);
         } else {
           res.send(results);
         }

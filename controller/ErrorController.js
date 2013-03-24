@@ -28,7 +28,7 @@ ErrorController = (function() {
     getErrorJSON: function(code, message) {
       return getErrorJSON(code, message);
     },
-    sendErrorJSON: function(res, code, message) {
+    sendErrorJson: function(res, code, message) {
       res.send(getErrorJSON(code, message));
     }
   };

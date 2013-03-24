@@ -1,23 +1,20 @@
-var $ = require('jquery')
-, cleanEmails
-, User;
-
-cleanEmails = function(emails) {
-  var cleanedEmails = [];
-  for (var i = 0; i < emails.length; i++) {
-    if (emails[i] && emails[i].value) {
-      cleanedEmails[cleanedEmails.length] = emails[i];
-    } else {
-      console.log('ignoring:' + emails[i]);
-    }
-  }
-  return cleanedEmails;
-}
-
-User = function(userInfo) {
-  this.id = userInfo.id;
+var User = function(userInfo) {
+  this._id = userInfo._id;
   this.name = userInfo.name;
-  this.emails = (userInfo.emails ? cleanEmails(userInfo.emails) : null);
+
+  if (userInfo.fromPassport && userInfo.emails) {
+    this.emails = [];
+    for (var i = 0; i < userInfo.emails.length; i++) {
+      if (userInfo.emails[i] && userInfo.emails[i].value) {
+        this.emails[this.emails.length] = userInfo.emails[i].value;
+      } else {
+        console.log('ignoring: ' + userInfo.emails[i]);
+      }
+    }
+  } else {
+    this.emails = userInfo.emails;
+  }
+
   this.facebookId = userInfo.facebookId;
   this.twitterId = userInfo.twitterId;
   this.googleId = userInfo.googleId;

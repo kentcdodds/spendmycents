@@ -1,38 +1,65 @@
 var UserController,
   User = require('../model/User')
-  , DatabaseController = require('./DatabaseController');
+  , DatabaseController = require('./DatabaseController')
+  , ErrorController = require('./ErrorController');
 
 UserController = (function() {
 
   var findUserWithProviderId
     , createNewUser
+    , userIsAdmin
     , findUserById
     , userCollectionName = 'SMC_USER';
 
   findUserWithProviderId = function(profile, callback) {
     var query = {};
     query[profile.provider + 'Id'] = profile.id;
+    console.log(JSON.stringify(query));
     DatabaseController.findOneObjectByQuery(userCollectionName, query, function(error, doc) {
+      console.log(JSON.stringify(doc, null, 2));
       var user = (doc ? new User(doc) : null);
       callback(error, user);
     });
   };
 
   createNewUser = function(profile, callback) {
+    console.log('creating new user');
     var user = new User(
       {
         name: profile.displayName,
+        fromPassport: profile.fromPassport || false,
         emails: (profile.emails && profile.emails[0] ? profile.emails : null),
         facebookId: (profile.provider.toLowerCase() === 'facebook' ? profile.id.toString() : null),
         twitterId: (profile.provider.toLowerCase() === 'twitter' ? profile.id.toString() : null),
         googleId: (profile.provider.toLowerCase() === 'google' ? profile.id.toString() : null)
       }
     );
+    if (userIsAdmin(user)) {
+      user.privilages = 'admin';
+    }
     DatabaseController.saveObject(userCollectionName, user, callback);
   };
 
+  userIsAdmin = function(user) {
+    if (user.emails) {
+      var adminEmails = JSON.parse(process.env.ADMIN_EMAILS);
+      for (var i = 0; i < user.emails.length; i++) {
+        for (var j = 0; j < adminEmails.length; j++) {
+          if (user.emails[i] === adminEmails[j]) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
   findOrCreateUser = function(profile, callback) {
     findUserWithProviderId(profile, function(error, user) {
+      console.log(error);
+      if (error) {
+        throw error;
+      }
       if (!user) {
         createNewUser(profile, callback);
       } else {
@@ -63,17 +90,14 @@ UserController = (function() {
     getUser: function(req, res) {
       findUserById(req.params.id, function(error, user) {
         if (error || !user) {
-          res.json(500, {
-            msg: 'There was an error getting user with id: ' + req.params.id,
-            error: error,
-            user: user
-          });
+          ErrorController.sendErrorJson(res, 500, error);
         } else {
           res.json(user);
         }
       });
     },
     handleAuthenticatedUser: function(profile, callback) {
+      profile.fromPassport = true;
       findOrCreateUser(profile, callback);
     },
     findById: function(id, callback) {
@@ -88,10 +112,7 @@ UserController = (function() {
     deleteUser: function(req, res) {
       DatabaseController.deleteObjectById(userCollectionName, req.params.id, function(error, numberRemoved) {
         if (error) {
-          res.json(500, {
-            msg: 'There was an error deleting user with id ' + req.params.id,
-            error: error
-          });
+          ErrorController.sendErrorJson(res, 500, error);
         } else {
           res.json({response: 'Success deleting user with id ' + req.params.id});
         }

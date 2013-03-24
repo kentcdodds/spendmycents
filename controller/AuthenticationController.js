@@ -95,7 +95,7 @@ AuthenticationController = (function() {
   sendUnsupportedPartyError = function(res, provider) {
     var message = 'The third-party provider "' + provider + '" is not supported';
     var code = 400;
-    ErrorController.sendErrorJSON(res, code, message);
+    ErrorController.sendErrorJson(res, code, message);
   }
 
   return {

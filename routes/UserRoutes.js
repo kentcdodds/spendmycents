@@ -22,7 +22,7 @@ UserRoutes = (function() {
   sendUnauthorizedError = function(res, asUser) {
     var message = 'Must be signed in with admin privilages' + (asUser ? ' or as the user' : '') + ' to perform this call';
     var code = 403;
-    ErrorController.sendErrorJSON(res, code, message);
+    ErrorController.sendErrorJson(res, code, message);
   }
 
   return {
@@ -39,7 +39,7 @@ UserRoutes = (function() {
         if (req.user) {
           UserController.getMe(req, res);
         } else {
-          ErrorController.sendErrorJSON(res, 403, 'Must be signed in to see this resource');
+          ErrorController.sendErrorJson(res, 403, 'Must be signed in to see this resource');
         }
       });
 
