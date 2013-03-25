@@ -1,40 +1,83 @@
 var DatabaseController = function() {
-  var instanceClient
-  , mongo = require('mongodb')
-  , openConnectionToCollection
-  , getOrCreateClient
-  , findOneObject
-  , deleteObjectByQuery;
+  var mongo = require('mongodb')
+    , openConnectionToCollection
+    , getOrCreateClient
+    , findOneObject
+    , deleteObjectByQuery;
 
-  var createClient = function() {
+  var createClient = function(callback) {
 
     var services = JSON.parse(process.env.VCAP_SERVICES)
-    , dbInfo = services['mongodb-1.8'][0]
-    , server = new mongo.Server(dbInfo.credentials.host, dbInfo.credentials.port,  {auto_reconnect: false})
-    , client = new mongo.Db(dbInfo.name, server, {w:1, strict: true});
+      , dbInfo = services['mongodb-1.8'][0]
+      , server = new mongo.Server(dbInfo.credentials.host, dbInfo.credentials.port, {auto_reconnect: false})
+      , client = new mongo.Db(dbInfo.name, server, {w: 1, strict: true})
+      , authenticateToClient;
 
-    // instanceClient.authenticate(dbInfo.credentials.username, dbInfo.credentials.password, null);
+    console.log('client created');
 
-    return client;
+    client.open(function(error, openedClient) {
+      console.log('client opened');
+      if (error) {
+        throw error;
+      }
+      var usersCollection = new mongo.Collection(openedClient, 'system.users');
+      console.log('Looking for users in system.users');
+      usersCollection.findOne({user: dbInfo.credentials.username}, function(error, doc) {
+        console.log('finished looking');
+        if (error) {
+          throw error;
+        }
+        if (!doc) {
+          console.log('No user found. Adding user.');
+          openedClient.addUser(dbInfo.credentials.username, dbInfo.credentials.password, function(error, result) {
+            authenticateToClient(openedClient);
+          });
+        } else {
+          authenticateToClient(openedClient);
+        }
+      });
+    });
+
+    authenticateToClient = function(openedClient) {
+      console.log('Authenticating to client');
+      openedClient.authenticate(dbInfo.credentials.username, dbInfo.credentials.password, function(error, result) {
+        console.log('closing client');
+        openedClient.close();
+        if (result) {
+          console.log('Success authenticating');
+          callback(error, openedClient);
+        } else {
+          console.log('Failure in authenticating');
+          throw 'Authentication to database failed!';
+        }
+      });
+    }
+
   };
 
-  getOrCreateClient = function() {
+  getOrCreateClient = function(callback) {
     if (!this.instanceClient) {
-      this.instanceClient = createClient();
+      createClient(callback);
+    } else {
+      callback(null, this.instanceClient);
     }
-    return this.instanceClient;
   };
 
   openConnectionToCollection = function(collectionName, callback) {
     if (!collectionName) {
       throw 'collectionName must be defined!';
     }
-    getOrCreateClient().open(function(error, client) {
+    getOrCreateClient(function(error, receivedClient) {
       if (error) {
-        callback(error, null);
-        return;
+        throw error;
       }
-      callback(new mongo.Collection(client, collectionName));
+      receivedClient.open(function(error, openedClient) {
+        if (error) {
+          callback(error, null);
+          return;
+        }
+        callback(new mongo.Collection(openedClient, collectionName));
+      });
     });
   };
 
@@ -61,7 +104,7 @@ var DatabaseController = function() {
       openConnectionToCollection(collectionName, function(collection) {
         collection.find().toArray(function(error, docs) {
           collection.db.close();
-          callback(error, docs);          
+          callback(error, docs);
         });
       });
     },
