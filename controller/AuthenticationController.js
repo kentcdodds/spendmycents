@@ -1,4 +1,5 @@
 var AuthenticationController
+  , logger = require('winston')
   , passport = require('passport')
   , UserController = require('./UserController')
   , ErrorController = require('./ErrorController')
@@ -54,7 +55,8 @@ AuthenticationController = (function() {
   handleAuthenticatedUser = function(accessToken, refreshToken, profile, done) {
     UserController.handleAuthenticatedUser(profile, function(error, user) {
       if (error) {
-        console.log('There was an error with handling a ' + profile.provider + ' authenticated user!');
+        logger.warn('There was an error with handling a ' + profile.provider + ' authenticated user!');
+        logger.error(error);
         return done(error);
       }
       done(null, user);

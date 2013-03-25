@@ -1,65 +1,70 @@
-var DatabaseController = function() {
+var DatabaseController = (function() {
   var mongo = require('mongodb')
+    , logger = require('winston')
     , openConnectionToCollection
     , getOrCreateClient
     , findOneObject
     , deleteObjectByQuery;
 
-  var createClient = function(callback) {
+  getOrCreateClient = function(callback) {
+    if (this.instanceClient) {
+      callback(null, this.instanceClient);
+    } else {
+      var services = JSON.parse(process.env.VCAP_SERVICES)
+        , dbInfo = services['mongodb-1.8'][0]
+        , server = new mongo.Server(dbInfo.credentials.host, dbInfo.credentials.port, {auto_reconnect: false})
+        , username = dbInfo.credentials.username
+        , password = dbInfo.credentials.password
+        , authenticateToClient;
 
-    var services = JSON.parse(process.env.VCAP_SERVICES)
-      , dbInfo = services['mongodb-1.8'][0]
-      , server = new mongo.Server(dbInfo.credentials.host, dbInfo.credentials.port, {auto_reconnect: false})
-      , client = new mongo.Db(dbInfo.name, server, {w: 1, strict: true})
-      , authenticateToClient;
+      this.instanceClient = new mongo.Db(dbInfo.name, server, {w: 1, strict: true});
 
-    console.log('client created');
+      logger.info('Client created');
 
-    client.open(function(error, openedClient) {
-      console.log('client opened');
-      if (error) {
-        throw error;
-      }
-      var usersCollection = new mongo.Collection(openedClient, 'system.users');
-      console.log('Looking for users in system.users');
-      usersCollection.findOne({user: dbInfo.credentials.username}, function(error, doc) {
-        console.log('finished looking');
+      this.instanceClient.open(function(error, openedClient) {
+        logger.info('Client opened');
         if (error) {
           throw error;
         }
-        if (!doc) {
-          console.log('No user found. Adding user.');
-          openedClient.addUser(dbInfo.credentials.username, dbInfo.credentials.password, function(error, result) {
+        var usersCollection = new mongo.Collection(openedClient, 'system.users');
+        logger.info('Looking for users in system.users');
+        usersCollection.findOne({user: username}, function(error, doc) {
+          if (error) {
+            logger.warn('Error finding user in system.users!');
+            logger.error(error);
+            throw error;
+          }
+          if (!doc) {
+            logger.info('No user found. Adding user.');
+            openedClient.addUser(dbInfo.credentials.username, password, function(error, result) {
+              if (!result || error) {
+                logger.warn('Error adding admin user to client!');
+                logger.error(error);
+                throw 'Error adding admin user to client! ' + error;
+              }
+              authenticateToClient(openedClient);
+            });
+          } else {
             authenticateToClient(openedClient);
-          });
-        } else {
-          authenticateToClient(openedClient);
-        }
+          }
+        });
       });
-    });
 
-    authenticateToClient = function(openedClient) {
-      console.log('Authenticating to client');
-      openedClient.authenticate(dbInfo.credentials.username, dbInfo.credentials.password, function(error, result) {
-        console.log('closing client');
-        openedClient.close();
-        if (result) {
-          console.log('Success authenticating');
-          callback(error, openedClient);
-        } else {
-          console.log('Failure in authenticating');
-          throw 'Authentication to database failed!';
-        }
-      });
-    }
-
-  };
-
-  getOrCreateClient = function(callback) {
-    if (!this.instanceClient) {
-      createClient(callback);
-    } else {
-      callback(null, this.instanceClient);
+      authenticateToClient = function(openedClient) {
+        logger.info('Authenticating to client');
+        openedClient.authenticate(username, password, function(error, result) {
+          logger.info('Closing client');
+          openedClient.close();
+          if (result && !error) {
+            logger.info('Success authenticating');
+            callback(error, openedClient);
+          } else {
+            logger.warn('Failure in authenticating!');
+            logger.error(error);
+            throw 'Authentication to database failed! ' + error;
+          }
+        });
+      };
     }
   };
 
@@ -126,6 +131,6 @@ var DatabaseController = function() {
       deleteObjectByQuery(collectionName, {_id: new mongo.ObjectID(idString)}, callback);
     }
   };
-}();
+})();
 
 module.exports = DatabaseController;

@@ -1,5 +1,6 @@
-var UserController,
-  User = require('../model/User')
+var UserController
+  , User = require('../model/User')
+  , logger = require('winston')
   , DatabaseController = require('./DatabaseController')
   , ErrorController = require('./ErrorController');
 
@@ -14,16 +15,14 @@ UserController = (function() {
   findUserWithProviderId = function(profile, callback) {
     var query = {};
     query[profile.provider + 'Id'] = profile.id;
-    console.log(JSON.stringify(query));
     DatabaseController.findOneObjectByQuery(userCollectionName, query, function(error, doc) {
-      console.log(JSON.stringify(doc, null, 2));
       var user = (doc ? new User(doc) : null);
       callback(error, user);
     });
   };
 
   createNewUser = function(profile, callback) {
-    console.log('creating new user');
+    logger.log('Creating new user');
     var user = new User(
       {
         name: profile.displayName,
@@ -56,8 +55,9 @@ UserController = (function() {
 
   findOrCreateUser = function(profile, callback) {
     findUserWithProviderId(profile, function(error, user) {
-      console.log(error);
       if (error) {
+        logger.warn('There was an error finging a user with a provider id');
+        logger.error(error);
         throw error;
       }
       if (!user) {

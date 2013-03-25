@@ -1,4 +1,5 @@
 var User = function(userInfo) {
+  var logger = require('winston')
   this._id = userInfo._id;
   this.name = userInfo.name;
 
@@ -8,7 +9,7 @@ var User = function(userInfo) {
       if (userInfo.emails[i] && userInfo.emails[i].value) {
         this.emails[this.emails.length] = userInfo.emails[i].value;
       } else {
-        console.log('ignoring: ' + userInfo.emails[i]);
+        logger.log('Creating user: Ignoring email: ' + userInfo.emails[i]);
       }
     }
   } else {
