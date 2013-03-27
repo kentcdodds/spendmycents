@@ -41,7 +41,8 @@ app.configure(function() {
   app.use(express.cookieParser());
 
   app.use(express.methodOverride());
-  app.use(express.session({secret: 'funny monkey'}));
+  var oneWeek = 604800000;
+  app.use(express.session({secret: 'funny monkey', cookie: { maxAge: oneWeek * 3 }}));
 
   app.use(express.static(__dirname + '/public'));
   app.use(passport.initialize());
