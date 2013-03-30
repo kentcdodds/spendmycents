@@ -10,7 +10,58 @@ UserController = (function() {
     , createNewUser
     , userIsAdmin
     , findUserById
-    , userCollectionName = 'SMC_USER';
+    , userCollectionName = 'SMC_USER'
+    , preferenceArray =
+    [
+      'all',
+      'apparel',
+      'appliances',
+      'artsandcrafts',
+      'automotive',
+      'baby',
+      'beauty',
+      'blended',
+      'books',
+      'classical',
+      'collectibles',
+      'digitalmusic',
+      'grocery',
+      'dvd',
+      'electronics',
+      'healthpersonalcare',
+      'homegarden',
+      'industrial',
+      'jewelry',
+      'kindlestore',
+      'kitchen',
+      'lawnandgarden',
+      'magazines',
+      'marketplace',
+      'merchants',
+      'miscellaneous',
+      'mobileapps',
+      'mp3downloads',
+      'music',
+      'musicalinstruments',
+      'musictracks',
+      'officeproducts',
+      'outdoorliving',
+      'pchardware',
+      'petsupplies',
+      'photo',
+      'shoes',
+      'software',
+      'sportinggoods',
+      'tools',
+      'toys',
+      'unboxvideo',
+      'vhs',
+      'video',
+      'videogames',
+      'watches',
+      'wireless',
+      'wirelessaccessories'
+    ];
 
   findUserWithProviderId = function(profile, callback) {
     var query = {};
@@ -76,7 +127,9 @@ UserController = (function() {
       var user = new User(doc);
       callback(error, user);
     });
-  }
+  };
+
+
 
   return {
     getMe: function(req, res) {
@@ -117,6 +170,66 @@ UserController = (function() {
           res.json({response: 'Success deleting user with id ' + req.params.id});
         }
       });
+    },
+    getDefaultPreferenceNumber: function() {
+      return this.convertPreferencesToPreferenceNumber({
+        all: true,
+        apparel: true,
+        appliances: true,
+        artsandcrafts: true,
+        automotive: true,
+        baby: true,
+        beauty: true,
+        blended: true,
+        books: true,
+        classical: true,
+        collectibles: true,
+        digitalmusic: true,
+        grocery: true,
+        dvd: true,
+        electronics: true,
+        healthpersonalcare: true,
+        homegarden: true,
+        industrial: true,
+        jewelry: true,
+        kindlestore: true,
+        kitchen: true,
+        lawnandgarden: true,
+        magazines: true,
+        marketplace: true,
+        merchants: true,
+        miscellaneous: true,
+        mobileapps: true,
+        mp3downloads: true,
+        music: true,
+        musicalinstruments: true,
+        musictracks: true,
+        officeproducts: true,
+        outdoorliving: true,
+        pchardware: true,
+        petsupplies: true,
+        photo: true,
+        shoes: true,
+        software: true,
+        sportinggoods: true,
+        tools: true,
+        toys: true,
+        unboxvideo: true,
+        vhs: true,
+        video: true,
+        videogames: true,
+        watches: true,
+        wireless: true,
+        wirelessaccessories: true
+      });
+    },
+    convertPreferenceNumberToPreferences: function(preferenceNumber) {
+      var preferences = {};
+      return preferences;
+    },
+    convertPreferencesToPreferenceNumber: function(preferences) {
+      var preferenceNumber = -1;
+      return preferenceNumber;
     }
   }
 
