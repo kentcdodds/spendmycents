@@ -13,54 +13,55 @@ UserController = (function() {
     , userCollectionName = 'SMC_USER'
     , preferenceArray =
     [
-      'all',
-      'apparel',
-      'appliances',
-      'artsandcrafts',
-      'automotive',
-      'baby',
-      'beauty',
-      'blended',
-      'books',
-      'classical',
-      'collectibles',
-      'digitalmusic',
-      'grocery',
-      'dvd',
-      'electronics',
-      'healthpersonalcare',
-      'homegarden',
-      'industrial',
-      'jewelry',
-      'kindlestore',
-      'kitchen',
-      'lawnandgarden',
-      'magazines',
-      'marketplace',
-      'merchants',
-      'miscellaneous',
-      'mobileapps',
-      'mp3downloads',
-      'music',
-      'musicalinstruments',
-      'musictracks',
-      'officeproducts',
-      'outdoorliving',
-      'pchardware',
-      'petsupplies',
-      'photo',
-      'shoes',
-      'software',
-      'sportinggoods',
-      'tools',
-      'toys',
-      'unboxvideo',
-      'vhs',
-      'video',
-      'videogames',
-      'watches',
-      'wireless',
-      'wirelessaccessories'
+      'All',
+      'Apparel',
+      'Appliances',
+      'Arts And Crafts',
+      'Automotive',
+      'Baby',
+      'Beauty',
+      'Blended',
+      'Books',
+      'Classical',
+      'Collectibles',
+      'DVD',
+      'Digital Music',
+      'Electronics',
+      'Gift Cards',
+      'Gourmet Food',
+      'Grocery',
+      'Health Personal Care',
+      'Home Garden',
+      'Industrial',
+      'Jewelry',
+      'Kindle Store',
+      'Kitchen',
+      'Lawn And Garden',
+      'Marketplace',
+      'MP3 Downloads',
+      'Magazines',
+      'Miscellaneous',
+      'Music',
+      'Music Tracks',
+      'Musical Instruments',
+      'Mobile Apps',
+      'Office Products',
+      'Outdoor Living',
+      'PC Hardware',
+      'Pet Supplies',
+      'Photo',
+      'Shoes',
+      'Software',
+      'Sporting Goods',
+      'Tools',
+      'Toys',
+      'Unbox Video',
+      'VHS',
+      'Video',
+      'Video Games',
+      'Watches',
+      'Wireless',
+      'Wireless Accessories'
     ];
 
   findUserWithProviderId = function(profile, callback) {
@@ -112,8 +113,10 @@ UserController = (function() {
         throw error;
       }
       if (!user) {
+        logger.log('Creating new user');
         createNewUser(profile, callback);
       } else {
+        logger.log('User found, updating lastLogin date and saving.');
         user.lastLogin = new Date();
         DatabaseController.saveObject(userCollectionName, user, function(error, updatedUser) {
           callback(error, user);
@@ -133,7 +136,7 @@ UserController = (function() {
 
   return {
     getMe: function(req, res) {
-      res.json(req.user);
+      res.json(req.user.getObject());
     },
     getAllUsers: function(req, res) {
       DatabaseController.findAll(userCollectionName, function(error, results) {
@@ -145,9 +148,12 @@ UserController = (function() {
         if (error || !user) {
           ErrorController.sendErrorJson(res, 500, error);
         } else {
-          res.json(user);
+          res.json(user.getObject());
         }
       });
+    },
+    getPreferencesList: function(req, res) {
+      res.json(200, preferenceArray);
     },
     handleAuthenticatedUser: function(profile, callback) {
       profile.fromPassport = true;
@@ -155,6 +161,14 @@ UserController = (function() {
     },
     findById: function(id, callback) {
       findUserById(id, callback);
+    },
+    updateUserPreferences: function(req, res) {
+      var preferences = req.body;
+      var currentUser = req.user;
+      currentUser.preferences(preferences);
+      DatabaseController.saveObject(userCollectionName, currentUser, function(error, updatedUser) {
+        res.json(200, updatedUser);
+      });
     },
     saveUser: function(req, res) {
       var user = new User(req.body);
@@ -171,65 +185,36 @@ UserController = (function() {
         }
       });
     },
+    getDefaultPreferences: function() {
+      var preferences = {};
+      for (var i = 0; i < preferenceArray.length; i++) {
+        preferences[preferenceArray[i]] = true;
+      }
+      return preferences;
+    },
     getDefaultPreferenceNumber: function() {
-      return this.convertPreferencesToPreferenceNumber({
-        all: true,
-        apparel: true,
-        appliances: true,
-        artsandcrafts: true,
-        automotive: true,
-        baby: true,
-        beauty: true,
-        blended: true,
-        books: true,
-        classical: true,
-        collectibles: true,
-        digitalmusic: true,
-        grocery: true,
-        dvd: true,
-        electronics: true,
-        healthpersonalcare: true,
-        homegarden: true,
-        industrial: true,
-        jewelry: true,
-        kindlestore: true,
-        kitchen: true,
-        lawnandgarden: true,
-        magazines: true,
-        marketplace: true,
-        merchants: true,
-        miscellaneous: true,
-        mobileapps: true,
-        mp3downloads: true,
-        music: true,
-        musicalinstruments: true,
-        musictracks: true,
-        officeproducts: true,
-        outdoorliving: true,
-        pchardware: true,
-        petsupplies: true,
-        photo: true,
-        shoes: true,
-        software: true,
-        sportinggoods: true,
-        tools: true,
-        toys: true,
-        unboxvideo: true,
-        vhs: true,
-        video: true,
-        videogames: true,
-        watches: true,
-        wireless: true,
-        wirelessaccessories: true
-      });
+      return this.convertPreferencesToPreferenceNumber(this.getDefaultPreferences());
     },
     convertPreferenceNumberToPreferences: function(preferenceNumber) {
-      var preferences = {};
+      var preferences = this.getDefaultPreferences();
+      var preferenceNumberArray = preferenceNumber.split('');
+      for (var i = 0; i < preferenceArray.length && i < preferenceNumberArray.length; i++) {
+        preferences[preferenceArray[i]] = (preferenceNumberArray[i] === '1');
+      }
       return preferences;
     },
     convertPreferencesToPreferenceNumber: function(preferences) {
-      var preferenceNumber = -1;
-      return preferenceNumber;
+      var preferenceNumberArray = [];
+      if (preferences.All === true) {
+        for (var i = 0; i < preferenceArray.length; i++) {
+          preferenceNumberArray[i] = 1;
+        }
+      } else {
+        for (var i = 0; i < preferenceArray.length; i++) {
+          preferenceNumberArray[i] = (preferences[preferenceArray[i]] ? 1 : 0);
+        }
+      }
+      return preferenceNumberArray.join('');
     }
   }
 

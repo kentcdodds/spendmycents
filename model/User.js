@@ -15,55 +15,35 @@ var User = function(userInfo) {
     adjustedEmails = userInfo.emails;
   }
 
-  var _id = userInfo._id,
-    name = userInfo.name,
-    facebookId = userInfo.facebookId,
-    twitterId = userInfo.twitterId,
-    googleId = userInfo.googleId,
-    privilages = userInfo.privilages || 'user',
-    preferenceNum = userInfo.preferenceNum || UserController.getDefaultPreferenceNum(),
-    lastLogin = userInfo.lastLogin || new Date();
-
-  this._id = function(new_Id) {
-    _id = new_Id || _id;
-    return _id;
-  }
-
-  this.name = function(newName) {
-    name = newName || name;
-    return name;
-  }
-
-  this.facebookId = function(newFacebookId) {
-    name = newFacebookId|| facebookId;
-    return facebookId;
-  }
-
-  this.twitterId = function(newTwitterId) {
-    twitterId = newTwitterId || twitterId;
-    return twitterId;
-  }
-
-  this.googleId = function(newGoogleId) {
-    googleId = newGoogleId || googleId;
-    return googleId;
-  }
-
-  this.privilages = function(newPrivilages) {
-    privilages = newPrivilages || privilages;
-    return privilages;
-  }
+  this._id = userInfo._id;
+  this.name = userInfo.name;
+  this.emails = adjustedEmails;
+  this.facebookId = userInfo.facebookId;
+  this.twitterId = userInfo.twitterId;
+  this.googleId = userInfo.googleId;
+  this.privilages = userInfo.privilages || 'user';
+  this.preferenceNum = userInfo.preferenceNum || UserController.getDefaultPreferenceNumber();
+  this.lastLogin = userInfo.lastLogin || new Date();
 
   this.preferences = function(newPreferences) {
     if (newPreferences) {
-      preferenceNum = UserController.convertPreferencesToPreferenceNumber(newPreferences);
+      this.preferenceNum = UserController.convertPreferencesToPreferenceNumber(newPreferences);
     }
-    return UserController.convertPreferenceNumberToPreferences(preferenceNum);
+    return UserController.convertPreferenceNumberToPreferences(this.preferenceNum);
   }
 
-  this.lastLogin = function(newLastLogin) {
-    lastLogin = newLastLogin || lastLogin;
-    return lastLogin;
+  this.getObject = function() {
+    return {
+      _id: this._id,
+      name: this.name,
+      emails: this.emails,
+      facebookId: this.facebookId,
+      twitterId: this.twitterId,
+      googleId: this.googleId,
+      privilages: this.privilages,
+      preferences: this.preferences(),
+      lastLogin: this.lastLogin
+    }
   }
 };
 

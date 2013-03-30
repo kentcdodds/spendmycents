@@ -35,6 +35,18 @@ UserRoutes = (function() {
         }
       });
 
+      app.get('/users/preferences', function(req, res) {
+        UserController.getPreferencesList(req, res);
+      });
+
+      app.put('/users/preferences', function(req, res) {
+        if (req.user) {
+          UserController.updateUserPreferences(req, res);
+        } else {
+          sendUnauthorizedError(res, false);
+        }
+      });
+
       app.get('/users/me', function(req, res) {
         if (req.user) {
           UserController.getMe(req, res);
