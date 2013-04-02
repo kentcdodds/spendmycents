@@ -1,0 +1,32 @@
+body {
+  padding-top: 10px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: rgb(78,78,78);
+}
+a {
+  color: #00b7ff;
+}
+
+.search-bar {
+  font-size: 20px;
+}
+
+.input-prepend {
+  margin-bottom 0px;
+}
+
+.user-button {
+  display: inline;
+}
+
+form {
+  display: inline;
+}
+
+
+
+.user-input-container {
+  width: 50%;
+  margin: 0px auto;
+
+}
