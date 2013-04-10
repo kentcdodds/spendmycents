@@ -1,7 +1,9 @@
 var User = function(userInfo) {
-  var logger = require('winston')
-    , UserController = require('../controller/UserController')
-    , adjustedEmails = [];
+  var logger = require('winston');
+  var UserController = require('../controller/UserController');
+  var adjustedEmails = [];
+
+  userInfo = userInfo || {};
 
   if (userInfo.fromPassport && userInfo.emails) {
     for (var i = 0; i < userInfo.emails.length; i++) {

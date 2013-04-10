@@ -3,7 +3,6 @@ var DatabaseController = (function() {
     , logger = require('winston')
     , openConnectionToCollection
     , getOrCreateClient
-    , findOneObject
     , deleteObjectByQuery;
 
   getOrCreateClient = function(callback) {
@@ -86,15 +85,6 @@ var DatabaseController = (function() {
     });
   };
 
-  findOneObject = function(collectionName, query, callback) {
-    openConnectionToCollection(collectionName, function(collection) {
-      collection.findOne(query, function(error, doc) {
-        collection.db.close();
-        callback(error, doc);
-      });
-    });
-  };
-
   deleteObjectByQuery = function(collectionName, query, callback) {
     openConnectionToCollection(collectionName, function(collection) {
       collection.remove(query, {save: true}, function(error, numberRemoved) {
@@ -122,11 +112,16 @@ var DatabaseController = (function() {
       });
     },
     findOneObjectById: function(collectionName, idString, callback) {
-      findOneObject(collectionName, {_id: new mongo.ObjectID(idString)}, callback);
+      this.findOneObjectByQuery(collectionName, {_id: new mongo.ObjectID(idString)}, callback);
     },
     findOneObjectByQuery: function(collectionName, query, callback) {
-      findOneObject(collectionName, query, callback);
-    },
+    openConnectionToCollection(collectionName, function(collection) {
+      collection.findOne(query, function(error, doc) {
+        collection.db.close();
+        callback(error, doc);
+      });
+    });
+  },
     deleteObjectById: function(collectionName, idString, callback) {
       deleteObjectByQuery(collectionName, {_id: new mongo.ObjectID(idString)}, callback);
     }

@@ -132,9 +132,9 @@ UserController = (function() {
     });
   };
 
-
-
   return {
+    ADMIN: 'admin',
+    ME: 'me',
     getMe: function(req, res) {
       res.json(req.user.getObject());
     },
@@ -152,6 +152,15 @@ UserController = (function() {
         }
       });
     },
+    getUsersPreferences: function(req, res) {
+      findUserById(req.params.id, function(error, user) {
+        if (error || !user) {
+          ErrorController.sendErrorJson(res, 500, error);
+        } else {
+          res.json(user.preferences());
+        }
+      });
+    },
     getPreferencesList: function(req, res) {
       res.json(200, preferenceArray);
     },
@@ -166,8 +175,8 @@ UserController = (function() {
       var preferences = req.body;
       var currentUser = req.user;
       currentUser.preferences(preferences);
-      DatabaseController.saveObject(userCollectionName, currentUser, function(error, updatedUser) {
-        res.json(200, updatedUser);
+      DatabaseController.saveObject(userCollectionName, currentUser, function(error, doc) {
+        res.json(200, currentUser);
       });
     },
     saveUser: function(req, res) {
