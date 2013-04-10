@@ -29,7 +29,7 @@ var User = function(userInfo) {
 
   this.preferences = function(newPreferences) {
     if (newPreferences) {
-      this.preferenceNum = UserController.convertPreferencesToPreferenceNumber(newPreferences);
+      this.preferenceNum = UserController.convertPreferencesToPreferenceNumber(newPreferences, this.preferenceNum);
     }
     return UserController.convertPreferenceNumberToPreferences(this.preferenceNum);
   }
