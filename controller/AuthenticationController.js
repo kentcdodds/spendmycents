@@ -58,8 +58,9 @@ AuthenticationController = (function() {
         logger.warn('There was an error with handling a ' + profile.provider + ' authenticated user!');
         logger.error(error);
         return done(error);
+      } else {
+        done(null, user);
       }
-      done(null, user);
     });
   }
 

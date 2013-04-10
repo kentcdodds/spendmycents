@@ -68,8 +68,12 @@ UserController = (function() {
     var query = {};
     query[profile.provider + 'Id'] = profile.id;
     DatabaseController.findOneObjectByQuery(userCollectionName, query, function(error, doc) {
-      var user = (doc ? new User(doc) : null);
-      callback(error, user);
+      if(error || !doc) {
+        callback(error, null);
+      } else {
+        var user = (doc ? new User(doc) : null);
+        callback(error, user);
+      }
     });
   };
 
@@ -108,9 +112,7 @@ UserController = (function() {
   findOrCreateUser = function(profile, callback) {
     findUserWithProviderId(profile, function(error, user) {
       if (error) {
-        logger.warn('There was an error finging a user with a provider id');
-        logger.error(error);
-        throw error;
+        callback(error, null);
       }
       if (!user) {
         logger.log('Creating new user');
@@ -127,8 +129,19 @@ UserController = (function() {
 
   findUserById = function(id, callback) {
     DatabaseController.findOneObjectById(userCollectionName, id, function(error, doc) {
-      var user = new User(doc);
-      callback(error, user);
+      if (error) {
+        callback(error, null);
+      } else {
+        var user = new User(doc);
+        callback(error, user);
+      }
+    });
+  };
+
+  updatePreferences = function(res, user, preferences) {
+    user.preferences(preferences);
+    DatabaseController.saveObject(userCollectionName, user, function(error, doc) {
+      res.json(200, user.getObject());
     });
   };
 
@@ -145,8 +158,10 @@ UserController = (function() {
     },
     getUser: function(req, res) {
       findUserById(req.params.id, function(error, user) {
+        console.log(error);
+        console.log(user);
         if (error || !user) {
-          ErrorController.sendErrorJson(res, 500, error);
+          ErrorController.sendErrorJson(res, 500, 'Unable to find user with id of ' + req.params.id);
         } else {
           res.json(user.getObject());
         }
@@ -173,11 +188,17 @@ UserController = (function() {
     },
     updateUserPreferences: function(req, res) {
       var preferences = req.body;
-      var currentUser = req.user;
-      currentUser.preferences(preferences);
-      DatabaseController.saveObject(userCollectionName, currentUser, function(error, doc) {
-        res.json(200, currentUser);
-      });
+      if (req.user._id.toString() === req.params.id) {
+        updatePreferences(res, req.user, preferences);
+      } else {
+        findUserById(req.params.id, function(error, user) {
+          if (error || !user) {
+            ErrorController.sendErrorJson(res, 500, error);
+          } else {
+            updaences(res, user, preferences);
+          }
+        });
+      }
     },
     saveUser: function(req, res) {
       var user = new User(req.body);
@@ -212,15 +233,22 @@ UserController = (function() {
       }
       return preferences;
     },
-    convertPreferencesToPreferenceNumber: function(preferences) {
+    convertPreferencesToPreferenceNumber: function(preferences, defaultPreferenceNumber) {
       var preferenceNumberArray = [];
+      var defaultPreferenceNumberArray = ((defaultPreferenceNumber) ? defaultPreferenceNumber.split('') : []);
+      var preferenceValue = 1;
       if (preferences.All === true) {
         for (var i = 0; i < preferenceArray.length; i++) {
           preferenceNumberArray[i] = 1;
         }
       } else {
         for (var i = 0; i < preferenceArray.length; i++) {
-          preferenceNumberArray[i] = (preferences[preferenceArray[i]] ? 1 : 0);
+          if (preferences.hasOwnProperty(preferenceArray[i])) {
+            preferenceValue = ((preferences[preferenceArray[i]]) ? 1 : 0);
+          } else {
+            preferenceValue = defaultPreferenceNumberArray[i] || 1;
+          }
+          preferenceNumberArray[i] = preferenceValue;
         }
       }
       return preferenceNumberArray.join('');
