@@ -235,9 +235,8 @@ var UserController = (function() {
     },
     getUserFavorites: function(req, res) {
       getContextualUser(req, res, function(user) {
-        req.query.ids = user.favorites.join(',');
-        console.log('User favorites: ' + user.favorites.join(','));
-        console.log('req.query.ids: ' + req.query.ids);
+        req.query.index = req.query.index || 0;
+        req.query.ids = _.rest(user.favorites, req.query.index).join(',');
         ProductController.getProducts(req, res);
       });
     },
