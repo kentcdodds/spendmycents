@@ -235,9 +235,13 @@ var UserController = (function() {
     },
     getUserFavorites: function(req, res) {
       getContextualUser(req, res, function(user) {
-        req.query.index = req.query.index || 0;
-        req.query.ids = _.rest(user.favorites, req.query.index).join(',');
-        ProductController.getProducts(req, res);
+        if (_.isEmpty(user.favorites)) {
+          res.json({});
+        } else {
+          req.query.index = req.query.index || 0;
+          req.query.ids = _.rest(user.favorites, req.query.index).join(',');
+          ProductController.getProducts(req, res);
+        }
       });
     },
     getUserFavoritesNumbers: function(req, res) {
