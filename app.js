@@ -6,7 +6,6 @@ var http = require('http');
 var path = require('path');
 var passport = require('passport');
 
-var routes = require('./routes');
 var ProductRoutes = require('./routes/ProductRoutes');
 var AuthenticationRoutes = require('./routes/AuthenticationRoutes');
 var UserRoutes = require('./routes/UserRoutes');
@@ -14,9 +13,11 @@ var UserRoutes = require('./routes/UserRoutes');
 var AuthenticationController = require('./controller/AuthenticationController');
 
 var app = express();
+var process = process || {env: {}};
 
 app.configure(function() {
   var onLocalHost = !process.env.ENVIRONMENT;
+  var oneWeek = 604800000;
   if (onLocalHost) {
     require('./config.local').env.setupEnvironmentVariables();
   }
@@ -33,7 +34,6 @@ app.configure(function() {
   app.use(express.cookieParser());
 
   app.use(express.methodOverride());
-  var oneWeek = 604800000;
   app.use(express.session({secret: 'funny monkey', cookie: {maxAge: oneWeek * 3}}));
 
   app.use(express.static(__dirname + '/public'));
@@ -51,7 +51,11 @@ app.configure('development', function() {
 /*
  * Setup Routes
  */
-app.get('/', routes.index);
+app.get('/', function(req, res) {
+  res.render('index', {
+    title: 'Spend My Cents!'
+  });
+});
 ProductRoutes.setupRoutes(app);
 AuthenticationRoutes.setupRoutes(app);
 UserRoutes.setupRoutes(app);
@@ -60,7 +64,6 @@ UserRoutes.setupRoutes(app);
  * Configure authentication
  */
 AuthenticationController.setupPassport();
-
 
 /*
  * Start server

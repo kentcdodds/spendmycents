@@ -1,6 +1,4 @@
-var UserController
-
-UserController = (function() {
+var UserController = (function() {
 
   var logger = require('winston');
   var _ = require('underscore');

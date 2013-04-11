@@ -1,17 +1,14 @@
-var AuthenticationController
-  , logger = require('winston')
-  , passport = require('passport')
-  , UserController = require('./UserController')
-  , ErrorController = require('./ErrorController')
-  ;
+var AuthenticationController = (function() {
+  var logger = require('winston');
+  var passport = require('passport');
+  var UserController = require('./UserController');
+  var ErrorController = require('./ErrorController');
 
-AuthenticationController = (function() {
-  var authenticateTo
-    , callbackFrom
-    , configure
-    , handleAuthenticatedUser
-    , sendUnsupportedPartyError
-    ;
+  var authenticateTo;
+  var callbackFrom;
+  var configure;
+  var handleAuthenticatedUser;
+  var sendUnsupportedPartyError;
 
   authenticateTo = {
     facebook: function(req, res, next) {

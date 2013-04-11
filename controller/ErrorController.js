@@ -1,9 +1,6 @@
-var ErrorController;
-
-ErrorController = (function() {
-  var getCodeError
-    , getErrorJSON
-    ;
+var ErrorController = (function() {
+  var getCodeError;
+  var getErrorJSON;
 
   getCodeError = function(code) {
     switch (code) {

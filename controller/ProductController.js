@@ -1,5 +1,4 @@
 var ProductController = (function() {
-
   var OperationHelper = require('apac').OperationHelper;
   var ErrorController = require('./ErrorController');
   var instanceOpHelper;
