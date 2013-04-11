@@ -58,11 +58,11 @@ var UserRoutes = (function() {
   };
 
   idParamExists = function(req) {
-    return req.params.hasOwnProperty('id');
+    return req.params.hasOwnProperty('id') && req.params.id;
   };
 
   userIdExists = function(req) {
-    return req.hasOwnProperty('user') && req.user.hasOwnProperty('_id');
+    return req.hasOwnProperty('user') && req.user.hasOwnProperty('_id') && req.user._id;
   };
 
   userPrivilagesExists = function(req) {
@@ -113,6 +113,26 @@ var UserRoutes = (function() {
         handleUserId(req);
         handleAuthorization(req, res, true, UserController.updateUserPreferences);
       });
+
+      app.get('/users/:id/favorites', function(req, res) {
+        handleUserId(req);
+        handleAuthorization(req, res, true, UserController.getUserFavorites);
+      });
+
+      app.post('/users/:id/favorites', function(req, res) {
+        handleUserId(req);
+        handleAuthorization(req, res, true, UserController.replaceUserFavorites);
+      });
+
+      app.put('/users/:id/favorites', function(req, res) {
+        handleUserId(req);
+        handleAuthorization(req, res, true, UserController.addUserFavorites);
+      });
+
+      app.del('/users/:id/favorites', function(req, res) {
+        handleUserId(req);
+        handleAuthorization(req, res, true, UserController.deleteUserFavorites);
+      })
     }
   };
 })();
