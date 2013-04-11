@@ -13,7 +13,7 @@ var UserRoutes = require('./routes/UserRoutes');
 var AuthenticationController = require('./controller/AuthenticationController');
 
 var app = express();
-var process = process || {env: {}};
+process = process || {env: {}};
 
 app.configure(function() {
   var onLocalHost = !process.env.ENVIRONMENT;
