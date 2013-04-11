@@ -1,9 +1,10 @@
 var ProductController = (function() {
 
-  var OperationHelper = require('apac').OperationHelper
-    , ErrorController = require('./ErrorController')
-    , instanceOpHelper
-    , getOpHelper;
+  var OperationHelper = require('apac').OperationHelper;
+  var ErrorController = require('./ErrorController');
+  var instanceOpHelper;
+  var getOpHelper;
+  var defaultResponseGroups = 'Small,OfferSummary,Images'
 
   getOpHelper = function() {
     if (!instanceOpHelper) {
@@ -17,13 +18,26 @@ var ProductController = (function() {
   }
 
   return {
-    getProducts: function(req, res) {
+    searchProducts: function(req, res) {
       getOpHelper().execute('ItemSearch', {
         SearchIndex: req.query.searchIndex || 'All',
         Keywords: req.query.keywords || ' ',
         MaximumPrice: req.query.price || req.query.maxPrice || req.query.minPrice || 1000,
         MinimumPrice: req.query.price || req.query.minPrice || req.query.maxPrice || 1000,
-        ResponseGroup: req.query.responseGroup || 'Small,OfferSummary'
+        ResponseGroup: req.query.responseGroup || defaultResponseGroups
+      }, function(error, results) {
+        if (error) {
+          ErrorController.sendErrorJson(res, 500, error);
+        } else {
+          res.send(results);
+        }
+      });
+    },
+    getProducts: function(req, res) {
+      getOpHelper().execute('ItemLookup', {
+        ItemId: req.query.ids,
+        IdType: req.query.idType || 'ASIN',
+        ResponseGroup: req.query.responseGroup || defaultResponseGroups
       }, function(error, results) {
         if (error) {
           ErrorController.sendErrorJson(res, 500, error);
