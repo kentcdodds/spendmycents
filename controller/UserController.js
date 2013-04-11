@@ -1,11 +1,12 @@
 var UserController
-  , User = require('../model/User')
-  , logger = require('winston')
-  , DatabaseController = require('./DatabaseController')
-  , ErrorController = require('./ErrorController');
 
 UserController = (function() {
 
+  var logger = require('winston');
+  var _ = require('underscore');
+  var User = require('../model/User');
+  var DatabaseController = require('./DatabaseController');
+  var ErrorController = require('./ErrorController');
   var findUserWithProviderId
   var createNewUser;
   var userIsAdmin;
@@ -72,7 +73,7 @@ UserController = (function() {
     var query = {};
     query[profile.provider + 'Id'] = profile.id;
     DatabaseController.findOneObjectByQuery(userCollectionName, query, function(error, doc) {
-      if(error || !doc) {
+      if (error || !doc) {
         callback(error, null);
       } else {
         var user = (doc ? new User(doc) : null);
@@ -240,7 +241,7 @@ UserController = (function() {
     },
     addUserFavorites: function(req, res) {
       getContextualUser(req, res, function(user) {
-        user.favorites = user.favorites.concat(req.query.ids.split(','));
+        user.favorites = _.union(user.favorites, req.query.ids.split(','));
         saveUser(res, user, function(updateduser) {
           res.json(user.favorites);
         });
@@ -255,10 +256,15 @@ UserController = (function() {
       });
     },
     deleteUserFavorites: function(req, res) {
+      var newFavorites;
       getContextualUser(req, res, function(user) {
-        user.favorites = [];
+        newFavorites = [];
+        if (req.query.hasOwnProperty('ids')) {
+          newFavorites = _.difference(user.favorites, req.query.ids.split(','));
+        }
+        user.favorites = newFavorites;
         saveUser(res, user, function(updateduser) {
-          res.json(user.getObject());
+          res.json(user.favorites);
         });
       });
     },
