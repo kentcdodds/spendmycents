@@ -115,23 +115,27 @@ var UserRoutes = (function() {
       });
 
       app.get('/users/:id/favorites', function(req, res) {
+        var functionToCall = UserController.getUserFavorites;
         handleUserId(req);
-        handleAuthorization(req, res, true, UserController.getUserFavorites);
+        if (req.query.ids) {
+          functionToCall = UserController.getUserFavoritesNumbers;
+        }
+        handleAuthorization(req, res, true, functionToCall);
       });
 
       app.post('/users/:id/favorites', function(req, res) {
         handleUserId(req);
-        handleAuthorization(req, res, true, UserController.replaceUserFavorites);
+        handleAuthorization(req, res, true, UserController.replaceUserFavoritesNumbers);
       });
 
       app.put('/users/:id/favorites', function(req, res) {
         handleUserId(req);
-        handleAuthorization(req, res, true, UserController.addUserFavorites);
+        handleAuthorization(req, res, true, UserController.addUserFavoritesNumbers);
       });
 
       app.del('/users/:id/favorites', function(req, res) {
         handleUserId(req);
-        handleAuthorization(req, res, true, UserController.deleteUserFavorites);
+        handleAuthorization(req, res, true, UserController.deleteUserFavoritesNumbers);
       })
     }
   };

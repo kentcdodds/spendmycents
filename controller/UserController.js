@@ -3,6 +3,7 @@ var UserController = (function() {
   var logger = require('winston');
   var _ = require('underscore');
   var User = require('../model/User');
+  var ProductController = require('./ProductController');
   var DatabaseController = require('./DatabaseController');
   var ErrorController = require('./ErrorController');
   var findUserWithProviderId
@@ -234,10 +235,18 @@ var UserController = (function() {
     },
     getUserFavorites: function(req, res) {
       getContextualUser(req, res, function(user) {
+        req.query.ids = user.favorites.join(',');
+        console.log('User favorites: ' + user.favorites.join(','));
+        console.log('req.query.ids: ' + req.query.ids);
+        ProductController.getProducts(req, res);
+      });
+    },
+    getUserFavoritesNumbers: function(req, res) {
+      getContextualUser(req, res, function(user) {
         res.json(user.favorites);
       });
     },
-    addUserFavorites: function(req, res) {
+    addUserFavoritesNumbers: function(req, res) {
       getContextualUser(req, res, function(user) {
         user.favorites = _.union(user.favorites, req.query.ids.split(','));
         saveUser(res, user, function(updateduser) {
@@ -245,7 +254,7 @@ var UserController = (function() {
         });
       });
     },
-    replaceUserFavorites: function(req, res) {
+    replaceUserFavoritesNumbers: function(req, res) {
       getContextualUser(req, res, function(user) {
         user.favorites = req.query.ids.split(',');
         saveUser(res, user, function(updateduser) {
@@ -253,7 +262,7 @@ var UserController = (function() {
         });
       });
     },
-    deleteUserFavorites: function(req, res) {
+    deleteUserFavoritesNumbers: function(req, res) {
       var newFavorites;
       getContextualUser(req, res, function(user) {
         newFavorites = [];
