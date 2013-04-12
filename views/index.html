@@ -8,6 +8,7 @@
 	    
         <link rel="stylesheet" href="../public/bootstrap/css/bootstrap.min.css" media="screen">
         <link rel="stylesheet" href="../public/css/style.css" type="text/css">
+        <link rel="stylesheet" href="../public/lib/zocial/zocial.css" type="text/css">
 
     </head>
 
@@ -29,9 +30,18 @@
                       
                             <button id='search-button' class="btn" ng-click='sendRequest()'>Search</button>
             
-                        <button href="#" id="login" class="btn user-button">
+                        
+                        <div class="btn-group user-button">
+                          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                             <i class="icon-user"></i>
-                        </button>
+                          </a>
+                          <ul class="dropdown-menu">
+                              <a href="/auth/facebook" id="login-facebook" class="dropdown-menu zocial facebook">Facebook</a><br/>
+                              <a href="/auth/google" id="login-google" class="dropdown-menu zocial google">Google</a><br/>
+                              <a href="/auth/twitter" id="login-twitter" class="dropdown-menu zocial twitter">Twitter</a><br/>
+                          </ul>
+                          
+                        </div>
                         <button class="btn user-button" href="#settings-modal" id="settings" role="button" data-toggle="modal" >
                             <i class="icon-wrench"></i>
                         </button>
