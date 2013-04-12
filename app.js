@@ -51,11 +51,17 @@ app.configure('development', function() {
 /*
  * Setup Routes
  */
+
 app.get('/', function(req, res) {
   res.render('index', {
     title: 'Spend My Cents!'
   });
 });
+app.get('/partials/:name', function(req, res) {
+  var name = req.params.name;
+  res.render('partials/' + name);
+});
+
 ProductRoutes.setupRoutes(app);
 AuthenticationRoutes.setupRoutes(app);
 UserRoutes.setupRoutes(app);
