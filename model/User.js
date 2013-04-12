@@ -30,7 +30,11 @@ var User = function(userInfo) {
 
   this.preferences = function(newPreferences) {
     if (newPreferences) {
-      this.preferenceNum = UserController.convertPreferencesToPreferenceNumber(newPreferences, this.preferenceNum);
+      if (typeof newPreferences === 'string') {
+        this.preferenceNum = newPreferences;
+      } else {
+        this.preferenceNum = UserController.convertPreferencesToPreferenceNumber(newPreferences, this.preferenceNum);
+      }
     }
     return UserController.convertPreferenceNumberToPreferences(this.preferenceNum);
   }

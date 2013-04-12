@@ -109,6 +109,11 @@ var UserRoutes = (function() {
         handleAuthorization(req, res, true, UserController.getUsersPreferences);
       });
 
+      app.post('/users/:id/preferences', function(req, res) {
+        handleUserId(req);
+        handleAuthorization(req, res, true, UserController.setUserPreferences);
+      });
+
       app.put('/users/:id/preferences', function(req, res) {
         handleUserId(req);
         handleAuthorization(req, res, true, UserController.updateUserPreferences);
@@ -125,7 +130,7 @@ var UserRoutes = (function() {
 
       app.post('/users/:id/favorites', function(req, res) {
         handleUserId(req);
-        handleAuthorization(req, res, true, UserController.replaceUserFavoritesNumbers);
+        handleAuthorization(req, res, true, UserController.setUserFavoritesNumbers);
       });
 
       app.put('/users/:id/favorites', function(req, res) {

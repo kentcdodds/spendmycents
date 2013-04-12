@@ -12,7 +12,6 @@ var UserController = (function() {
   var findOrCreateUserFromProfile;
   var saveUser;
   var findUserById;
-  var updatePreferences;
   var getContextualUser;
   var userCollectionName = 'SMC_USER';
   var preferenceArray =
@@ -155,13 +154,6 @@ var UserController = (function() {
     });
   };
 
-  updatePreferences = function(res, user, preferences) {
-    user.preferences(preferences);
-    saveUser(res, user, function(updatedUser) {
-      res.json(200, updatedUser.getObject());
-    });
-  };
-
   getContextualUser = function(req, res, callback) {
     if (req.user.id === req.params.id) {
       callback(req.user);
@@ -207,10 +199,23 @@ var UserController = (function() {
     findById: function(id, callback) {
       findUserById(id, callback);
     },
+    setUserPreferences: function(req, res) {
+      var preferences = req.body;
+      getContextualUser(req, res, function(user) {
+        user.preferences(preferences);
+        saveUser(res, user, function(updatedUser) {
+          res.json(200, updatedUser.getObject());
+        });
+      });
+    },
     updateUserPreferences: function(req, res) {
       var preferences = req.body;
       getContextualUser(req, res, function(user) {
-        updatePreferences(res, user, preferences);
+        var newPreferences = require('./UserController').convertPreferencesToPreferenceNumber(preferences, user.preferenceNum);
+        user.preferences(newPreferences);
+        saveUser(res, user, function(updatedUser) {
+          res.json(200, updatedUser.getObject());
+        });
       });
     },
     saveUser: function(req, res) {
@@ -257,7 +262,7 @@ var UserController = (function() {
         });
       });
     },
-    replaceUserFavoritesNumbers: function(req, res) {
+    setUserFavoritesNumbers: function(req, res) {
       getContextualUser(req, res, function(user) {
         user.favorites = req.query.ids.split(',');
         saveUser(res, user, function(updateduser) {
