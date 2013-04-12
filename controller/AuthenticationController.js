@@ -30,19 +30,19 @@ var AuthenticationController = (function() {
   callbackFrom = {
     facebook: function(req, res, next) {
       passport.authenticate('facebook', {
-        successRedirect: '/users/me',
+        successRedirect: '/',
         failureRedirect: '/facebook-failure'
       })(req, res, next);
     },
     twitter: function(req, res, next) {
       passport.authenticate('twitter', {
-        successRedirect: '/users/me',
+        successRedirect: '/',
         failureRedirect: '/twitter-failure'
       })(req, res, next);
     },
     google: function(req, res, next) {
       passport.authenticate('google', {
-        successRedirect: '/users/me',
+        successRedirect: '/',
         failureRedirect: '/google-failure'
       })(req, res, next);
     }
