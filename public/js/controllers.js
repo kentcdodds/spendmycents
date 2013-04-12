@@ -2,30 +2,29 @@
 
 /* Controllers */
 
-function ProductControl($scope, $http, $location) {
-  // console.log('calling product control')
-//   $http.get('/products?price=2000').success(function(data) {
-//     console.log(data)
-//     window.dataStuff = data;
-//     $scope.products = data.ItemSearchResponse.Items[0].Item;
-//   });
-  
-  $scope.sendRequest = function () {
-    $http({
-        url: '/products', 
-        method: "GET",
-        query: {price: $scope.price}
-     }).success(function(data) {
-      console.log(data)
-      window.dataStuff = data;
-      $scope.products = data.ItemSearchResponse.Items[0].Item;    
-    });
-  }
+function ProductControl($scope, $http) {
+  console.log('calling product control')
+  $http.get('/products?price=2000').success(function(data) {
+    console.log(data)
+    window.dataStuff = data;
+    $scope.products = data.ItemSearchResponse.Items[0].Item;
+  });
+  // console.log('calling product control');
+//   $scope.sendRequest = function () {
+//     $http({
+//         url: '/products', 
+//         method: "GET",
+//         query: {price: $scope.price}
+//      }).success(function(data) {
+//       console.log(data)
+//       window.dataStuff = data;
+//       $scope.products = data.ItemSearchResponse.Items[0].Item;    
+//     });
+//   }
 
-  
 }
 
-ProductControl.$inject = ['$scope', '$http', '$location'];
+ProductControl.$inject = ['$scope', '$http'];
 
 
 function ProductDetailControl($scope, $routeParams) {
@@ -33,3 +32,4 @@ function ProductDetailControl($scope, $routeParams) {
 }
 
 ProductDetailControl.$inject = ['$scope', '$routeParams'];
+

@@ -24,32 +24,36 @@ a {
   display: inline;
 }
 
+img.product-image {
+  max-height: 100%;
+  max-width: 100%;
+}
+
 span.product-manufacturer {
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
   font-weight: bold;
   margin-bottom: 10px;
-	position: relative;
-	top: 250px;
+	position: absolute;
+	display: block;
   
 }
 
 span.product-title {
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
 	position: relative;
-	top: 250px;
+	display: block;
 	
 }
 
 span.product-price {
   font: 48px "Lucida Grande", Helvetica, Arial, sans-serif;
   display: block;
-  margin-top: 100px;
 }
 
 .product-panel {
 	float: left;
-	width: 350px;
-	height: 350px;
+	width: 250px;
+	height: 250px;
 	margin: 20px;
 	position: relative;
 	text-align: center;
@@ -67,7 +71,7 @@ span.product-price {
 	width: inherit;
 	height: inherit;
 	border: 5px solid #ccc;
-	background: rgb(240, 240, 240);
+	background: rgb(255, 255, 255);
 
 
 	-moz-box-shadow: 0 1px 5px rgba(0,0,0,0.9);
