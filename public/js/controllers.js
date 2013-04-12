@@ -2,19 +2,34 @@
 
 /* Controllers */
 
-function ProductControl($scope, $http) {
-  $http.get('/products').success(function(data) {
-    $scope.products = data;
-  });
+function ProductControl($scope, $http, $location) {
+  // console.log('calling product control')
+//   $http.get('/products?price=2000').success(function(data) {
+//     console.log(data)
+//     window.dataStuff = data;
+//     $scope.products = data.ItemSearchResponse.Items[0].Item;
+//   });
+  
+  $scope.sendRequest = function () {
+    $http({
+        url: '/products', 
+        method: "GET",
+        query: {price: $scope.price}
+     }).success(function(data) {
+      console.log(data)
+      window.dataStuff = data;
+      $scope.products = data.ItemSearchResponse.Items[0].Item;    
+    });
+  }
 
-  $scope.orderProp = 'age';
+  
 }
 
-//PhoneListCtrl.$inject = ['$scope', '$http'];
+ProductControl.$inject = ['$scope', '$http', '$location'];
 
 
-// function PhoneDetailCtrl($scope, $routeParams) {
-//   $scope.phoneId = $routeParams.phoneId;
-// }
+function ProductDetailControl($scope, $routeParams) {
+  $scope.phoneId = $routeParams.phoneId;
+}
 
-//PhoneDetailCtrl.$inject = ['$scope', '$routeParams'];
+ProductDetailControl.$inject = ['$scope', '$routeParams'];

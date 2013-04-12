@@ -8,3 +8,8 @@ exports.index = function(req, res){
   	title: 'Spend My Cents!'
   });
 };
+
+exports.partials = function (req, res) {
+  var name = req.params.name;
+  res.render('partials/' + name);
+};

@@ -5,7 +5,7 @@
 angular.module('spendmycents', []).
   config(['$routeProvider', function($routeProvider) {
   $routeProvider.
-      when('/phones', {templateUrl: 'partials/phone-list.html',   controller: PhoneListCtrl}).
-      when('/phones/:phoneId', {templateUrl: 'partials/phone-detail.html', controller: PhoneDetailCtrl}).
-      otherwise({redirectTo: '/phones'});
+      when('/index', {templateUrl: 'partials/productSearchTemplate.html',   controller: ProductControl}).
+      when('/products/:productId', {templateUrl: 'html/productDetailTemplate.html', controller: ProductDetailControl}).
+      otherwise({redirectTo: '/index'});
 }]);

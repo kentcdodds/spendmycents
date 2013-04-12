@@ -1,0 +1,17 @@
+<div class="products">
+    <div ng-repeat="product in products" class='hover product-panel'>
+        <div class='front'>      
+            
+            <span class='product-title'>{{product.ItemAttributes[0].Title[0]}}</span><br/>
+            <span class='product-manufacturer'>{{product.ItemAttributes[0].Manufacturer[0]}}</span>
+        </div>
+        <div class='back'>
+            <span class='product-price'>{{product.OfferSummary[0].LowestNewPrice[0].FormattedPrice[0]}}</span><br/>
+            <a href="{{product.DetailPageURL[0]}}">See on Amazon</a>
+        </div>
+<!-- <img href="#/products/{{phone.id}}" class="thumb"><img ng-src="{{product.imageUrl}}"></a> -->
+
+
+
+</div>
+</div>

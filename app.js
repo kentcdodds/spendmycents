@@ -61,6 +61,7 @@ app.configure('development', function() {
  * Setup Routes
  */
 app.get('/', routes.index);
+app.get('/partials/:name', routes.partials);
 ProductRoutes.setupRoutes(app, ProductController);
 AuthenticationRoutes.setupRoutes(app);
 UserRoutes.setupRoutes(app);
