@@ -16,6 +16,7 @@
     "passport-twitter": "*",
     "passport-google-oauth": "*",
     "mongodb": "*",
-    "winston": "*"
+    "winston": "*",
+    "underscore": "*"
   }
 }

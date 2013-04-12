@@ -1,30 +1,23 @@
-
 /**
  * Module dependencies.
  */
+var express = require('express');
+var http = require('http');
+var path = require('path');
+var passport = require('passport');
 
-var express = require('express')
-  , http = require('http')
-  , path = require('path')
-  , passport = require('passport')
+var ProductRoutes = require('./routes/ProductRoutes');
+var AuthenticationRoutes = require('./routes/AuthenticationRoutes');
+var UserRoutes = require('./routes/UserRoutes');
 
-  , routes = require('./routes')
+var AuthenticationController = require('./controller/AuthenticationController');
 
-  , ProductRoutes = require('./routes/ProductRoutes')
-  , ProductController = require('./controller/ProductController')
-
-  , AuthenticationRoutes = require('./routes/AuthenticationRoutes')
-  , AuthenticationController = require('./controller/AuthenticationController')
-
-  , DatabaseController = require('./controller/DatabaseController')
-
-  , UserRoutes = require('./routes/UserRoutes')
-  , UserController = require('./controller/UserController')
-  ;
 var app = express();
+process = process || {env: {}};
 
 app.configure(function() {
   var onLocalHost = !process.env.ENVIRONMENT;
+  var oneWeek = 604800000;
   if (onLocalHost) {
     require('./config.local').env.setupEnvironmentVariables();
   }
@@ -33,7 +26,6 @@ app.configure(function() {
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use('/public', express.static(__dirname + '/public'));
-  // app.use(require('stylus').middleware(__dirname + '/public'));
 
   app.use(express.favicon());
 
@@ -42,8 +34,7 @@ app.configure(function() {
   app.use(express.cookieParser());
 
   app.use(express.methodOverride());
-  var oneWeek = 604800000;
-  app.use(express.session({secret: 'funny monkey', cookie: { maxAge: oneWeek * 3 }}));
+  app.use(express.session({secret: 'funny monkey', cookie: {maxAge: oneWeek * 3}}));
 
   app.use(express.static(__dirname + '/public'));
   app.use(passport.initialize());
@@ -60,9 +51,12 @@ app.configure('development', function() {
 /*
  * Setup Routes
  */
-app.get('/', routes.index);
-app.get('/partials/:name', routes.partials);
-ProductRoutes.setupRoutes(app, ProductController);
+app.get('/', function(req, res) {
+  res.render('index', {
+    title: 'Spend My Cents!'
+  });
+});
+ProductRoutes.setupRoutes(app);
 AuthenticationRoutes.setupRoutes(app);
 UserRoutes.setupRoutes(app);
 
@@ -70,7 +64,6 @@ UserRoutes.setupRoutes(app);
  * Configure authentication
  */
 AuthenticationController.setupPassport();
-
 
 /*
  * Start server

@@ -1,21 +1,20 @@
 var DatabaseController = (function() {
-  var mongo = require('mongodb')
-    , logger = require('winston')
-    , openConnectionToCollection
-    , getOrCreateClient
-    , findOneObject
-    , deleteObjectByQuery;
+  var mongo = require('mongodb');
+  var logger = require('winston');
+  var openConnectionToCollection;
+  var getOrCreateClient;
+  var deleteObjectByQuery;
 
   getOrCreateClient = function(callback) {
     if (this.instanceClient) {
       callback(null, this.instanceClient);
     } else {
-      var services = JSON.parse(process.env.VCAP_SERVICES)
-        , dbInfo = services['mongodb-1.8'][0]
-        , server = new mongo.Server(dbInfo.credentials.host, dbInfo.credentials.port, {auto_reconnect: false})
-        , username = dbInfo.credentials.username
-        , password = dbInfo.credentials.password
-        , authenticateToClient;
+      var services = JSON.parse(process.env.VCAP_SERVICES);
+      var dbInfo = services['mongodb-1.8'][0];
+      var server = new mongo.Server(dbInfo.credentials.host, dbInfo.credentials.port, {auto_reconnect: false});
+      var username = dbInfo.credentials.username;
+      var password = dbInfo.credentials.password;
+      var authenticateToClient;
 
       this.instanceClient = new mongo.Db(dbInfo.name, server, {w: 1, strict: true});
 
@@ -86,15 +85,6 @@ var DatabaseController = (function() {
     });
   };
 
-  findOneObject = function(collectionName, query, callback) {
-    openConnectionToCollection(collectionName, function(collection) {
-      collection.findOne(query, function(error, doc) {
-        collection.db.close();
-        callback(error, doc);
-      });
-    });
-  };
-
   deleteObjectByQuery = function(collectionName, query, callback) {
     openConnectionToCollection(collectionName, function(collection) {
       collection.remove(query, {save: true}, function(error, numberRemoved) {
@@ -122,11 +112,16 @@ var DatabaseController = (function() {
       });
     },
     findOneObjectById: function(collectionName, idString, callback) {
-      findOneObject(collectionName, {_id: new mongo.ObjectID(idString)}, callback);
+      this.findOneObjectByQuery(collectionName, {_id: new mongo.ObjectID(idString)}, callback);
     },
     findOneObjectByQuery: function(collectionName, query, callback) {
-      findOneObject(collectionName, query, callback);
-    },
+    openConnectionToCollection(collectionName, function(collection) {
+      collection.findOne(query, function(error, doc) {
+        collection.db.close();
+        callback(error, doc);
+      });
+    });
+  },
     deleteObjectById: function(collectionName, idString, callback) {
       deleteObjectByQuery(collectionName, {_id: new mongo.ObjectID(idString)}, callback);
     }

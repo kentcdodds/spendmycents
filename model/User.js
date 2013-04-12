@@ -1,7 +1,9 @@
 var User = function(userInfo) {
-  var logger = require('winston')
-    , UserController = require('../controller/UserController')
-    , adjustedEmails = [];
+  var logger = require('winston');
+  var UserController = require('../controller/UserController');
+  var adjustedEmails = [];
+
+  userInfo = userInfo || {};
 
   if (userInfo.fromPassport && userInfo.emails) {
     for (var i = 0; i < userInfo.emails.length; i++) {
@@ -23,13 +25,18 @@ var User = function(userInfo) {
   this.googleId = userInfo.googleId;
   this.privilages = userInfo.privilages || 'user';
   this.preferenceNum = userInfo.preferenceNum || UserController.getDefaultPreferenceNumber();
+  this.favorites = userInfo.favorites || [];
   this.lastLogin = userInfo.lastLogin || new Date();
 
   this.preferences = function(newPreferences) {
     if (newPreferences) {
-      this.preferenceNum = UserController.convertPreferencesToPreferenceNumber(newPreferences);
+      this.preferenceNum = UserController.convertPreferencesToPreferenceNumber(newPreferences, this.preferenceNum);
     }
     return UserController.convertPreferenceNumberToPreferences(this.preferenceNum);
+  }
+
+  this.id = function() {
+    return (this.hasOwnProperty('_id') ? this._id.toString() : null);
   }
 
   this.getObject = function() {
@@ -41,6 +48,7 @@ var User = function(userInfo) {
       twitterId: this.twitterId,
       googleId: this.googleId,
       privilages: this.privilages,
+      favorites: this.favorites,
       preferences: this.preferences(),
       lastLogin: this.lastLogin
     }

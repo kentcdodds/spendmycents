@@ -1,17 +1,21 @@
-var UserController
-  , User = require('../model/User')
-  , logger = require('winston')
-  , DatabaseController = require('./DatabaseController')
-  , ErrorController = require('./ErrorController');
+var UserController = (function() {
 
-UserController = (function() {
-
+  var logger = require('winston');
+  var _ = require('underscore');
+  var User = require('../model/User');
+  var ProductController = require('./ProductController');
+  var DatabaseController = require('./DatabaseController');
+  var ErrorController = require('./ErrorController');
   var findUserWithProviderId
-    , createNewUser
-    , userIsAdmin
-    , findUserById
-    , userCollectionName = 'SMC_USER'
-    , preferenceArray =
+  var createNewUser;
+  var userIsAdmin;
+  var findOrCreateUserFromProfile;
+  var saveUser;
+  var findUserById;
+  var updatePreferences;
+  var getContextualUser;
+  var userCollectionName = 'SMC_USER';
+  var preferenceArray =
     [
       'All',
       'Apparel',
@@ -68,8 +72,12 @@ UserController = (function() {
     var query = {};
     query[profile.provider + 'Id'] = profile.id;
     DatabaseController.findOneObjectByQuery(userCollectionName, query, function(error, doc) {
-      var user = (doc ? new User(doc) : null);
-      callback(error, user);
+      if (error || !doc) {
+        callback(error, null);
+      } else {
+        var user = (doc ? new User(doc) : null);
+        callback(error, user);
+      }
     });
   };
 
@@ -105,12 +113,10 @@ UserController = (function() {
     return false;
   }
 
-  findOrCreateUser = function(profile, callback) {
+  findOrCreateUserFromProfile = function(profile, callback) {
     findUserWithProviderId(profile, function(error, user) {
       if (error) {
-        logger.warn('There was an error finging a user with a provider id');
-        logger.error(error);
-        throw error;
+        callback(error, null);
       }
       if (!user) {
         logger.log('Creating new user');
@@ -118,25 +124,67 @@ UserController = (function() {
       } else {
         logger.log('User found, updating lastLogin date and saving.');
         user.lastLogin = new Date();
-        DatabaseController.saveObject(userCollectionName, user, function(error, updatedUser) {
+        saveUser(null, user, function(updatedUser, error) {
           callback(error, user);
         });
       }
     });
   };
 
-  findUserById = function(id, callback) {
-    DatabaseController.findOneObjectById(userCollectionName, id, function(error, doc) {
-      var user = new User(doc);
-      callback(error, user);
+  saveUser = function(res, user, callback) {
+    DatabaseController.saveObject(userCollectionName, user, function(error, updatedUser) {
+      if (res && (error || !updatedUser)) {
+        ErrorController.sendErrorJson(res, 500, error);
+      } else if (!res && (error || !updatedUser)) {
+        callback(null, error);
+      } else {
+        logger.log('User saved successfully');
+        callback(user);
+      }
     });
   };
 
+  findUserById = function(id, callback) {
+    DatabaseController.findOneObjectById(userCollectionName, id, function(error, doc) {
+      if (error) {
+        callback(error, null);
+      } else {
+        var user = new User(doc);
+        callback(error, user);
+      }
+    });
+  };
 
+  updatePreferences = function(res, user, preferences) {
+    user.preferences(preferences);
+    saveUser(res, user, function(updatedUser) {
+      res.json(200, updatedUser.getObject());
+    });
+  };
+
+  getContextualUser = function(req, res, callback) {
+    if (req.user.id === req.params.id) {
+      callback(req.user);
+    } else {
+      findUserById(req.params.id, function(error, user) {
+        if (error || !user) {
+          ErrorController.sendErrorJson(res, 500, error);
+        } else {
+          callback(user);
+        }
+      });
+    }
+  }
 
   return {
+    ADMIN: 'admin',
+    ME: 'me',
     getMe: function(req, res) {
       res.json(req.user.getObject());
+    },
+    handleAuthenticatedUser: function(profile, callback) {
+      profile.fromPassport = true;
+      findOrCreateUserFromProfile(profile, callback);
     },
     getAllUsers: function(req, res) {
       DatabaseController.findAll(userCollectionName, function(error, results) {
@@ -144,45 +192,90 @@ UserController = (function() {
       });
     },
     getUser: function(req, res) {
-      findUserById(req.params.id, function(error, user) {
-        if (error || !user) {
-          ErrorController.sendErrorJson(res, 500, error);
-        } else {
-          res.json(user.getObject());
-        }
+      getContextualUser(req, res, function(user) {
+        res.json(user.getObject());
+      });
+    },
+    getUsersPreferences: function(req, res) {
+      getContextualUser(req, res, function(user) {
+        res.json(user.preferences());
       });
     },
     getPreferencesList: function(req, res) {
       res.json(200, preferenceArray);
-    },
-    handleAuthenticatedUser: function(profile, callback) {
-      profile.fromPassport = true;
-      findOrCreateUser(profile, callback);
     },
     findById: function(id, callback) {
       findUserById(id, callback);
     },
     updateUserPreferences: function(req, res) {
       var preferences = req.body;
-      var currentUser = req.user;
-      currentUser.preferences(preferences);
-      DatabaseController.saveObject(userCollectionName, currentUser, function(error, updatedUser) {
-        res.json(200, updatedUser);
+      getContextualUser(req, res, function(user) {
+        updatePreferences(res, user, preferences);
       });
     },
     saveUser: function(req, res) {
       var user = new User(req.body);
-      findOrCreateUser(user, function(error, newUser) {
-        res.json(newUser);
-      })
+      saveUser(res, user, function(updatedUser) {
+        res.json(user);
+      });
     },
     deleteUser: function(req, res) {
+      var logoutMessage;
       DatabaseController.deleteObjectById(userCollectionName, req.params.id, function(error, numberRemoved) {
         if (error) {
           ErrorController.sendErrorJson(res, 500, error);
         } else {
-          res.json({response: 'Success deleting user with id ' + req.params.id});
+          if (req.params.id === req.user.id) {
+            req.logout();
+            logoutMessage = 'This was you. Your session has ended.';
+          }
+          res.json({response: 'Success deleting user with id ' + req.params.id + ((logoutMessage) ? '. ' + logoutMessage : '')});
         }
+      });
+    },
+    getUserFavorites: function(req, res) {
+      getContextualUser(req, res, function(user) {
+        if (_.isEmpty(user.favorites)) {
+          res.json({});
+        } else {
+          req.query.index = req.query.index || 0;
+          req.query.ids = _.rest(user.favorites, req.query.index).join(',');
+          ProductController.getProducts(req, res);
+        }
+      });
+    },
+    getUserFavoritesNumbers: function(req, res) {
+      getContextualUser(req, res, function(user) {
+        res.json(user.favorites);
+      });
+    },
+    addUserFavoritesNumbers: function(req, res) {
+      getContextualUser(req, res, function(user) {
+        user.favorites = _.union(user.favorites, req.query.ids.split(','));
+        saveUser(res, user, function(updateduser) {
+          res.json(user.favorites);
+        });
+      });
+    },
+    replaceUserFavoritesNumbers: function(req, res) {
+      getContextualUser(req, res, function(user) {
+        user.favorites = req.query.ids.split(',');
+        saveUser(res, user, function(updateduser) {
+          res.json(user.favorites);
+        });
+      });
+    },
+    deleteUserFavoritesNumbers: function(req, res) {
+      var newFavorites;
+      getContextualUser(req, res, function(user) {
+        newFavorites = [];
+        if (req.query.hasOwnProperty('ids')) {
+          newFavorites = _.difference(user.favorites, req.query.ids.split(','));
+        }
+        user.favorites = newFavorites;
+        saveUser(res, user, function(updateduser) {
+          res.json(user.favorites);
+        });
       });
     },
     getDefaultPreferences: function() {
@@ -203,15 +296,22 @@ UserController = (function() {
       }
       return preferences;
     },
-    convertPreferencesToPreferenceNumber: function(preferences) {
+    convertPreferencesToPreferenceNumber: function(preferences, defaultPreferenceNumber) {
       var preferenceNumberArray = [];
+      var defaultPreferenceNumberArray = ((defaultPreferenceNumber) ? defaultPreferenceNumber.split('') : []);
+      var preferenceValue = 1;
       if (preferences.All === true) {
         for (var i = 0; i < preferenceArray.length; i++) {
           preferenceNumberArray[i] = 1;
         }
       } else {
         for (var i = 0; i < preferenceArray.length; i++) {
-          preferenceNumberArray[i] = (preferences[preferenceArray[i]] ? 1 : 0);
+          if (preferences.hasOwnProperty(preferenceArray[i])) {
+            preferenceValue = ((preferences[preferenceArray[i]]) ? 1 : 0);
+          } else {
+            preferenceValue = defaultPreferenceNumberArray[i] || 1;
+          }
+          preferenceNumberArray[i] = preferenceValue;
         }
       }
       return preferenceNumberArray.join('');

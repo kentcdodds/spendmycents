@@ -1,17 +1,14 @@
-var AuthenticationController
-  , logger = require('winston')
-  , passport = require('passport')
-  , UserController = require('./UserController')
-  , ErrorController = require('./ErrorController')
-  ;
+var AuthenticationController = (function() {
+  var logger = require('winston');
+  var passport = require('passport');
+  var UserController = require('./UserController');
+  var ErrorController = require('./ErrorController');
 
-AuthenticationController = (function() {
-  var authenticateTo
-    , callbackFrom
-    , configure
-    , handleAuthenticatedUser
-    , sendUnsupportedPartyError
-    ;
+  var authenticateTo;
+  var callbackFrom;
+  var configure;
+  var handleAuthenticatedUser;
+  var sendUnsupportedPartyError;
 
   authenticateTo = {
     facebook: function(req, res, next) {
@@ -58,8 +55,9 @@ AuthenticationController = (function() {
         logger.warn('There was an error with handling a ' + profile.provider + ' authenticated user!');
         logger.error(error);
         return done(error);
+      } else {
+        done(null, user);
       }
-      done(null, user);
     });
   }
 

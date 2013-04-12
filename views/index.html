@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html ng-app="spendmycents">
+<html lang='en'>
     <head>
         <meta charset="utf-8">
         <title>SpendMyCents.com</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    
-        <link rel="stylesheet" href="../public/lib/bootstrap/css/bootstrap.min.css" media="screen">
-        <link rel="stylesheet" href="../public/css/style.css" type="text/css">
+        <link rel="stylesheet" href="../public/bootstrap/css/bootstrap.min.css" media="screen">
+        <link rel="stylesheet" href="../public/stylesheets/style.css" type="text/css">
 
     </head>
 
@@ -18,19 +18,19 @@
             </div>
             <div class="span10 body-content">
 
-                <div class="row-fluid search-row">
-                    <div class="span6 search-bar" style="width: auto" ng-controller='ProductControl'>
+                <div class="row-fluid">
+                    <div class="span6 search-bar" style="width: auto">
             
-                        
+                        <form class="main-form">
                             
                             <div class="user-input input-prepend" style="margin-bottom: 0px;">
                               <span class="add-on">$</span>
-                              <input class="user-input" id="user-input-price"  type="text" ng-model='price'>
+                              <input class="user-input" id="appendedPrependedInput" type="text">
                             </div>
                       
-                            <button id='search-button' class="btn" ng-click='sendRequest()'>Search</button>
+                            <button type="submit" class="btn">Search</button>
 
-                        
+                        </form>
             
                         <button href="#" id="login" class="btn user-button">
                             <i class="icon-user"></i>
@@ -43,14 +43,9 @@
                     
                 </div>
                 
-                <div class='row-fluid results-container'>
-                    <div ng-view></div>
-                </div>
-                
             </div>
             
-            
-            
+          
           
         </div>
         
@@ -68,15 +63,12 @@
             <button class="btn btn-primary">Save changes</button>
           </div>
         </div>
-        <script src="../public/lib/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
-        <script src="../public/js/lib/angularjs/angular.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../public/js/app.js" type="text/javascript" charset="utf-8"></script>
         
-        <script src="../public/js/controllers.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../public/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
         
-        <script src="../public/lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="../public/js/view.js" type="text/javascript" charset="utf-8"></script>
-
+        <script src="../public/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="../public/javascript/view.js" type="text/javascript" charset="utf-8"></script>
+        
 
     </body>
 </html>
