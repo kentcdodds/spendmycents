@@ -23,7 +23,7 @@ SMC.setupProductView = function (products) {
     
     if (product.DetailPageURL[0]) {
       detailPageURL = product.DetailPageURL[0];
-      detailPageDescription = "See on Amazon";
+      detailPageURLDescription = "See on Amazon";
     }else {
       detailPageURL = "";
       detailPageURLDescription = "URL Unavailable";

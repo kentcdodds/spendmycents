@@ -20,9 +20,12 @@ function sendSearchRequest(){
       url: "/products",  
       data: "price="+price,  
       success: function(resp){
-          
-        SMC.setupProductView(resp.ItemSearchResponse.Items[0].Item);
-        setupHover();
+        if(resp.ItemSearchResponse.Items[0].Item.length) {  
+          SMC.setupProductView(resp.ItemSearchResponse.Items[0].Item);
+          setupHover();
+        } else {
+          sendSearchRequest();
+        }
       },  
       error: function(e){  
         alert('Error: ' + e);  
