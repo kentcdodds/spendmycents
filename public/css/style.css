@@ -26,7 +26,7 @@ div.product-info {
 
 div.product-info p {
   list-style-type: none;
-  padding: 8px;
+  padding: 5px;
 }
 
 li.login {
@@ -35,7 +35,7 @@ li.login {
 
 div.search-bar {
   width: auto;
-  margin-left: 30%;
+  margin-left: 35%;
 }
 
 #span-logo {
@@ -77,6 +77,10 @@ img.input-logo {
   max-width: auto;
 }
 
+img.loading-image {
+  margin-left: 46.3%;
+}
+
 span.product-manufacturer {
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
   font-weight: bold;
@@ -90,6 +94,10 @@ span.product-title {
 #results-container {
   margin-left: 4%;
   margin-bottom: ;
+}
+
+#results-container div.product-panel:nth-child(15) {
+  margin-left: 25.2%;
 }
 
 .product-panel {

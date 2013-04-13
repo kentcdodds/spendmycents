@@ -12,9 +12,12 @@ SMC.setupHover = function () {
 
 SMC.sendSearchRequest = function (){
   var price = $('#user-input-price').val();
+  
   if (price && parseFloat(price)){
     price = price * 100;
-   
+    $('.product-panel').remove();
+    SMC.displayLoadingGif();
+    
     $.ajax({  
       type: "GET",  
       url: "/products",  
@@ -40,6 +43,8 @@ SMC.sendSearchRequest = function (){
         alert('Error: ' + e);  
       }  
     });      
+  } else {
+    SMC.showError();
   }
 }
 
@@ -51,8 +56,27 @@ SMC.setupForUser = function (isAuthenticated) {
   }
 }
 
+SMC.displayLoadingGif = function () {
+  if (!$('.loading-image').length) {
+    $('#loading-image-container').append("<img src='../public/img/ajax-loader.gif' class='loading-image'>");
+  } else {
+    $('.loading-image').show();
+  }
+}
+
+// SMC.showError = function () {
+//   "<div class="alert">" +
+//     "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>" +
+//     "<strong>Warning!</strong> Best check yo self, youre not looking too good." + 
+//   "</div>";
+// }
+
 $(document).ready(function () {
-  
+  $('#user-input-price').keypress(function (e) {
+    if (e.which == 13) {
+      SMC.sendSearchRequest();
+    }
+  });
   // If a user is logged in, then just show favorites button
   // TODO find out how to tell if a user is authenticated
   SMC.setupForUser();

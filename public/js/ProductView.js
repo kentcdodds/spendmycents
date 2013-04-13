@@ -2,6 +2,7 @@ SMC.setupProductView = function (products) {
   
   var i;
   $('.product-panel').remove();
+  $('.loading-image').hide();
   console.log(products);
   for (i = 0; i < products.length; i += 1) {
     var product, imageURL, title, manufacturer, detailPageURL, detailPageURLDescription, productPanelTemplate;
@@ -53,6 +54,8 @@ SMC.setupProductView = function (products) {
                 "</div>"+
             "</div>" + 
         "</div>";
+    
+        
     $('#results-container').append(productPanelTemplate);
   }
   
