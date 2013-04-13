@@ -1,27 +1,32 @@
 SMC.setupProductView = function (products) {
   
-  var i = 0;
+  var i;
   $('.product-panel').remove();
-  
-  for (i; i < products.length; i += 1) {
-    var product, imageURL, title, manufacturer, detailPageURL, detailPageURLDescription, template;
+  console.log(products);
+  for (i = 0; i < products.length; i += 1) {
+    var product, imageURL, title, manufacturer, detailPageURL, detailPageURLDescription, productPanelTemplate;
     
     product = products[i];
     
-    //due to sometimes not having all the data, we need to check for null values
-    if(product.LargeImage[0].URL[0]) {
+    //due to sometimes not having all the data, we need to check for non-exisiting values
+    
+    if(product.LargeImage && product.LargeImage[0].URL && product.LargeImage[0].URL) {
       imageURL = product.LargeImage[0].URL[0];
     }
     
-    if (product.ItemAttributes[0].Title[0]) {
+    if (product.ItemAttributes && product.ItemAttributes[0].Title) {
       title = product.ItemAttributes[0].Title[0];
+    } else {
+      title = "Title not provided.";
     }
     
-    if (product.ItemAttributes[0].Manufacturer[0]) {
+    if (product.ItemAttributes && product.ItemAttributes[0] && product.ItemAttributes[0].Manufacturer) {
       manufacturer = product.ItemAttributes[0].Manufacturer[0];
+    } else {
+      manufacturer = "Unknown";
     }
     
-    if (product.DetailPageURL[0]) {
+    if (product.DetailPageURL) {
       detailPageURL = product.DetailPageURL[0];
       detailPageURLDescription = "See on Amazon";
     }else {
@@ -29,22 +34,26 @@ SMC.setupProductView = function (products) {
       detailPageURLDescription = "URL Unavailable";
     }
     
-    template =
+    productPanelTemplate =
         "<div class='hover product-panel'>" +
             "<div class='front'>"+
                 "<img class=\"product-image thumb\" src=\"" + imageURL + "\">" +    
             "</div>" + 
             "<div class='back'>" +
-                "<div class='product-title-container'>" +
-                    "<span class='product-title'>" + title + "</span>" +
-                "</div>" +
-                "<div class='product-manufacturer-container'>" +
-                    "<span class='product-manufacturer'>" + manufacturer + "</span>" +
-                "</div>" +
-                "<a href=\"" + detailPageURL + "\" target=\"_blank\">" + detailPageURLDescription + "</a>" +
+                "<div class='product-info'>" +
+                    "<p>" +
+                        "<span class='product-title'>" + title + "</span>" +
+                    "</p>" +
+                    "<p>" +
+                      "<span class='product-manufacturer'>Made By: &nbsp;" + manufacturer + "</span>" +
+                    "</p>" +
+                    "<p>" +
+                      "<a href=\"" + detailPageURL + "\" target=\"_blank\">" + detailPageURLDescription + "</a>" +
+                    "</p>" +
+                "</div>"+
             "</div>" + 
         "</div>";
-    $('#results-container').append(template);
+    $('#results-container').append(productPanelTemplate);
   }
   
 }

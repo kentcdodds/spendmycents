@@ -1,5 +1,6 @@
-// Global object
+// Global object for 
 var SMC = {};
+var MAX_REQUEST_RETRIES = 5;
 
 SMC.setupHover = function () {
     $('.hover').hover(function(){
@@ -20,12 +21,20 @@ SMC.sendSearchRequest = function (){
       data: "price="+price,  
       success: function(resp){
         
-        if(resp.ItemSearchResponse.Items[0].Item.length) {  
+        var requests = 0;
+        SMC.response = resp;
+        
+        // TODO Discuss a better way to do this, if possible.
+        // Make sure that response has results, if not, try again
+        if(resp.ItemSearchResponse.Items[0].Item) {
           SMC.setupProductView(resp.ItemSearchResponse.Items[0].Item);
           SMC.setupHover();
-        } else {
-          sendSearchRequest();
+          requests += 1;
+        } else if (requests <= 5) {
+          SMC.sendSearchRequest();
         }
+        
+      
       },  
       error: function(e){  
         alert('Error: ' + e);  
