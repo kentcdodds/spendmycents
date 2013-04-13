@@ -35,8 +35,12 @@ SMC.setupProductView = function (products) {
                 "<img class=\"product-image thumb\" src=\"" + imageURL + "\">" +    
             "</div>" + 
             "<div class='back'>" +
-                "<span class='product-title'>" + title + "</span><br/>" +
-                "<span class='product-manufacturer'>" + manufacturer + "</span>" +
+                "<div class='product-title-container'>" +
+                    "<span class='product-title'>" + title + "</span>" +
+                "</div>" +
+                "<div class='product-manufacturer-container'>" +
+                    "<span class='product-manufacturer'>" + manufacturer + "</span>" +
+                "</div>" +
                 "<a href=\"" + detailPageURL + "\" target=\"_blank\">" + detailPageURLDescription + "</a>" +
             "</div>" + 
         "</div>";
