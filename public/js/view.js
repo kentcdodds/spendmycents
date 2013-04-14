@@ -58,7 +58,7 @@ SMC.setupForUser = function (isAuthenticated) {
 
 SMC.displayLoadingGif = function () {
   if (!$('.loading-image').length) {
-    $('#loading-image-container').append("<img src='../public/img/ajax-loader.gif' class='loading-image'>");
+    $('#loading-image-container').append("<img src='../public/img/ajax-loader-light.gif' class='loading-image'>");
   } else {
     $('.loading-image').show();
   }

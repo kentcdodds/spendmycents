@@ -13,51 +13,58 @@
     </head>
 
     <body>
-        <div id="user-container">
-            <div class="btn-group pull-right">
-              
-              <button id="favorites-button" class="btn" href="#settings-modal" id="settings" role="button" data-toggle="modal" >
-                    <span class="favorites">Favorites</span>
-              </button>
-              
-              <button class="btn sign-in-button">Sign In</button>
-              <button class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-              </button>
-              
-              <ul id="login-dropdown" class="dropdown-menu">
-                  <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5>
-                  <li class="divider"></li>
-                  <li class="login"><span href="/auth/facebook" id="login-facebook" class="zocial facebook">
-                      Sign In With Facebook
-                  </span></li>
-                  <li class="login"><span href="/auth/google" id="login-google" class="zocial google">
-                      Sign In With Google+
-                  </span></li>
-                  <li class="login"><span href="/auth/twitter" id="login-twitter" class="zocial twitter">
-                      Sign In With Twitter
-                  </span></li>
-              </ul>
-              
-            </div>
-        </div>
-        <div id="search-container">
+        <div id='page-level-container'class='row-fluid'>
+            
+            <div id="app-content-container" class='container'>
+                <div id="search-container">
           
-            <div class="search-bar" style="width: auto" ng-controller='ProductControl'>      
+                    <div class="search-bar" style="width: auto">      
                 
-                    <div class="user-input input-prepend" style="margin-bottom: 0px;">
-                      <span id="span-logo" class="add-on"><img src='../public/img/logo.jpg' class='input-logo'></span>
-                      <input class="user-input" id="user-input-price"  type="text" ng-model='price'>
-                    </div>
+                            <div class="user-input input-prepend" style="margin-bottom: 0px;">
+                              <span id="span-logo" class="add-on"><img src='../public/img/logo.jpg' class='input-logo'></span>
+                              <input class="user-input" id="user-input-price"  type="text" ng-model='price'>
+                            </div>
           
-                    <button id='search-button' class="btn" onclick='SMC.sendSearchRequest()'>Search</button>
+                            <button id='search-button' class="btn" onclick='SMC.sendSearchRequest()'>Search</button>
                     
-            </div>
+                            <div class="user-buttons btn-group">
+              
+                              <button id="favorites-button" class="btn" href="#settings-modal" id="settings" role="button" data-toggle="modal" >
+                                    <span class="favorites">Favorites</span>
+                              </button>
+              
+                              <button class="btn sign-in-button">Sign In</button>
+                              <button class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                              </button>
+              
+                              <ul id="login-dropdown" class="dropdown-menu">
+                                  <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5>
+                                  <li class="divider"></li>
+                                  <li class="login"><span href="/auth/facebook" id="login-facebook" class="zocial facebook">
+                                      Sign In With Facebook
+                                  </span></li>
+                                  <li class="login"><span href="/auth/google" id="login-google" class="zocial google">
+                                      Sign In With Google+
+                                  </span></li>
+                                  <li class="login"><span href="/auth/twitter" id="login-twitter" class="zocial twitter">
+                                      Sign In With Twitter
+                                  </span></li>
+                              </ul>
+              
+                            </div>
+                    
+                    </div>
             
           
+                </div>
+                <div id='results-container'><div id='loading-image-container'></div></div>
+            </div>
+            
         </div>
         
-        <div id='results-container'><div id='loading-image-container'></div>
+        
+        
         
         <div id="settings-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="settings-modal-label" aria-hidden="true">
           <div class="modal-header">
