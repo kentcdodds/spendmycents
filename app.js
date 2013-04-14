@@ -43,9 +43,11 @@ app.configure(function() {
 
 });
 
-app.configure('development', function() {
-  app.use(express.errorHandler());
-});
+if (!process.env.ENVIRONMENT || process.env.ENVIRONMENT === 'DEV') {
+  app.configure('development', function() {
+    app.use(express.errorHandler());
+  });
+}
 
 
 /*
