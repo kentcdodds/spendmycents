@@ -33,23 +33,23 @@
                                     <span class="favorites">Favorites</span>
                               </button>
               
-                              <button class="btn sign-in-button">Sign In</button>
-                              <button class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
+                              <button id='user-status-button' class="btn sign-in-button">Sign In</button>
+                              <button id='sign-in-dropdown-button'class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
                                 <span class="caret"></span>
                               </button>
               
                               <ul id="login-dropdown" class="dropdown-menu">
                                   <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5>
-                                  <li class="divider"></li>
-                                  <li class="login"><span href="/auth/facebook" id="login-facebook" class="zocial facebook">
+                                  <li class="login divider"></li>
+                                  <li class="login"><span><a href="/auth/facebook" id="login-facebook" class="zocial facebook">
                                       Sign In With Facebook
-                                  </span></li>
-                                  <li class="login"><span href="/auth/google" id="login-google" class="zocial google">
+                                  </a></span></li>
+                                  <li class="login"><span> <a href="/auth/google" id="login-google" class="zocial google">
                                       Sign In With Google+
-                                  </span></li>
-                                  <li class="login"><span href="/auth/twitter" id="login-twitter" class="zocial twitter">
+                                  </a></span></li>
+                                  <li class="login"><span> <a href="/auth/twitter" id="login-twitter" class="zocial twitter">
                                       Sign In With Twitter
-                                  </span></li>
+                                  </a></span></li>
                               </ul>
               
                             </div>
@@ -58,7 +58,7 @@
             
           
                 </div>
-                <div id='results-container'><div id='loading-image-container'></div></div>
+                <div id='results-container' class='container'><div id='loading-image-container'></div></div>
             </div>
             
         </div>

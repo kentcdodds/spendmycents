@@ -113,7 +113,9 @@ span.product-title {
 }
 
 #results-container {
-  margin-left: 2%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 #results-container div.product-panel:nth-child(10) {

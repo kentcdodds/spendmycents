@@ -48,12 +48,35 @@ SMC.sendSearchRequest = function (){
   }
 }
 
-SMC.setupForUser = function (isAuthenticated) {
-  if(isAuthenticated) {
-    $('#favorites-button').show();
-  }else {
-    $('#favorites-button').hide();
-  }
+SMC.checkIfUserIsLoggedIn = function () {
+  
+  $.ajax({  
+    type: "GET",  
+    url: "/users/me",  
+    success: function(resp){
+      
+      if (resp['name']) {
+        SMC.user = resp;
+        SMC.setupForUser();
+        
+        console.log("user is authenticated");  
+      } else if (resp['code'] === 403) {
+        $('#favorites-button').hide();
+        console.log("user is not authenticated");
+      }
+      
+      console.log(resp);
+    },  
+    error: function(e){  
+      console.log("user is not authenticated");
+    }  
+  });     
+  
+}
+
+SMC.setupForUser = function () {
+  $('#user-status-button').html(SMC.user['name']);  
+  $('#sign-in-dropdown-button').remove();
 }
 
 SMC.displayLoadingGif = function () {
@@ -79,7 +102,7 @@ $(document).ready(function () {
   });
   // If a user is logged in, then just show favorites button
   // TODO find out how to tell if a user is authenticated
-  SMC.setupForUser();
+  SMC.checkIfUserIsLoggedIn();
   
 });
 
