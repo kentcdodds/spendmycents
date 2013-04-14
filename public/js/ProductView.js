@@ -1,7 +1,7 @@
 SMC.setupProductView = function (products) {
   
   var i;
-  $('.product-panel').remove();
+
   $('.loading-image').hide();
   console.log(products);
   for (i = 0; i < products.length; i += 1) {
@@ -13,6 +13,8 @@ SMC.setupProductView = function (products) {
     
     if(product.LargeImage && product.LargeImage[0].URL && product.LargeImage[0].URL) {
       imageURL = product.LargeImage[0].URL[0];
+    } else {
+      imageURL = "../public/img/No_image_available.png";
     }
     
     if (product.ItemAttributes && product.ItemAttributes[0].Title) {

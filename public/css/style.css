@@ -146,7 +146,7 @@ span.product-title {
 .product-panel.flip .front {
 	z-index: 900;
 	border-color: #eee;
-	background: #333;
+	background: rgb(255, 255, 255);
 
 	-webkit-transform: rotateY(180deg);
 	-moz-transform: rotateY(180deg);
