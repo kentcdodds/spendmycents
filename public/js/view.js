@@ -45,9 +45,33 @@ SMC.sendSearchRequest = function (){
       }  
     });      
   } else {
-    SMC.showError();
+    SMC.showError("<strong>Warning!</strong> Easy there tiger. We only do numbers or the word 'Favorites'");
   }
 };
+
+SMC.loadUserFavorites = function () {
+  $.ajax({  
+    type: "GET",  
+    url: "/users/me/favorites",  
+    success: function(resp){
+      
+      var requests = 0;
+      SMC.response = resp;
+      
+      if(resp.ItemSearchResponse.Items[0].Item) {
+        SMC.setupProductView(resp.ItemSearchResponse.Items[0].Item);
+        SMC.setupHover();
+        requests += 1;
+      } else if (requests <= 5) {
+        SMC.loadUserFavorites();
+      }
+    
+    },  
+    error: function(e){  
+      SMC.showError("<strong>Error!</strong> Something crazy happened. If it happens again let us know."); 
+    }  
+  });      
+}
 
 SMC.validateUserInput = function (userInput) {
   console.log(userInput)
@@ -67,13 +91,10 @@ SMC.checkIfUserIsLoggedIn = function () {
       
       if (resp['name']) {
         SMC.user = resp;
-        SMC.setupForUser();
-        
+        SMC.setupForUser(); 
       } else if (resp['code'] === 403) {
         $('#favorites-button').hide();
-        
       }
-      
     },  
     error: function(e){  
     }  
@@ -103,11 +124,11 @@ SMC.displayLoadingGif = function () {
   }
 };
 
-SMC.showError = function () {
+SMC.showError = function (errorText) {
   var alert =
               "<div id='user-input-error' class='alert alert-error'>" +
                 "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>" +
-                "<strong>Warning!</strong> Easy there tiger. We only do numbers" + 
+                errorText + 
               "</div>";
   
   $('#loading-image-container').append(alert);
@@ -122,8 +143,6 @@ $(document).ready(function () {
     }
   });
   
-  // If a user is logged in, then just show favorites button
-  // TODO find out how to tell if a user is authenticated
   SMC.checkIfUserIsLoggedIn();
   
 });

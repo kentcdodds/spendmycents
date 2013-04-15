@@ -10,9 +10,9 @@ SMC.setupProductView = function (products) {
     
     product = products[i];
     
-    //due to sometimes not having all the data, we need to check for non-exisiting values
+    //due to sometimes not receiving all the data we need to check for non-exisiting values
     
-    if(product.LargeImage && product.LargeImage[0].URL && product.LargeImage[0].URL) {
+    if(product.LargeImage && product.LargeImage[0].URL && product.LargeImage[0].URL[0]) {
       imageURL = product.LargeImage[0].URL[0];
     } else if (product.ImageSets && product.ImageSets[0].ImageSet){
       try {
@@ -46,11 +46,10 @@ SMC.setupProductView = function (products) {
     }
     
     if (SMC.user) {
-      saveAsFavoriteURL = "/users/me/favorites";
       productId = product.ASIN[0];
       
       favoritesLinkHTML = "&nbsp;|&nbsp;" +
-                      "<a href=\"" + saveAsFavoriteURL + "\" target=\"_blank\" onclick='setFavorite(" + 
+                      "<a href='#'onclick='SMC.setFavorite(" + 
                       product.ASIN[0] + ")'>Save as Favorite</a>";
       
     } else {
