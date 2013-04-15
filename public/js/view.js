@@ -8,7 +8,7 @@ SMC.setupHover = function () {
 		},function(){
 			$(this).removeClass('flip');
   });
-}
+};
 
 SMC.sendSearchRequest = function (){
   var price = $('#user-input-price').val();
@@ -46,7 +46,7 @@ SMC.sendSearchRequest = function (){
   } else {
     SMC.showError();
   }
-}
+};
 
 SMC.checkIfUserIsLoggedIn = function () {
   
@@ -72,12 +72,12 @@ SMC.checkIfUserIsLoggedIn = function () {
     }  
   });     
   
-}
+};
 
 SMC.setupForUser = function () {
   $('#user-status-button').html(SMC.user['name']);  
   $('#sign-in-dropdown-button').remove();
-}
+};
 
 SMC.displayLoadingGif = function () {
   if (!$('.loading-image').length) {
@@ -85,7 +85,7 @@ SMC.displayLoadingGif = function () {
   } else {
     $('.loading-image').show();
   }
-}
+};
 
 // SMC.showError = function () {
 //   "<div class="alert">" +
@@ -94,12 +94,15 @@ SMC.displayLoadingGif = function () {
 //   "</div>";
 // }
 
+
 $(document).ready(function () {
+  
   $('#user-input-price').keypress(function (e) {
     if (e.which == 13) {
       SMC.sendSearchRequest();
     }
   });
+  
   // If a user is logged in, then just show favorites button
   // TODO find out how to tell if a user is authenticated
   SMC.checkIfUserIsLoggedIn();

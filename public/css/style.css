@@ -118,6 +118,32 @@ span.product-title {
   width: 100%;
 }
 
+@media (min-width: 1230px) {
+  #product-container {
+    width: 1160px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 920px) and (max-width: 1229px)  {
+  #product-container {
+    width: 870px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 618px) and (max-width: 918px)  {
+  #product-container {
+    width: 580px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+
+
 #results-container div.product-panel:nth-child(10) {
   margin-left: 26%;
 }
@@ -127,10 +153,11 @@ span.product-title {
 }
 
 .product-panel {
-	float: left;
+/*  float: left;*/
+  display: inline-block;
 	width: 250px;
 	height: 250px;
-	margin: 20px;
+  margin: 20px;
 	position: relative;
 	text-align: center;
 	

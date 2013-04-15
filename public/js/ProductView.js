@@ -58,7 +58,7 @@ SMC.setupProductView = function (products) {
         "</div>";
     
         
-    $('#results-container').append(productPanelTemplate);
+    $('#product-container').append(productPanelTemplate);
   }
   
 }
