@@ -11,9 +11,11 @@ SMC.setupHover = function () {
 };
 
 SMC.sendSearchRequest = function (){
-  var price = $('#user-input-price').val();
+  var price, priceIsValid; 
+  price = $('#user-input-price').val();
+  priceIsValid = SMC.validateUserInput(price);
   
-  if (price && parseFloat(price)){
+  if (priceIsValid){
     price = price * 100;
     $('.product-panel').remove();
     SMC.displayLoadingGif();
@@ -36,7 +38,6 @@ SMC.sendSearchRequest = function (){
         } else if (requests <= 5) {
           SMC.sendSearchRequest();
         }
-        
       
       },  
       error: function(e){  
@@ -46,6 +47,15 @@ SMC.sendSearchRequest = function (){
   } else {
     SMC.showError();
   }
+};
+
+SMC.validateUserInput = function (userInput) {
+  console.log(userInput)
+  if (userInput && !_.isFinite(userInput)) {
+    return false;
+  }
+
+  return true;
 };
 
 SMC.checkIfUserIsLoggedIn = function () {
@@ -59,16 +69,13 @@ SMC.checkIfUserIsLoggedIn = function () {
         SMC.user = resp;
         SMC.setupForUser();
         
-        console.log("user is authenticated");  
       } else if (resp['code'] === 403) {
         $('#favorites-button').hide();
-        console.log("user is not authenticated");
+        
       }
       
-      console.log(resp);
     },  
     error: function(e){  
-      console.log("user is not authenticated");
     }  
   });     
   
@@ -76,7 +83,16 @@ SMC.checkIfUserIsLoggedIn = function () {
 
 SMC.setupForUser = function () {
   $('#user-status-button').html(SMC.user['name']);  
-  $('#sign-in-dropdown-button').remove();
+  $('li.login').remove();
+  
+  var logoutHTML = "<li class='logout'><span class='logout'><h5>All done? Click below to sign out.</h5></span></li>" +
+                    "<li class='logout divider'></li>" +
+                    "<li class='logout'><span><a href='/auth/logout' id='logout-button' class='btn'>" + 
+                        "Sign Out" +
+                    "</a></span></li>";
+                    
+  $('#login-dropdown').append(logoutHTML);
+  
 };
 
 SMC.displayLoadingGif = function () {
@@ -87,12 +103,15 @@ SMC.displayLoadingGif = function () {
   }
 };
 
-// SMC.showError = function () {
-//   "<div class="alert">" +
-//     "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>" +
-//     "<strong>Warning!</strong> Best check yo self, youre not looking too good." + 
-//   "</div>";
-// }
+SMC.showError = function () {
+  var alert =
+              "<div class='alert alert-error'>" +
+                "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>" +
+                "<strong>Warning!</strong> Easy there tiger. We only do numbers" + 
+              "</div>";
+  
+  $('#loading-image-container').append(alert);
+}
 
 
 $(document).ready(function () {

@@ -22,7 +22,7 @@
                 
                             <div class="user-input input-prepend" style="margin-bottom: 0px;">
                               <span id="span-logo" class="add-on"><img src='../public/img/logo.jpg' class='input-logo'></span>
-                              <input class="user-input" id="user-input-price"  type="text" ng-model='price'>
+                              <input class="user-input" id="user-input-price"  type="number" step='0.01'>
                             </div>
           
                             <button id='search-button' class="btn" onclick='SMC.sendSearchRequest()'>Search</button>
@@ -33,13 +33,15 @@
                                     <span class="favorites">Favorites</span>
                               </button>
               
-                              <button id='user-status-button' class="btn sign-in-button">Sign In</button>
+                              <button id='user-status-button' class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
+                                  Sign In
+                              </button>
                               <button id='sign-in-dropdown-button'class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
                                 <span class="caret"></span>
                               </button>
               
                               <ul id="login-dropdown" class="dropdown-menu">
-                                  <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5>
+                                  <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5></li>
                                   <li class="login divider"></li>
                                   <li class="login"><span><a href="/auth/facebook" id="login-facebook" class="zocial facebook">
                                       Sign In With Facebook
@@ -85,6 +87,7 @@
                 
         <script src="../public/lib/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
         <script src="../public/lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="../public/js/lib/underscore-min.js" type="text/javascript" charset="utf-8"></script>
         <script src="../public/js/view.js" type="text/javascript" charset="utf-8"></script>
         <script src="../public/js/ProductView.js" type="text/javascript" charset="utf-8"></script>
 

@@ -112,6 +112,11 @@ span.product-title {
 	
 }
 
+span.logout  h5{
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 #results-container {
   margin-left: auto;
   margin-right: auto;
@@ -151,8 +156,12 @@ span.product-title {
   }
 }
 
-
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
 
 
 #loading-image-container {
