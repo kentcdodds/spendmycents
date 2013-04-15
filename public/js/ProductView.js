@@ -5,7 +5,8 @@ SMC.setupProductView = function (products) {
   $('.loading-image').hide();
   console.log(products);
   for (i = 0; i < products.length; i += 1) {
-    var product, imageURL, title, manufacturer, detailPageURL, detailPageURLDescription, productPanelTemplate;
+    var product, imageURL, title, manufacturer, detailPageURL, detailPageURLDescription, 
+        productPanelTemplate, saveAsFavoriteURL, favoritesLinkHTML;
     
     product = products[i];
     
@@ -13,12 +14,19 @@ SMC.setupProductView = function (products) {
     
     if(product.LargeImage && product.LargeImage[0].URL && product.LargeImage[0].URL) {
       imageURL = product.LargeImage[0].URL[0];
+    } else if (product.ImageSets && product.ImageSets[0].ImageSet){
+      try {
+        imageURL = product.ImageSets[0].ImageSet[0].LargeImage[0].URL[0];
+      } catch (e) {
+        imageURL = "../public/img/No_image_available.png";
+      }
     } else {
       imageURL = "../public/img/No_image_available.png";
     }
     
     if (product.ItemAttributes && product.ItemAttributes[0].Title) {
       title = product.ItemAttributes[0].Title[0];
+      // if (title.length > )
     } else {
       title = "Title not provided.";
     }
@@ -37,6 +45,20 @@ SMC.setupProductView = function (products) {
       detailPageURLDescription = "URL Unavailable";
     }
     
+    if (SMC.user) {
+      saveAsFavoriteURL = "/users/me/favorites";
+      productId = product.ASIN[0];
+      
+      favoritesLinkHTML = "&nbsp;|&nbsp;" +
+                      "<a href=\"" + saveAsFavoriteURL + "\" target=\"_blank\" onclick='setFavorite(" + 
+                      product.ASIN[0] + ")'>Save as Favorite</a>";
+      
+    } else {
+      favoritesLinkHTML = "";
+    }
+    
+    
+    
     productPanelTemplate =
         "<div class='hover product-panel'>" +
             "<div class='front'>"+
@@ -52,6 +74,7 @@ SMC.setupProductView = function (products) {
                     "</p>" +
                     "<p>" +
                       "<a href=\"" + detailPageURL + "\" target=\"_blank\">" + detailPageURLDescription + "</a>" +
+                      favoritesLinkHTML +
                     "</p>" +
                 "</div>"+
             "</div>" + 
@@ -61,4 +84,8 @@ SMC.setupProductView = function (products) {
     $('#product-container').append(productPanelTemplate);
   }
   
-}
+};
+
+SMC.shortenLongTitle = function (title) {
+  
+};

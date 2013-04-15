@@ -51,7 +51,7 @@ SMC.sendSearchRequest = function (){
 
 SMC.validateUserInput = function (userInput) {
   console.log(userInput)
-  if (userInput && !_.isFinite(userInput)) {
+  if ((userInput || userInput === "") && !_.isFinite(userInput)) {
     return false;
   }
 
@@ -105,7 +105,7 @@ SMC.displayLoadingGif = function () {
 
 SMC.showError = function () {
   var alert =
-              "<div class='alert alert-error'>" +
+              "<div id='user-input-error' class='alert alert-error'>" +
                 "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>" +
                 "<strong>Warning!</strong> Easy there tiger. We only do numbers" + 
               "</div>";

@@ -28,7 +28,6 @@ div.product-info {
 
 div.product-info p {
   list-style-type: none;
-  padding: 5px;
 }
 
 #page-level-container {
@@ -132,7 +131,6 @@ span.logout  h5{
   
   #results-container div.product-panel:nth-child(9) {
     margin-left: 26.7%;
-    margin-top: -20px;
   }
 }
 
@@ -166,6 +164,14 @@ input::-webkit-inner-spin-button {
 
 #loading-image-container {
   margin-bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#user-input-error {
+  width: 25%;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .product-panel {
