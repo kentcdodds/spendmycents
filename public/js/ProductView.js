@@ -1,7 +1,7 @@
 SMC.setupProductView = function (products) {
   
   var i;
-
+  $('.product-panel').remove();
   $('.loading-image').hide();
   console.log(products);
   for (i = 0; i < products.length; i += 1) {

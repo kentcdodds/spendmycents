@@ -124,6 +124,11 @@ span.product-title {
     margin-left: auto;
     margin-right: auto;
   }
+  
+  #results-container div.product-panel:nth-child(9) {
+    margin-left: 26.7%;
+    margin-top: -20px;
+  }
 }
 
 @media (min-width: 920px) and (max-width: 1229px)  {
@@ -131,6 +136,10 @@ span.product-title {
     width: 870px;
     margin-left: auto;
     margin-right: auto;
+  }
+  
+  #results-container div.product-panel:nth-child(10) {
+    margin-left: 35.7%;
   }
 }
 
@@ -144,9 +153,7 @@ span.product-title {
 
 
 
-#results-container div.product-panel:nth-child(10) {
-  margin-left: 26%;
-}
+
 
 #loading-image-container {
   margin-bottom: 30px;
