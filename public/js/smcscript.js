@@ -192,7 +192,11 @@ var SMC = (function() {
         $('#more-button').remove();
       },
       shortenLongTitle: function(title) {
-        return _.first(title, SMCConstants.MAX_TITLE_LENGTH).join('');
+        var newTitle = title;
+        if (title.length > SMCConstants.MAX_TITLE_LENGTH) {
+          newTitle = _.first(title, SMCConstants.MAX_TITLE_LENGTH).join('') + '...';
+        }
+        return newTitle;
       },
       showLoadingGif: function() {
         $('.loading-image').css('visibility', 'visible');
@@ -260,7 +264,7 @@ var SMC = (function() {
       };
 
       getProductTitle = function(product) {
-        return product.ItemAttributes[0].Title || 'Title not provided.';
+        return product.ItemAttributes[0].Title[0] || 'Title not provided.';
       };
 
       getProductManufacturer = function(product) {
