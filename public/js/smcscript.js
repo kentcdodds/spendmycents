@@ -74,7 +74,7 @@ var SMC = (function() {
             SMCSetup.setupProductView(amazonResponseItem, append, moreButton);
             SMCSetup.setupHover();
           } else {
-            sendProductRequests(req, requestAttempt + 1, moreButton);
+            sendProductRequest(req, requestAttempt + 1, moreButton);
             SMCUtil.log(data);
           }
         },
