@@ -322,3 +322,13 @@ form {
   color: gray;
   text-align: right;
 }
+
+#social-media {
+  float: right;
+  padding-top: 30px;
+  padding-right: 35px;
+}
+
+#logo-container {
+  margin-left: 33%;
+}
