@@ -36,12 +36,22 @@ var SMC = (function() {
       sendProductRequest({
         type: 'GET',
         url: '/products?price=' + price + '&itemPage=' + itemPage
-      }, append, 0, $moreButton);
+      }, append, 0, $moreButton, 'search');
     };
 
     loadUserFavorites = function(index, append) {
       index = index || 0;
       append = append || false;
+      if (SMC.user && SMC.user.favorites) {
+        var totalFavorites = SMC.user.favorites.length;
+        if (totalFavorites < 0) {
+          SMCUtil.showAlert('error', '<strong>Dang!</strong> It looks like you don\'t have any favorites. Give that a try!');
+          return;
+        } else if (totalFavorites < index) {
+          SMCUtil.showAlert('', '<strong>That\'s it!</strong> These are all of your favorites. You could always add some more!');
+          return;
+        }
+      }
       var $moreButton = SMCTemplate.moreButton();
       $moreButton.click(function() {
         loadUserFavorites(index + 10, true);
@@ -49,10 +59,10 @@ var SMC = (function() {
       sendProductRequest({
         type: 'GET',
         url: '/users/me/favorites?index=' + index
-      }, append, 0, $moreButton);
+      }, append, 0, $moreButton, 'favorites');
     };
 
-    sendProductRequest = function(req, append, requestAttempt, moreButton) {
+    sendProductRequest = function(req, append, requestAttempt, moreButton, location) {
       SMCUtil.removeMoreButton();
       if (requestAttempt > SMCConstants.MAX_REQUEST_RETRIES) {
         SMCUtil.showAlert('error', '<strong>Ouch!</strong> We tried and tried, but couldn\'t get any results for you! If this happens several times, please let us know.')
@@ -71,8 +81,9 @@ var SMC = (function() {
           if (amazonResponseItem) {
             SMCSetup.setupProductView(amazonResponseItem, append, moreButton);
             SMCSetup.setupHover();
+            SMC.location = location;
           } else {
-            sendProductRequest(req, requestAttempt + 1, moreButton);
+            sendProductRequest(req, requestAttempt + 1, moreButton, location);
             SMCUtil.log(data);
           }
         },
@@ -82,11 +93,11 @@ var SMC = (function() {
           SMCUtil.log(e);
         }
       });
-    }
+    };
 
     return {
-      sendProductRequest: function(req, append, requestAttempt, moreButton) {
-        sendProductRequest(req, append, requestAttempt, moreButton);
+      sendProductRequest: function(req, append, requestAttempt, moreButton, location) {
+        sendProductRequest(req, append, requestAttempt, moreButton, location);
       },
       loadUserFavorites: function(index, append) {
         loadUserFavorites(index, append);
@@ -128,6 +139,7 @@ var SMC = (function() {
             SMC.response = data;
             if (responseIsSuccess(xhr)) {
               SMCUtil.showAlert('info', '<strong>Sweet!</strong> Another item on the favorites list.');
+              SMC.user.favorites = data;
               item.data('is-favorite', true);
               item.attr('title', 'Remove from favorites');
             } else {
@@ -148,6 +160,10 @@ var SMC = (function() {
             SMC.response = data;
             if (responseIsSuccess(xhr)) {
               SMCUtil.showAlert('info', '<strong>Sayonara!</strong> That item is no longer a favorite.');
+              SMC.user.favorites = data;
+              if (SMC.location === 'favorites') {
+                item.parents('.product-panel').remove();
+              }
               item.data('is-favorite', false);
               item.attr('title', 'Save to favorites');
             } else {
@@ -188,14 +204,17 @@ var SMC = (function() {
         $('.product-panel').remove();
       },
       showAlert: function(type, text) {
-        var alertText = text;
-        $('#user-info-alert').addClass('alert-' + type);
-        $('#user-info-alert').html(alertText);
-        $('#user-info-alert').css('visibility', 'visible');
+        var $alert = $('#alert-template').clone();
+        var $alertContainer = $('#user-info-alert');
+        $('#current-alert').remove();
+        $alert.attr('id', 'current-alert');
+        $alert.addClass('alert-' + type);
+        $alert.html(text);
+        $alert.css('visibility', 'visible');
+        $alertContainer.append($alert);
 
         setTimeout(function() {
-          $('#user-info-alert').css('visibility', 'hidden');
-          $('#user-info-alert').removeClass('alert-' + type);
+          $alert.css('visibility', 'hidden');
         }, 5000);
       },
       log: function(text) {
