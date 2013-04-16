@@ -28,17 +28,15 @@
                     <div class="search-bar" style="width: auto">      
                 
                             <div class="user-input input-prepend" style="margin-bottom: 0px;">
-                              <span id="span-logo" class="add-on"><img src='../public/img/dollar.png' class='input-logo'></span>
-                              <input class="user-input" id="user-input-price" type="number" step="0.01">
+                              <span id="span-dollar" class="add-on"><img src='../public/img/dollar.png' class='input-logo'></span>
+                              <input class="user-input" id="user-input-price" type="text" pattern="[0-9]+\.[0-9]{0,2}|[0-9]+|favorites|Favorites">
                             </div>
           
                             <button id='search-button' class="btn">Search</button>
                     
                             <div class="user-buttons btn-group">
               
-                              <button id="favorites-button" class="btn" role="button">
-                                    <span class="favorites">Favorites</span>
-                              </button>
+                              <button id="favorites-button" class="btn">Favorites</button>
               
                               <button id='user-status-button' class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
                                   Sign In
@@ -70,9 +68,9 @@
                 <div id='results-container' class='container'>
                     <div id='loading-image-container'>
                         <center>
-                        <img src='../public/img/ajax-loader-light.gif' class='loading-image'>
-                        <div id='user-info-alert'class='alert fade in out'>Woo!!</div>
-                    </center>
+                            <img src='../public/img/ajax-loader-light.gif' class='loading-image'>
+                            <div id='user-info-alert' class='alert fade in out'>Woo!!</div>
+                        </center>
                     </div>
                     <div id='product-container'></div>
                 </div>
@@ -100,9 +98,10 @@
         <script src="../public/lib/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
         <script src="../public/lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="../public/js/lib/underscore-min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../public/js/view.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../public/js/smcscript.js" type="text/javascript" charset="utf-8"></script>
+<!--        <script src="../public/js/view.js" type="text/javascript" charset="utf-8"></script>
         <script src="../public/js/ProductView.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../public/js/favorites.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../public/js/favorites.js" type="text/javascript" charset="utf-8"></script>-->
 
     </body>
 </html>
