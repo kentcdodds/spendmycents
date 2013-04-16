@@ -22,11 +22,8 @@ var ErrorController = (function() {
   }
 
   return {
-    getErrorJSON: function(code, message) {
-      return getErrorJSON(code, message);
-    },
     sendErrorJson: function(res, code, message) {
-      res.send(getErrorJSON(code, message));
+      res.send(code, getErrorJSON(code, message));
     }
   };
 })();

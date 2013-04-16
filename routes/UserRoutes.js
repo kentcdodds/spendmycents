@@ -91,11 +91,15 @@ var UserRoutes = (function() {
       });
 
       app.get('/users/:id', function(req, res) {
-        if (idIsMe(req) && req.hasOwnProperty('user')) {
-          UserController.getMe(req, res);
+        if (idIsMe(req) && !userIdExists(req)) {
+          ErrorController.sendErrorJson(res, 200, 'User not logged in.');
         } else {
-          handleUserId(req);
-          handleAuthorization(req, res, true, UserController.getUser);
+          if (idIsMe(req) && req.hasOwnProperty('user')) {
+            UserController.getMe(req, res);
+          } else {
+            handleUserId(req);
+            handleAuthorization(req, res, true, UserController.getUser);
+          }
         }
       });
 
