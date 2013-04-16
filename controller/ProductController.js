@@ -49,6 +49,9 @@ var ProductController = (function() {
         }));
       }
       var itemPage = req.query.itemPage || Math.floor(Math.random() * 6);
+      if (itemPage <= 0) {
+        itemPage = 1;
+      }
       getOpHelper().execute('ItemSearch', {
         SearchIndex: req.query.searchIndex || 'All',
         Keywords: req.query.keywords || ' ',
@@ -70,6 +73,9 @@ var ProductController = (function() {
       });
     },
     getProducts: function(req, res) {
+      if (!req.query.ids) {
+        res.send({});
+      }
       getOpHelper().execute('ItemLookup', {
         ItemId: req.query.ids,
         IdType: req.query.idType || 'ASIN',
