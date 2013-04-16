@@ -21,6 +21,7 @@ SMC.sendRequest = function (){
   
   userInput = $('#user-input-price').val();
   userInputIsValid = SMC.validateUserInput(userInput);
+  
   if (userInputIsValid){
     SMC.sendSearchRequest(userInput);
   } else {

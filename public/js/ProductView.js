@@ -92,20 +92,17 @@ SMC.sendSearchRequest = function (userInput) {
 
   $.ajax({  
     type: "GET",  
-    url: "/products",  
-    data: "price="+userInput,  
+    url: "/products?price="+userInput,  
     success: function(resp){
     
       var requests = 0;
       SMC.response = resp;
     
-      // TODO Discuss a better way to do this, if possible.
-      // Make sure that response has results, if not, try again
       if(resp.ItemSearchResponse.Items[0].Item) {
         SMC.setupProductView(resp.ItemSearchResponse.Items[0].Item);
         SMC.setupHover();
         requests += 1;
-      } else if (requests <= SMC.MAX_REQUEST_RETRIES) {
+      } else if (requests <= 5) {
         SMC.sendSearchRequest();
       }
   
