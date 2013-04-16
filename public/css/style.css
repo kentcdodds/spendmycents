@@ -21,6 +21,10 @@ a.favorites-link:hover {
   text-decoration: none;
 }
 
+#favorites-button {
+  display: none;
+}
+
 .dropdown-menu a:hover {  
   cursor: default;
 }
@@ -56,7 +60,8 @@ li.login {
   padding: 4px;
 }
 
-#span-logo {
+
+#span-dollar {
   height: 50px;
   width: 32px;
 }
@@ -115,7 +120,7 @@ img.smc-logo {
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
-  width: 300px;
+  width: 400px;
   height: auto;
 }
 
@@ -146,13 +151,13 @@ span.logout  h5{
     margin-left: auto;
     margin-right: auto;
   }
-
+/*
   #results-container div.product-panel:nth-child(9) {
     margin-left: 26.7%;
-  }
+  }*/
   div.search-bar {
     width: auto;
-    margin-left: 35%;
+    margin-left: 34%;
   }
 
   div.user-buttons {
@@ -167,9 +172,9 @@ span.logout  h5{
     margin-right: auto;
   }
 
-  #results-container div.product-panel:nth-child(10) {
+/*  #results-container div.product-panel:nth-child(10) {
     margin-left: 35.7%;
-  }
+  }*/
 
   div.user-buttons {
     margin-left: 1%;
@@ -311,10 +316,4 @@ input::-webkit-inner-spin-button {
 
 form {
   display: inline;
-}
-
-.user-input-container {
-  width: 50%;
-  margin: 0px auto;
-
 }
