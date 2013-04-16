@@ -1,17 +1,19 @@
-SMC.setupProductView = function (products) {
-  
+SMC.setupProductView = function (products, append) {
+
   var i;
-  SMC.removeProductPanels();
+  if (!append) {
+    SMC.removeProductPanels();
+  }
   SMC.hideLoadingGif();
 
   for (i = 0; i < products.length; i += 1) {
-    var product, imageURL, title, manufacturer, detailPageURL, detailPageURLDescription, 
-        productPanelTemplate, saveAsFavoriteURL, favoritesLinkHTML;
-    
+    var product, imageURL, title, manufacturer, detailPageURL, detailPageURLDescription,
+        productPanelTemplate, favoritesLinkHTML, productId, isFavorite;
+
     product = products[i];
-    
+
     //due to sometimes not receiving all the data we need to check for non-exisiting values
-    
+
     if (product.LargeImage && product.LargeImage[0].URL && product.LargeImage[0].URL[0]) {
       imageURL = product.LargeImage[0].URL[0];
     } else if (product.ImageSets && product.ImageSets[0].ImageSet){
@@ -23,20 +25,20 @@ SMC.setupProductView = function (products) {
     } else {
       imageURL = "../public/img/No_image_available.png";
     }
-    
+
     if (product.ItemAttributes && product.ItemAttributes[0].Title) {
       title = product.ItemAttributes[0].Title[0];
       // if (title.length > )
     } else {
       title = "Title not provided.";
     }
-    
+
     if (product.ItemAttributes && product.ItemAttributes[0] && product.ItemAttributes[0].Manufacturer) {
       manufacturer = product.ItemAttributes[0].Manufacturer[0];
     } else {
       manufacturer = "Unknown";
     }
-    
+
     if (product.DetailPageURL) {
       detailPageURL = product.DetailPageURL[0];
       detailPageURLDescription = "See on Amazon";
@@ -44,25 +46,25 @@ SMC.setupProductView = function (products) {
       detailPageURL = "";
       detailPageURLDescription = "URL Unavailable";
     }
-    
+
     if (SMC.user) {
-      var productId = product.ASIN[0];
-      
+      productId = product.ASIN[0];
+      isFavorite = _.contains(SMC.user.favorites, productId);
       favoritesLinkHTML = "<br/><br/>" +
-                      "<a class='favorites-link' href='#' title='Save to Favorites' onclick='SMC.setFavorite(\"" + 
-                      productId + "\")'><i class='icon-star-empty'></i></a>";
-      
+                      "<i class='favorites-link icon-star-empty' title='Save to Favorites' data-product-id='"
+                      + productId + "' data-is-favorite='" + isFavorite + "'></i>";
+
     } else {
       favoritesLinkHTML = "";
     }
-    
-    
-    
+
+
+
     productPanelTemplate =
         "<div id='" + product.ASIN[0] + "'class='hover product-panel'>" +
             "<div class='front'>"+
-                "<img class=\"product-image thumb\" src=\"" + imageURL + "\">" +    
-            "</div>" + 
+                "<img class=\"product-image thumb\" src=\"" + imageURL + "\">" +
+            "</div>" +
             "<div class='back'>" +
                 "<div class='product-info'>" +
                     "<p>" +
@@ -76,45 +78,49 @@ SMC.setupProductView = function (products) {
                       favoritesLinkHTML +
                     "</p>" +
                 "</div>"+
-            "</div>" + 
+            "</div>" +
         "</div>";
-    
-        
+
+
     $('#product-container').append(productPanelTemplate);
   }
-  SMC.setupFavoriteStars();
+  if (SMC.user) {
+    SMC.setupFavoriteStars();
+  }
 };
 
-SMC.sendSearchRequest = function (userInput) {
+SMC.sendSearchRequest = function (userInput, requests) {
   userInput = userInput * 100;
   $('.product-panel').remove();
   SMC.displayLoadingGif();
 
-  $.ajax({  
-    type: "GET",  
-    url: "/products?price="+userInput,  
-    success: function(resp){
-    
-      var requests = 0;
-      SMC.response = resp;
-    
-      if(resp.ItemSearchResponse.Items[0].Item) {
-        SMC.setupProductView(resp.ItemSearchResponse.Items[0].Item);
+  $.ajax({
+    type: "GET",
+    url: "/products?price="+userInput,
+    success: function(res){
+
+      SMC.response = res;
+
+      if(res.hasOwnProperty('ItemSearchResponse')
+        && res.ItemSearchResponse.hasOwnProperty('Items')
+        && res.ItemSearchResponse.Items[0].hasOwnProperty('Item')
+        && res.ItemSearchResponse.Items[0].Item) {
+        SMC.setupProductView(res.ItemSearchResponse.Items[0].Item);
         SMC.setupHover();
-        requests += 1;
-      } else if (requests <= 3) {
-        SMC.sendSearchRequest(userInput);
+      } else {
+        SMC.hideLoadingGif();
+        SMC.showAlert("error", "<strong>Odd...</strong> We weren't able to get any results. Please try again.");
       }
-  
-    },  
-    error: function(e){  
-        
-    }  
-  });      
-}; 
+
+    },
+    error: function(e){
+
+    }
+  });
+};
 
 
 SMC.shortenLongTitle = function (title) {
-  
+
 };
 

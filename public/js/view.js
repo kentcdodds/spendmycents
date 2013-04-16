@@ -33,8 +33,6 @@ SMC.sendRequest = function (){
       SMC.showAlert("error", "<strong>Warning!</strong> Easy there tiger. We only do numbers.");
     }
   }
-
-
 };
 
 
@@ -101,16 +99,6 @@ SMC.removeProductPanels = function () {
   $('.product-panel').remove();
 };
 
-SMC.setupFavoriteStars = function () {
-  $('.icon-star-empty').hover(function () {
-    $(this).removeClass('icon-star-empty');
-    $(this).addClass('icon-star');
-  }, function () {
-    $(this).removeClass('icon-star');
-    $(this).addClass('icon-star-empty');
-  });
-};
-
 /********************************/
 
 /******** Alert Handling ********/
@@ -135,14 +123,14 @@ $(document).ready(function () {
 
   // Bind event handlers
   $('#user-input-price').keypress(function (e) {
-    if (e.which == 13) {
+    if (e.which === 13) {
       SMC.sendRequest();
     }
   });
 
   $('#favorites-button').click(function () {
     SMC.loadUserFavorites();
-    
+
   });
 
   $('#search-button').click(function () {
