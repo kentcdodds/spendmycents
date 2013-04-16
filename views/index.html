@@ -1,107 +1,112 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>SpendMyCents.com</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	    
-        <link rel="stylesheet" href="../public/bootstrap/css/bootstrap.min.css" media="screen">
-        <link rel="stylesheet" href="../public/css/style.css" type="text/css">
-        <link rel="stylesheet" href="../public/lib/zocial/zocial.css" type="text/css">
-        <link rel="stylesheet" href="../public/fontawesome/css/font-awesome.min.css" type="text/css" media="screen">
-        
+  <head>
+    <meta charset="utf-8">
+    <title>SpendMyCents.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    </head>
+    <link rel="stylesheet" href="../public/bootstrap/css/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" href="../public/css/style.css" type="text/css">
+    <link rel="stylesheet" href="../public/lib/zocial/zocial.css" type="text/css">
+    <link rel="stylesheet" href="../public/fontawesome/css/font-awesome.min.css" type="text/css" media="screen">
 
-    <body>
-        <div id='page-level-container'class='row-fluid'>
-            
-            <div id="app-content-container" class='container'>
-                <div id='logo-container'>
-                    <center>
-                        <img class='smc-logo'src="../public/img/logo.png" width="512" height="349" alt="Logo">
-                    </center>
-                </div>
-                <div id="search-container">
-          
-                    <div class="search-bar" style="width: auto">      
-                
-                            <div class="user-input input-prepend" style="margin-bottom: 0px;">
-                              <span id="span-dollar" class="add-on"><img src='../public/img/dollar.png' class='input-logo'></span>
-                              <input class="user-input" id="user-input-price" type="text" pattern="[0-9]+\.[0-9]{0,2}|[0-9]+|favorites|Favorites">
-                            </div>
-          
-                            <button id='search-button' class="btn">Search</button>
-                    
-                            <div class="user-buttons btn-group">
-              
-                              <button id="favorites-button" class="btn">Favorites</button>
-              
-                              <button id='user-status-button' class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
-                                  Sign In
-                              </button>
-                              <button id='sign-in-dropdown-button'class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                              </button>
-              
-                              <ul id="login-dropdown" class="dropdown-menu">
-                                  <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5></li>
-                                  <li class="login divider"></li>
-                                  <li class="login"><span><a href="/auth/facebook"  id="login-facebook" class="zocial facebook">
-                                      Sign In With Facebook
-                                  </a></span></li>
-                                  <li class="login"><span> <a href="/auth/google" id="login-google" class="zocial google">
-                                      Sign In With Google
-                                  </a></span></li>
-                                  <li class="login"><span> <a href="/auth/twitter" id="login-twitter" class="zocial twitter">
-                                      Sign In With Twitter
-                                  </a></span></li>
-                              </ul>
-              
-                            </div>
-                    
-                    </div>
-            
-          
-                </div>
-                <div id='results-container' class='container'>
-                    <div id='loading-image-container'>
-                        <center>
-                            <img src='../public/img/ajax-loader-light.gif' class='loading-image'>
-                            <div id='user-info-alert' class='alert fade in out'>Woo!!</div>
-                        </center>
-                    </div>
-                    <div id='product-container'></div>
-                </div>
+
+  </head>
+
+  <body>
+    <div id='page-level-container'class='row-fluid'>
+
+      <div id="app-content-container" class='container'>
+        <div id='logo-container'>
+          <center>
+            <a href='/'><img class='smc-logo'src="../public/img/logo.png" width="512" height="349" alt="Logo"></a>
+          </center>
+        </div>
+        <div id="search-container">
+
+          <div class="search-bar" style="width: auto">      
+
+            <div class="user-input input-prepend" style="margin-bottom: 0px;">
+              <span id="span-dollar" class="add-on"><img src='../public/img/dollar.png' class='input-logo'></span>
+              <input class="user-input" id="user-input-price" type="text" pattern="[0-9]+\.[0-9]{0,2}|[0-9]+|favorites|Favorites">
             </div>
-            
-        </div>
-        
-        
-        
-        
-        <div id="favorites-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="favorites-modal-label" aria-hidden="true">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="favorites-modal-label">Favorites</h3>
-          </div>
-          <div class="modal-body">
-            <p>Settings options go here</p>
-          </div>
-          <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
-                
-        <script src="../public/lib/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
-        <script src="../public/lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="../public/js/lib/underscore-min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../public/js/smcscript.js" type="text/javascript" charset="utf-8"></script>
-<!--        <script src="../public/js/view.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../public/js/ProductView.js" type="text/javascript" charset="utf-8"></script>
-        <script src="../public/js/favorites.js" type="text/javascript" charset="utf-8"></script>-->
 
-    </body>
+            <button id='search-button' class="btn">Search</button>
+
+            <div class="user-buttons btn-group">
+
+              <button id="favorites-button" class="btn">Favorites</button>
+
+              <button id='user-status-button' class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
+                Sign In
+              </button>
+              <button id='sign-in-dropdown-button'class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+              </button>
+
+              <ul id="login-dropdown" class="dropdown-menu">
+                <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5></li>
+                <li class="login divider"></li>
+                <li class="login"><span><a href="/auth/facebook"  id="login-facebook" class="zocial facebook">
+                      Sign In With Facebook
+                    </a></span></li>
+                <li class="login"><span> <a href="/auth/google" id="login-google" class="zocial google">
+                      Sign In With Google
+                    </a></span></li>
+                <li class="login"><span> <a href="/auth/twitter" id="login-twitter" class="zocial twitter">
+                      Sign In With Twitter
+                    </a></span></li>
+              </ul>
+
+            </div>
+
+          </div>
+
+
+        </div>
+        <div id='results-container' class='container'>
+          <div id='loading-image-container'>
+            <center>
+              <img src='../public/img/ajax-loader-light.gif' class='loading-image'>
+              <div id='user-info-alert' class='alert fade in out'>Woo!!</div>
+            </center>
+          </div>
+          <div id='product-container'></div>
+        </div>
+        <div id='footer' class='container'>
+          <hr />
+          <a href='#faq-modal' data-toggle="modal">FAQ</a>
+        </div>
+      </div>
+
+    </div>
+    <div id='faq-modal' class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Spend My Cents FAQ</h3>
+      </div>
+      <div class="modal-body">
+        <div class="qa-block">
+            <div class="question">
+              <strong>Question:</strong> When I go to Amazon sometimes the list price is different from the price I entered. Why?
+            </div>
+            <div class="answer">
+                <strong>Answer:</strong> If you look around that product, you will find that one of the specific items is actually for sale at the price you entered. Amazon will not let us search on only listed price.
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>        
+    <script src="../public/lib/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="../public/lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../public/js/lib/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../public/js/smcscript.js" type="text/javascript" charset="utf-8"></script>
+    <!--        <script src="../public/js/view.js" type="text/javascript" charset="utf-8"></script>
+            <script src="../public/js/ProductView.js" type="text/javascript" charset="utf-8"></script>
+            <script src="../public/js/favorites.js" type="text/javascript" charset="utf-8"></script>-->
+
+  </body>
 </html>

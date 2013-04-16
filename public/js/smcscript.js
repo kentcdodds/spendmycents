@@ -31,7 +31,6 @@ var SMC = (function() {
       append = append || false;
       var $moreButton = SMCTemplate.moreButton();
       $moreButton.click(function() {
-        SMCUtil.removeMoreButton();
         searchWithPrice(price, itemPage + 1, true);
       });
       sendProductRequest({
@@ -45,7 +44,6 @@ var SMC = (function() {
       append = append || false;
       var $moreButton = SMCTemplate.moreButton();
       $moreButton.click(function() {
-        SMCUtil.removeMoreButton();
         loadUserFavorites(index + 10, true);
       });
       sendProductRequest({
@@ -55,9 +53,9 @@ var SMC = (function() {
     };
 
     sendProductRequest = function(req, append, requestAttempt, moreButton) {
+      SMCUtil.removeMoreButton();
       if (requestAttempt > SMCConstants.MAX_REQUEST_RETRIES) {
         SMCUtil.showAlert('error', '<strong>Ouch!</strong> We tried and tried, but couldn\'t get any results for you! If this happens several times, please let us know.')
-        callback(new Error('Failed too many times'));
       }
       SMCUtil.showLoadingGif();
       $.ajax({
