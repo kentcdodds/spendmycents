@@ -1,6 +1,8 @@
 // Global object for 
 var SMC = {};
-var MAX_REQUEST_RETRIES = 5;
+SMC.MAX_REQUEST_RETRIES = 3;
+
+/******** Formatting Functions ********/
 
 SMC.setupHover = function () {
     $('.hover').hover(function(){
@@ -10,80 +12,36 @@ SMC.setupHover = function () {
   });
 };
 
-SMC.sendSearchRequest = function (){
-  var price, priceIsValid; 
-  price = $('#user-input-price').val();
-  priceIsValid = SMC.validateUserInput(price);
+/***************************************/
+
+/******* Ajax Requests ********/
+
+SMC.sendRequest = function (){
+  var userInput, userInputIsValid; 
   
-  if (priceIsValid){
-    price = price * 100;
-    $('.product-panel').remove();
-    SMC.displayLoadingGif();
-    
-    $.ajax({  
-      type: "GET",  
-      url: "/products",  
-      data: "price="+price,  
-      success: function(resp){
-        
-        var requests = 0;
-        SMC.response = resp;
-        
-        // TODO Discuss a better way to do this, if possible.
-        // Make sure that response has results, if not, try again
-        if(resp.ItemSearchResponse.Items[0].Item) {
-          SMC.setupProductView(resp.ItemSearchResponse.Items[0].Item);
-          SMC.setupHover();
-          requests += 1;
-        } else if (requests <= 5) {
-          SMC.sendSearchRequest();
-        }
-      
-      },  
-      error: function(e){  
-        alert('Error: ' + e);  
-      }  
-    });      
+  userInput = $('#user-input-price').val();
+  userInputIsValid = SMC.validateUserInput(userInput);
+  if (userInputIsValid){
+    SMC.sendSearchRequest(userInput);
   } else {
-    SMC.showError("<strong>Warning!</strong> Easy there tiger. We only do numbers or the word 'Favorites'");
-  }
-};
-
-SMC.loadUserFavorites = function () {
-  $.ajax({  
-    type: "GET",  
-    url: "/users/me/favorites",  
-    success: function(resp){
-      
-      var requests = 0;
-      SMC.response = resp;
-      
-      if(resp.ItemSearchResponse.Items[0].Item) {
-        SMC.setupProductView(resp.ItemSearchResponse.Items[0].Item);
-        SMC.setupHover();
-        requests += 1;
-      } else if (requests <= 5) {
-        SMC.loadUserFavorites();
-      }
-    
-    },  
-    error: function(e){  
-      SMC.showError("<strong>Error!</strong> Something crazy happened. If it happens again let us know."); 
-    }  
-  });      
-}
-
-SMC.validateUserInput = function (userInput) {
-  console.log(userInput)
-  if ((userInput || userInput === "") && !_.isFinite(userInput)) {
-    return false;
-  }
-
-  return true;
-};
-
-SMC.checkIfUserIsLoggedIn = function () {
+    userInput = userInput.toLowerCase();
   
+    if (_.isEqual(userInput, 'favorites')) {
+      SMC.loadUserFavorites();
+    } else {
+      SMC.showAlert("error", "<strong>Warning!</strong> Easy there tiger. We only do numbers.");
+    }
+  } 
+  
+  
+};
+
+
+/***********************************/
+
+/******** User authentication functions ********/
+
+SMC.checkIfUserIsLoggedIn = function () {  
   $.ajax({  
     type: "GET",  
     url: "/users/me",  
@@ -101,6 +59,20 @@ SMC.checkIfUserIsLoggedIn = function () {
   });     
   
 };
+/***********************************************/
+
+/******** Utility Functions ********/
+
+SMC.validateUserInput = function (userInput) {
+  console.log(userInput)
+  if ((userInput || userInput === "") && !_.isFinite(userInput)) {
+    return false;
+  }
+
+  return true;
+};
+
+
 
 SMC.setupForUser = function () {
   $('#user-status-button').html(SMC.user['name']);  
@@ -117,31 +89,55 @@ SMC.setupForUser = function () {
 };
 
 SMC.displayLoadingGif = function () {
-  if (!$('.loading-image').length) {
-    $('#loading-image-container').append("<img src='../public/img/ajax-loader-light.gif' class='loading-image'>");
-  } else {
-    $('.loading-image').show();
-  }
+  $('.loading-image').css('visibility', 'visible');
 };
 
-SMC.showError = function (errorText) {
-  var alert =
-              "<div id='user-input-error' class='alert alert-error'>" +
-                "<button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>" +
-                errorText + 
-              "</div>";
-  
-  $('#loading-image-container').append(alert);
-}
+SMC.hideLoadingGif = function () {
+  $('.loading-image').css('visibility', 'hidden');
+};
 
+SMC.removeProductPanels = function () {
+  $('.product-panel').remove();
+};
+
+/********************************/
+
+/******** Alert Handling ********/
+
+SMC.showAlert = function (type, text) {
+  var alertText = text;
+  if (type === 'error') {
+    $(".alert").addClass('alert-error'); 
+  } 
+  $('.alert').html(alertText);
+  $(".alert").css('visibility', 'visible');
+   
+  window.setTimeout(function() { 
+    $(".alert").css('visibility', 'hidden');
+    $(".alert").removeClass('alert-error'); 
+  }, 4000);
+};
+
+/******** App setup ********/
 
 $(document).ready(function () {
   
+  // Bind event handlers
   $('#user-input-price').keypress(function (e) {
     if (e.which == 13) {
-      SMC.sendSearchRequest();
+      SMC.sendRequest();
     }
   });
+  
+  $('#favorites-button').click(function () {
+    $('#user-input-price').val('favorites');
+    SMC.loadUserFavorites();
+    console.log('calling loaduser favorites')
+  });
+  
+  $('#search-button').click(function () {
+    SMC.sendRequest();
+  })
   
   SMC.checkIfUserIsLoggedIn();
   

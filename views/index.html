@@ -25,11 +25,11 @@
                               <input class="user-input" id="user-input-price" type="text" pattern="[0-9]+\.[0-9]{0,2}|[0-9]+|favorites|Favorites">
                             </div>
           
-                            <button id='search-button' class="btn" onclick='SMC.sendSearchRequest()'>Search</button>
+                            <button id='search-button' class="btn">Search</button>
                     
                             <div class="user-buttons btn-group">
               
-                              <button id="favorites-button" class="btn" href="#favorites-modal" id="settings" role="button" data-toggle="modal" >
+                              <button id="favorites-button" class="btn" role="button">
                                     <span class="favorites">Favorites</span>
                               </button>
               
@@ -43,7 +43,7 @@
                               <ul id="login-dropdown" class="dropdown-menu">
                                   <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5></li>
                                   <li class="login divider"></li>
-                                  <li class="login"><span><a href="/auth/facebook" id="login-facebook" class="zocial facebook">
+                                  <li class="login"><span><a href="/auth/facebook"  id="login-facebook" class="zocial facebook">
                                       Sign In With Facebook
                                   </a></span></li>
                                   <li class="login"><span> <a href="/auth/google" id="login-google" class="zocial google">
@@ -61,7 +61,12 @@
           
                 </div>
                 <div id='results-container' class='container'>
-                    <div id='loading-image-container'></div>
+                    <div id='loading-image-container'>
+                        <center>
+                        <img src='../public/img/ajax-loader-light.gif' class='loading-image'>
+                        <div id='user-info-alert'class='alert fade in out'>Woo!!</div>
+                    </center>
+                    </div>
                     <div id='product-container'></div>
                 </div>
             </div>

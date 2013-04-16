@@ -76,7 +76,7 @@ div.user-buttons {
 
 #search-container {
   margin-top: 40px;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
 }
 
 .search-row {
@@ -95,10 +95,13 @@ img.product-image {
 img.input-logo {
   max-height: 100%;
   max-width: auto;
+  margin-top: 4px;
 }
 
 img.loading-image {
-  margin-left: 46.3%;
+  margin-left: auto;
+  margin-right: auto;
+  visibility: hidden;
 }
 
 span.product-manufacturer {
@@ -163,15 +166,15 @@ input::-webkit-inner-spin-button {
 
 
 #loading-image-container {
-  margin-bottom: 30px;
   margin-left: auto;
   margin-right: auto;
 }
 
-#user-input-error {
-  width: 25%;
+#user-info-alert {
+  width: 40%;
   margin-right: auto;
   margin-left: auto;
+  visibility: hidden;
 }
 
 .product-panel {

@@ -1,9 +1,9 @@
 SMC.setupProductView = function (products) {
   
   var i;
-  $('.product-panel').remove();
-  $('.loading-image').hide();
-  console.log(products);
+  SMC.removeProductPanels();
+  SMC.hideLoadingGif();
+
   for (i = 0; i < products.length; i += 1) {
     var product, imageURL, title, manufacturer, detailPageURL, detailPageURLDescription, 
         productPanelTemplate, saveAsFavoriteURL, favoritesLinkHTML;
@@ -12,7 +12,7 @@ SMC.setupProductView = function (products) {
     
     //due to sometimes not receiving all the data we need to check for non-exisiting values
     
-    if(product.LargeImage && product.LargeImage[0].URL && product.LargeImage[0].URL[0]) {
+    if (product.LargeImage && product.LargeImage[0].URL && product.LargeImage[0].URL[0]) {
       imageURL = product.LargeImage[0].URL[0];
     } else if (product.ImageSets && product.ImageSets[0].ImageSet){
       try {
@@ -40,17 +40,17 @@ SMC.setupProductView = function (products) {
     if (product.DetailPageURL) {
       detailPageURL = product.DetailPageURL[0];
       detailPageURLDescription = "See on Amazon";
-    }else {
+    } else {
       detailPageURL = "";
       detailPageURLDescription = "URL Unavailable";
     }
     
     if (SMC.user) {
-      productId = product.ASIN[0];
+      var productId = product.ASIN[0];
       
       favoritesLinkHTML = "&nbsp;|&nbsp;" +
-                      "<a href='#'onclick='SMC.setFavorite(" + 
-                      product.ASIN[0] + ")'>Save as Favorite</a>";
+                      "<a href='#'onclick='SMC.setFavorite(\"" + 
+                      productId + "\")'>Save as Favorite</a>";
       
     } else {
       favoritesLinkHTML = "";
@@ -59,7 +59,7 @@ SMC.setupProductView = function (products) {
     
     
     productPanelTemplate =
-        "<div class='hover product-panel'>" +
+        "<div id='" + product.ASIN[0] + "'class='hover product-panel'>" +
             "<div class='front'>"+
                 "<img class=\"product-image thumb\" src=\"" + imageURL + "\">" +    
             "</div>" + 
@@ -71,7 +71,7 @@ SMC.setupProductView = function (products) {
                     "<p>" +
                       "<span class='product-manufacturer'>Made By: &nbsp;" + manufacturer + "</span>" +
                     "</p>" +
-                    "<p>" +
+                    "<p class='product-link'>" +
                       "<a href=\"" + detailPageURL + "\" target=\"_blank\">" + detailPageURLDescription + "</a>" +
                       favoritesLinkHTML +
                     "</p>" +
@@ -85,6 +85,39 @@ SMC.setupProductView = function (products) {
   
 };
 
+SMC.sendSearchRequest = function (userInput) {
+  userInput = userInput * 100;
+  $('.product-panel').remove();
+  SMC.displayLoadingGif();
+
+  $.ajax({  
+    type: "GET",  
+    url: "/products",  
+    data: "price="+userInput,  
+    success: function(resp){
+    
+      var requests = 0;
+      SMC.response = resp;
+    
+      // TODO Discuss a better way to do this, if possible.
+      // Make sure that response has results, if not, try again
+      if(resp.ItemSearchResponse.Items[0].Item) {
+        SMC.setupProductView(resp.ItemSearchResponse.Items[0].Item);
+        SMC.setupHover();
+        requests += 1;
+      } else if (requests <= SMC.MAX_REQUEST_RETRIES) {
+        SMC.sendSearchRequest();
+      }
+  
+    },  
+    error: function(e){  
+        
+    }  
+  });      
+}; 
+
+
 SMC.shortenLongTitle = function (title) {
   
 };
+
