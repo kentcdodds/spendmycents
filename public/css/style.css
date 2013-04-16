@@ -317,3 +317,8 @@ input::-webkit-inner-spin-button {
 form {
   display: inline;
 }
+
+#footer {
+  color: gray;
+  text-align: right;
+}
