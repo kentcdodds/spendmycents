@@ -44,7 +44,7 @@ var SMC = (function() {
       append = append || false;
       if (SMC.user && SMC.user.favorites) {
         var totalFavorites = SMC.user.favorites.length;
-        if (totalFavorites < 0) {
+        if (totalFavorites < 1) {
           SMCUtil.showAlert('error', '<strong>Dang!</strong> It looks like you don\'t have any favorites. Give that a try!');
           return;
         } else if (totalFavorites < index) {
