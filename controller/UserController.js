@@ -244,7 +244,7 @@ var UserController = (function() {
           res.json({});
         } else {
           req.query.index = req.query.index || 0;
-          req.query.ids = _.rest(user.favorites, req.query.index).join(',');
+          req.query.ids = _.first(_.rest(user.favorites, req.query.index), 10).join(',');
           ProductController.getProducts(req, res);
         }
       });
