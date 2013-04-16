@@ -101,6 +101,16 @@ SMC.removeProductPanels = function () {
   $('.product-panel').remove();
 };
 
+SMC.setupFavoriteStars = function () {
+  $('.icon-star-empty').hover(function () {
+    $(this).removeClass('icon-star-empty');
+    $(this).addClass('icon-star');
+  }, function () {
+    $(this).removeClass('icon-star');
+    $(this).addClass('icon-star-empty');
+  });
+};
+
 /********************************/
 
 /******** Alert Handling ********/
@@ -131,9 +141,8 @@ $(document).ready(function () {
   });
 
   $('#favorites-button').click(function () {
-    $('#user-input-price').val('favorites');
     SMC.loadUserFavorites();
-    console.log('calling loaduser favorites')
+    
   });
 
   $('#search-button').click(function () {

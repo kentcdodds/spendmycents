@@ -48,9 +48,9 @@ SMC.setupProductView = function (products) {
     if (SMC.user) {
       var productId = product.ASIN[0];
       
-      favoritesLinkHTML = "&nbsp;|&nbsp;" +
-                      "<a href='#'onclick='SMC.setFavorite(\"" + 
-                      productId + "\")'>Save as Favorite</a>";
+      favoritesLinkHTML = "<br/><br/>" +
+                      "<a class='favorites-link' href='#' title='Save to Favorites' onclick='SMC.setFavorite(\"" + 
+                      productId + "\")'><i class='icon-star-empty'></i></a>";
       
     } else {
       favoritesLinkHTML = "";
@@ -82,7 +82,7 @@ SMC.setupProductView = function (products) {
         
     $('#product-container').append(productPanelTemplate);
   }
-  
+  SMC.setupFavoriteStars();
 };
 
 SMC.sendSearchRequest = function (userInput) {
@@ -102,8 +102,8 @@ SMC.sendSearchRequest = function (userInput) {
         SMC.setupProductView(resp.ItemSearchResponse.Items[0].Item);
         SMC.setupHover();
         requests += 1;
-      } else if (requests <= 5) {
-        SMC.sendSearchRequest();
+      } else if (requests <= 3) {
+        SMC.sendSearchRequest(userInput);
       }
   
     },  

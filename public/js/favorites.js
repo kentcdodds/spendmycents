@@ -1,4 +1,5 @@
 SMC.setFavorite = function (id) {
+  SMC.fillClickedStar(id);
   $.ajax({  
     type: "PUT",  
     url: "/users/me/favorites?ids="+id,  
@@ -29,6 +30,7 @@ SMC.loadUserFavorites = function () {
         
         SMC.setupProductView(resp.ItemLookupResponse.Items[0].Item);
         SMC.setupHover();
+        SMC.showAlert('info', 'Ok, '+ SMC.user['name'] + ' Here are your favorites:');
         requests += 1;
       } else if (requests < 3) {
         // SMC.loadUserFavorites();

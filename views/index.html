@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="../public/bootstrap/css/bootstrap.min.css" media="screen">
         <link rel="stylesheet" href="../public/css/style.css" type="text/css">
         <link rel="stylesheet" href="../public/lib/zocial/zocial.css" type="text/css">
+        <link rel="stylesheet" href="../public/fontawesome/css/font-awesome.min.css" type="text/css" media="screen">
+        
 
     </head>
 
@@ -16,13 +18,18 @@
         <div id='page-level-container'class='row-fluid'>
             
             <div id="app-content-container" class='container'>
+                <div id='logo-container'>
+                    <center>
+                        <img class='smc-logo'src="../public/img/logo.png" width="512" height="349" alt="Logo">
+                    </center>
+                </div>
                 <div id="search-container">
           
                     <div class="search-bar" style="width: auto">      
                 
                             <div class="user-input input-prepend" style="margin-bottom: 0px;">
                               <span id="span-logo" class="add-on"><img src='../public/img/dollar.png' class='input-logo'></span>
-                              <input class="user-input" id="user-input-price" type="text" pattern="[0-9]+\.[0-9]{0,2}|[0-9]+|favorites|Favorites">
+                              <input class="user-input" id="user-input-price" type="number" step="0.01">
                             </div>
           
                             <button id='search-button' class="btn">Search</button>
