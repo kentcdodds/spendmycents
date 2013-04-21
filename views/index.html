@@ -2,21 +2,62 @@
 
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <title>SpendMyCents.com</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
-    <link rel="stylesheet" href="../public/bootstrap/css/bootstrap.min.css" media="screen">
-    <link rel="stylesheet" href="../public/css/style.css" type="text/css">
-    <link rel="stylesheet" href="../public/lib/zocial/zocial.css" type="text/css">
-    <link rel="stylesheet" href="../public/fontawesome/css/font-awesome.min.css" type="text/css" media="screen">
+    <link rel='stylesheet' href='../public/bootstrap/css/bootstrap.min.css' media='screen'>
+    <link rel='stylesheet' href='../public/css/style.css' type='text/css'>
+    <link rel='stylesheet' href='../public/lib/zocial/zocial.css' type='text/css'>
+    <link rel='stylesheet' href='../public/fontawesome/css/font-awesome.min.css' type='text/css' media='screen'>
 
 
   </head>
 
   <body>
-    <div id='page-level-container'class='row-fluid'>
-      <div id="app-content-container" class='container'>
+    <div id='page-level-container' class='row-fluid'>
+      <div id='user-buttons-container'>
+        <div id='user-buttons' class='btn-group pull-right'>
+          <button id='favorites-button' class='btn'>Favorites</button>
+          <button id='user-status-button' class='btn sign-in-button dropdown-toggle' data-toggle='dropdown'>Sign In &nbsp;<span class='caret'></span></button>
+          <ul id='login-dropdown' class='dropdown-menu'>
+            <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5></li>
+            <li class='login divider'></li>
+            <li class='login'><span><a href='/auth/facebook'  id='login-facebook' class='zocial facebook'>Sign In With Facebook</a></span></li>
+            <li class='login'><span> <a href='/auth/google' id='login-google' class='zocial google'>Sign In With Google</a></span></li>
+            <li class='login'><span> <a href='/auth/twitter' id='login-twitter' class='zocial twitter'>Sign In With Twitter</a></span></li>
+          </ul>
+        </div>
+      </div>
+      <div id='app-content-container' class='container'>
+        <div id='logo-container'>
+          <a href='/'><img class='smc-logo' src='../public/img/logo.png' width='512' height='349' alt='Logo'></a>
+        </div>
+        <div id='search-bar'>      
+          <div class='user-input input-prepend input-append'>
+            <span id='span-dollar' class='add-on'><img id='input-icon' src='../public/img/dollar.png'></span>
+            <input class='user-input' id='user-input-price' type='text' pattern='[0-9]+\.[0-9]{0,2}|[0-9]+|favorites|Favorites'>
+            <div id='search-button-group' class='btn-group pull-right'>
+              <button id='search-button' class='btn'>Search</button>
+              <button id='advanced-search-button' class='btn dropdown-toggle' data-toggle='dropdown'>All
+                <span id='search-index' class='caret'></span>
+              </button>
+              <ul id='search-index-list' class='dropdown-menu'>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id='results-container' class='container'>
+          <div id='loading-image-container'>
+            <center>
+              <img src='../public/img/ajax-loader-light.gif' class='loading-image'>
+              <div id='user-info-alert'><div id='alert-template' class='alert fade in out'>Woo!!</div></div>
+            </center>
+          </div>
+          <div id='product-container'></div>
+        </div>
+        <div id='footer' class='container'>
+          <hr />
           <div id='social-media'>
             <span class='st_facebook_large' title='Facebook'></span>
             <span class='st_googleplus_large' title='Google +'></span>
@@ -25,92 +66,35 @@
             <span class='st_pinterest_large' title='Pinterest'></span>
             <span class='st_sharethis_large' title='ShareThis'></span>
           </div>
-        <div id='logo-container'>
-            <a href='/'><img class='smc-logo' src="../public/img/logo.png" width="512" height="349" alt="Logo"></a>
-        </div>
-        <div id="search-container">
-
-          <div class="search-bar" style="width: auto">      
-
-            <div class="user-input input-prepend" style="margin-bottom: 0px;">
-              <span id="span-dollar" class="add-on"><img src='../public/img/dollar.png' class='input-logo'></span>
-              <input class="user-input" id="user-input-price" type="text" pattern="[0-9]+\.[0-9]{0,2}|[0-9]+|favorites|Favorites">
-            </div>
-
-            <button id='search-button' class="btn">Search</button>
-
-            <div class="user-buttons btn-group">
-
-              <button id="favorites-button" class="btn">Favorites</button>
-
-              <button id='user-status-button' class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
-                Sign In
-              </button>
-              <button id='sign-in-dropdown-button'class="btn sign-in-button dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-              </button>
-
-              <ul id="login-dropdown" class="dropdown-menu">
-                <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5></li>
-                <li class="login divider"></li>
-                <li class="login"><span><a href="/auth/facebook"  id="login-facebook" class="zocial facebook">
-                      Sign In With Facebook
-                    </a></span></li>
-                <li class="login"><span> <a href="/auth/google" id="login-google" class="zocial google">
-                      Sign In With Google
-                    </a></span></li>
-                <li class="login"><span> <a href="/auth/twitter" id="login-twitter" class="zocial twitter">
-                      Sign In With Twitter
-                    </a></span></li>
-              </ul>
-
-            </div>
-
-          </div>
-
-
-        </div>
-        <div id='results-container' class='container'>
-          <div id='loading-image-container'>
-            <center>
-              <img src='../public/img/ajax-loader-light.gif' class='loading-image'>
-              <div id='user-info-alert'><div id="alert-template" class='alert fade in out'>Woo!!</div></div>
-            </center>
-          </div>
-          <div id='product-container'></div>
-        </div>
-        <div id='footer' class='container'>
-          <hr />
-          <a href='#faq-modal' data-toggle="modal">FAQ</a>
+          <a href='#faq-modal' data-toggle='modal'>FAQ</a>
           &nbsp;&nbsp;|&nbsp;&nbsp;<a href='mailto:info@spendmycents.com'>Contact Us</a>
         </div>
       </div>
-
     </div>
-    <div id='faq-modal' class="modal hide fade">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <div id='faq-modal' class='modal hide fade'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
         <h3>Spend My Cents FAQ</h3>
       </div>
-      <div class="modal-body">
-        <div class="qa-block">
-          <div class="question">
+      <div class='modal-body'>
+        <div class='qa-block'>
+          <div class='question'>
             <strong>Question:</strong> When I go to Amazon sometimes the list price is different from the price I entered. Why?
           </div>
-          <div class="answer">
+          <div class='answer'>
             <strong>Answer:</strong> If you look around that product, you will find that one of the specific items is actually for sale at the price you entered. Amazon will not let us search on only listed price.
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn">Close</a>
+      <div class='modal-footer'>
+        <a href='#' data-dismiss='modal' class='btn'>Close</a>
       </div>
     </div>        
-    <script src="../public/lib/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
-    <script src="../public/lib/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../public/js/lib/underscore-min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="../public/js/smcscript.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript">
+    <script src='../public/lib/jquery/jquery-1.9.1.min.js' type='text/javascript'></script>
+    <script src='../public/lib/bootstrap/js/bootstrap.min.js' type='text/javascript'></script>
+    <script src='../public/js/lib/underscore-min.js' type='text/javascript' charset='utf-8'></script>
+    <script src='../public/js/smcscript.js' type='text/javascript' charset='utf-8'></script>
+    <script type='text/javascript'>
 
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-40183359-1']);
@@ -126,9 +110,9 @@
       })();
 
     </script>
-    <script type="text/javascript">var switchTo5x = true;</script>
-    <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-    <script type="text/javascript">stLight.options({publisher: "7b19e3f7-6525-4905-b064-2b86839ffc86", doNotHash: false, doNotCopy: false, hashAddressBar: true});</script>
+    <script type='text/javascript'>var switchTo5x = true;</script>
+    <script type='text/javascript' src='http://w.sharethis.com/button/buttons.js'></script>
+    <script type='text/javascript'>stLight.options({publisher: '7b19e3f7-6525-4905-b064-2b86839ffc86', doNotHash: false, doNotCopy: false, hashAddressBar: true});</script>
 
   </body>
 </html>

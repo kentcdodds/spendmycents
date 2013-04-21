@@ -61,38 +61,33 @@ li.login {
 }
 
 
-#span-dollar {
-  height: 50px;
-  width: 32px;
-}
-
 input.user-input {
   height: 50px;
   font-size: 30pt;
 }
 
-div.search-bar {
-  width: auto;
-  margin-left: 35%;
+div#search-bar {
+  margin-top: 40px;
+  margin-left:auto;
+  margin-right:auto;
+  width: 402px;
 }
 
-div.user-buttons {
-  margin-left: 16.6%;
+div#user-buttons-container {
+  padding-top: 50px;
+  padding-right: 70px;
+  float: right;
 }
 
 #search-button {
-  height: 52px;
-  font-size: 20pt;
-  margin-left: 8px;
+  height: 60px;
+  font-size: 30px;
 }
 
-#search-container {
-  margin-top: 40px;
-  margin-bottom: 20px;
-}
-
-.search-row {
-  margin-bottom: 20px;
+#advanced-search-button {
+  height: 60px;
+  max-width: 225px;
+  font-size: 20px;
 }
 
 .input-prepend {
@@ -104,10 +99,12 @@ img.product-image {
   max-width: 100%;
 }
 
-img.input-logo {
+img#input-icon {
   max-height: 100%;
-  max-width: auto;
-  margin-top: 4px;
+}
+
+span#span-dollar {
+  height: 50px;
 }
 
 img.loading-image {
@@ -116,13 +113,7 @@ img.loading-image {
   visibility: hidden;
 }
 
-img.smc-logo {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
-  width: 400px;
-  height: auto;
-}
+img.smc-logo {}
 
 span.product-manufacturer {
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -152,13 +143,10 @@ span.logout  h5{
     margin-right: auto;
   }
 /*
-  #results-container div.product-panel:nth-child(9) {
-    margin-left: 26.7%;
-  }*/
-  div.search-bar {
+  div#search-bar {
     width: auto;
     margin-left: 34%;
-  }
+  }*/
 
   div.user-buttons {
     margin-left: 16.6%;
@@ -172,10 +160,6 @@ span.logout  h5{
     margin-right: auto;
   }
 
-/*  #results-container div.product-panel:nth-child(10) {
-    margin-left: 35.7%;
-  }*/
-
   div.user-buttons {
     margin-left: 1%;
   }
@@ -186,11 +170,6 @@ span.logout  h5{
     width: 580px;
     margin-left: auto;
     margin-right: auto;
-  }
-
-  div.search-bar {
-    width: auto;
-    margin-left: 17%;
   }
 
 }
@@ -321,14 +300,18 @@ form {
 #footer {
   color: gray;
   text-align: right;
+  width: 75%;
 }
 
 #social-media {
-  float: right;
-  padding-top: 30px;
-  padding-right: 35px;
+  float: left;
 }
 
 #logo-container {
-  margin-left: 33%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  width: 400px;
+  height: auto;
+  display: block;
 }
