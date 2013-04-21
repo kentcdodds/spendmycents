@@ -84,7 +84,7 @@ div#user-buttons-container {
   font-size: 30px;
 }
 
-#advanced-search-button {
+#search-index-button {
   height: 60px;
   max-width: 225px;
   font-size: 20px;
@@ -314,4 +314,18 @@ form {
   width: 400px;
   height: auto;
   display: block;
+}
+
+.template {
+  display: none;
+}
+
+.search-index-item {
+  padding: 2px;
+}
+
+.search-index-item>a {
+  text-align: left !important;
+  width: 80% !important;
+  cursor: pointer !important;
 }

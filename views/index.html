@@ -39,10 +39,11 @@
             <input class='user-input' id='user-input-price' type='text' pattern='[0-9]+\.[0-9]{0,2}|[0-9]+|favorites|Favorites'>
             <div id='search-button-group' class='btn-group pull-right'>
               <button id='search-button' class='btn'>Search</button>
-              <button id='advanced-search-button' class='btn dropdown-toggle' data-toggle='dropdown'>All
-                <span id='search-index' class='caret'></span>
+              <button id='search-index-button' class='btn dropdown-toggle' data-toggle='dropdown' data-search-index='All' >All
+                <span class='caret'></span>
               </button>
               <ul id='search-index-list' class='dropdown-menu'>
+                <li class='search-index-item template'></li>
               </ul>
             </div>
           </div>
@@ -51,7 +52,7 @@
           <div id='loading-image-container'>
             <center>
               <img src='../public/img/ajax-loader-light.gif' class='loading-image'>
-              <div id='user-info-alert'><div id='alert-template' class='alert fade in out'>Woo!!</div></div>
+              <div id='user-info-alert'><div id='alert-template' class='template alert fade in out'>Woo!!</div></div>
             </center>
           </div>
           <div id='product-container'></div>

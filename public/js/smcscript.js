@@ -27,15 +27,15 @@ var SMC = (function() {
       return xhr.status && (xhr.status === 200 || xhr.status === 304);
     };
 
-    searchWithPrice = function(price, itemPage, append) {
+    searchWithPrice = function(price, searchIndex, itemPage, append) {
       append = append || false;
       var $moreButton = SMCTemplate.moreButton();
       $moreButton.click(function() {
-        searchWithPrice(price, itemPage + 1, true);
+        searchWithPrice(price, searchIndex, itemPage + 1, true);
       });
       sendProductRequest({
         type: 'GET',
-        url: '/products?price=' + price + '&itemPage=' + itemPage
+        url: '/products?price=' + price + '&searchIndex=' + searchIndex + '&itemPage=' + itemPage
       }, append, 0, $moreButton, 'search');
     };
 
@@ -106,7 +106,7 @@ var SMC = (function() {
         var userInput = $('#user-input-price').val();
         var numVersion = parseFloat(userInput.replace(/,/g, ''));
         if (_.isFinite(numVersion)) {
-          searchWithPrice(userInput * 100, 1);
+          searchWithPrice(userInput * 100, $('#search-index-button').data('search-index').replace(/ /g, ''), 1);
         } else if (userInput.toLowerCase() === 'favorites') {
           loadUserFavorites();
         } else {
@@ -175,6 +175,20 @@ var SMC = (function() {
             SMCUtil.log(e);
           }
         });
+      },
+      getAvailablePreferences: function(callback) {
+        $.ajax({
+          type: 'GET',
+          url: '/users/preferences',
+          success: function(data, testStatus, xhr) {
+            SMC.response = data;
+            if (responseIsSuccess(xhr)) {
+              callback(data);
+            } else {
+              SMCUtil.showAlert('error', '<string>Whoops!</strong> Couldn\'t load available search indexes. You will not be able to select specific areas to search.');
+            }
+          }
+        });
       }
     };
   })();
@@ -214,11 +228,11 @@ var SMC = (function() {
         $alert.attr('id', 'current-alert');
         $alert.addClass('alert-' + type);
         $alert.html(text);
-        $alert.css('visibility', 'visible');
+        $alert.removeClass('template');
         $alertContainer.append($alert);
 
         setTimeout(function() {
-          $alert.css('visibility', 'hidden');
+          $alert.remove();
         }, 5000);
       },
       log: function(text) {
@@ -428,6 +442,74 @@ var SMC = (function() {
           SMCRequest.onSearch();
         });
       },
+      loadPreferences: function() {
+        var i, listParent, listItemTemplate, listItem,
+          checkItem, uncheckItem, isSelected,
+          onHover, offHover, onClick;
+
+        checkItem = function(obj) {
+          obj.addClass('icon-check');
+          obj.removeClass('icon-check-empty');
+        };
+
+        uncheckItem = function(obj) {
+          obj.addClass('icon-check-empty');
+          obj.removeClass('icon-check');
+        };
+
+        isSelected = function(obj) {
+          return obj.data('selected');
+        };
+
+        onHover = function(obj) {
+          if (isSelected(obj)) {
+            uncheckItem(obj);
+          } else {
+            checkItem(obj);
+          }
+        };
+
+        offHover = function(obj) {
+          if (isSelected(obj)) {
+            checkItem(obj);
+          } else {
+            uncheckItem(obj);
+          }
+        };
+
+        onClick = function(obj) {
+          checkItem(obj);
+          obj.data('selected', true);
+          $('#search-index-button').data('search-index', obj.data('search-index'));
+          $('#search-index-button').html(obj.data('search-index') + ' <span class=\'caret\'></span>');
+        };
+
+        SMCRequest.getAvailablePreferences(function(preferences) {
+          listParent = $('#search-index-list');
+          listItemTemplate = listParent.find('.template');
+          for (i = 0; i < preferences.length; i++) {
+            if (i % 10 === 0) {
+              //Separate things here?
+            }
+            listItem = listItemTemplate.clone();
+            listItem.removeClass('template');
+//            listItem.append(i % 10 === 0 ? '<br />' : '');
+
+            listItem.html('<a class=\'icon-check-empty\' data-selected=\'false\' data-search-index=\'' + preferences[i] + '\'> ' + preferences[i] + '</a>');
+            listParent.append(listItem);
+            listItem.click(function() {
+              listParent.find('a').data('selected', false).removeClass('icon-check').addClass('icon-check-empty');
+              onClick($(this).find('a'));
+            });
+            listItem.hover(function() {
+              onHover($(this).find('a'));
+            }, function() {
+              offHover($(this).find('a'));
+            });
+          }
+          listItemTemplate.remove();
+        });
+      },
       setupHover: function() {
         $('.hover').hover(function() {
           $(this).addClass('flip');
@@ -516,6 +598,7 @@ var SMC = (function() {
     user: undefined,
     setupApp: function() {
       SMCSetup.bindEventHandlers();
+      SMCSetup.loadPreferences();
       SMCRequest.loadSMCUser();
     },
     enableLogging: function() {
