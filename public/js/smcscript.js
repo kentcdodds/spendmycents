@@ -520,7 +520,7 @@ var SMC = (function() {
         });
       },
       setupForUser: function() {
-        $('#user-status-button').html(SMC.user['name']);
+        $('#user-status-button').html(SMC.user['name'] + '  &nbsp;<span class=\'caret\'></span>');
         $('li.login').remove();
 
         var logoutHTML = '<li class="logout"><span class="logout"><h5>All done? Click below to sign out.</h5></span></li>' +
