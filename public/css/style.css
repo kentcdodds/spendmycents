@@ -142,11 +142,11 @@ span.logout  h5{
     margin-left: auto;
     margin-right: auto;
   }
-/*
-  div#search-bar {
-    width: auto;
-    margin-left: 34%;
-  }*/
+  /*
+    div#search-bar {
+      width: auto;
+      margin-left: 34%;
+    }*/
 
   div.user-buttons {
     margin-left: 16.6%;
@@ -185,13 +185,16 @@ input::-webkit-inner-spin-button {
 #loading-image-container {
   margin-left: auto;
   margin-right: auto;
+  width: 32px;
+  margin-top: 15px;
 }
 
 #user-info-alert {
   width: 40%;
   margin-right: auto;
   margin-left: auto;
-  visibility: hidden;
+  display: bock;
+  margin-top: 15px;
 }
 
 .product-panel {
@@ -320,12 +323,14 @@ form {
   display: none;
 }
 
-.search-index-item {
-  padding: 2px;
-}
-
 .search-index-item>a {
   text-align: left !important;
   width: 80% !important;
   cursor: pointer !important;
+}
+
+#search-index-list {
+  max-height: 243px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }

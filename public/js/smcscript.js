@@ -27,21 +27,19 @@ var SMC = (function() {
       return xhr.status && (xhr.status === 200 || xhr.status === 304);
     };
 
-    searchWithPrice = function(price, searchIndex, itemPage, append) {
-      append = append || false;
+    searchWithPrice = function(price, searchIndex, itemPage) {
       var $moreButton = SMCTemplate.moreButton();
       $moreButton.click(function() {
-        searchWithPrice(price, searchIndex, itemPage + 1, true);
+        searchWithPrice(price, searchIndex, itemPage + 1);
       });
       sendProductRequest({
         type: 'GET',
         url: '/products?price=' + price + '&searchIndex=' + searchIndex + '&itemPage=' + itemPage
-      }, append, 0, $moreButton, 'search');
+      }, 0, $moreButton, 'search');
     };
 
-    loadUserFavorites = function(index, append) {
+    loadUserFavorites = function(index) {
       index = index || 0;
-      append = append || false;
       if (SMC.user && SMC.user.favorites) {
         var totalFavorites = SMC.user.favorites.length;
         if (totalFavorites < 1) {
@@ -54,15 +52,15 @@ var SMC = (function() {
       }
       var $moreButton = SMCTemplate.moreButton();
       $moreButton.click(function() {
-        loadUserFavorites(index + 10, true);
+        loadUserFavorites(index + 10);
       });
       sendProductRequest({
         type: 'GET',
         url: '/users/me/favorites?index=' + index
-      }, append, 0, $moreButton, 'favorites');
+      }, 0, $moreButton, 'favorites');
     };
 
-    sendProductRequest = function(req, append, requestAttempt, moreButton, location) {
+    sendProductRequest = function(req, requestAttempt, moreButton, location) {
       SMCUtil.removeMoreButton();
       if (requestAttempt > SMCConstants.MAX_REQUEST_RETRIES) {
         SMCUtil.showAlert('error', '<strong>Ouch!</strong> We tried and tried, but couldn\'t get any results for you! If this happens several times, please let us know.')
@@ -79,7 +77,7 @@ var SMC = (function() {
             amazonResponseItem = getAmazonResponseItem(data);
           }
           if (amazonResponseItem) {
-            SMCSetup.setupProductView(amazonResponseItem, append, moreButton);
+            SMCSetup.setupProductView(amazonResponseItem, moreButton);
             SMCSetup.setupHover();
             SMC.location = location;
           } else {
@@ -96,21 +94,25 @@ var SMC = (function() {
     };
 
     return {
-      sendProductRequest: function(req, append, requestAttempt, moreButton, location) {
-        sendProductRequest(req, append, requestAttempt, moreButton, location);
+      sendProductRequest: function(req, requestAttempt, moreButton, location) {
+        sendProductRequest(req, requestAttempt, moreButton, location);
       },
-      loadUserFavorites: function(index, append) {
-        loadUserFavorites(index, append);
+      loadUserFavorites: function(index) {
+        loadUserFavorites(index);
       },
       onSearch: function() {
+        SMCUtil.removeProductPanels();
         var userInput = $('#user-input-price').val();
-        var numVersion = parseFloat(userInput.replace(/,/g, ''));
-        if (_.isFinite(numVersion)) {
-          searchWithPrice(userInput * 100, $('#search-index-button').data('search-index').replace(/ /g, ''), 1);
-        } else if (userInput.toLowerCase() === 'favorites') {
-          loadUserFavorites();
+        if (/^[0-9]+\.[0-9]{0,2}$|^[0-9]+$|^Favorites$|^favorites$/.test(userInput)) {
+          if (_.isFinite(userInput)) {
+            searchWithPrice(Math.round(userInput * 100), $('#search-index-button').data('search-index').replace(/ /g, ''), 1);
+          } else if (userInput.toLowerCase() === 'favorites') {
+            loadUserFavorites();
+          } else {
+            SMCUtil.showAlert('error', '<strong>Whoa!</strong> Easy there tiger. We only do numbers.');
+          }
         } else {
-          SMCUtil.showAlert('error', '<strong>Warning!</strong> Easy there tiger. We only do numbers.');
+          SMCUtil.showAlert('error', '<strong>Whoa!</strong> Easy there tiger. We only do numbers.');
         }
       },
       loadSMCUser: function() {
@@ -123,6 +125,8 @@ var SMC = (function() {
               SMC.user = data;
               SMCSetup.setupForUser();
               $('#favorites-button').show();
+            } else {
+              $('#favorites-button').hide();
             }
           },
           error: function(e) {
@@ -486,14 +490,9 @@ var SMC = (function() {
 
         SMCRequest.getAvailablePreferences(function(preferences) {
           listParent = $('#search-index-list');
-          listItemTemplate = listParent.find('.template');
+          listItemTemplate = $('<li class=\'search-index-item\'></li>');
           for (i = 0; i < preferences.length; i++) {
-            if (i % 10 === 0) {
-              //Separate things here?
-            }
             listItem = listItemTemplate.clone();
-            listItem.removeClass('template');
-//            listItem.append(i % 10 === 0 ? '<br />' : '');
 
             listItem.html('<a class=\'icon-check-empty\' data-selected=\'false\' data-search-index=\'' + preferences[i] + '\'> ' + preferences[i] + '</a>');
             listParent.append(listItem);
@@ -506,8 +505,11 @@ var SMC = (function() {
             }, function() {
               offHover($(this).find('a'));
             });
+            if (i < 1) {
+              listItem.click();
+            }
           }
-          listItemTemplate.remove();
+
         });
       },
       setupHover: function() {
@@ -529,11 +531,8 @@ var SMC = (function() {
 
         $('#login-dropdown').append(logoutHTML);
       },
-      setupProductView: function(amazonProductsResponse, append, moreButton) {
+      setupProductView: function(amazonProductsResponse, moreButton) {
         var i, $productContainer;
-        if (!append) {
-          SMCUtil.removeProductPanels();
-        }
         SMCUtil.hideLoadingGif();
 
         for (i = 0; i < amazonProductsResponse.length; i += 1) {
@@ -554,6 +553,63 @@ var SMC = (function() {
         if (SMC.user) {
           FavoritesSetup.setup();
         }
+      },
+      enableKeyboardNavigationForDropdowns: function() {
+        $('.dropdown').bind('keydown', function(evt) {
+          var $this = $(this);
+          switch (evt.keyCode) {
+            case 13: // Enter key
+            case 32: // Space bar
+            case 38: // Up arrow
+            case 40: // Down arrow
+              $this.addClass("open");
+              $this.find('.dropdown-menu a:first').focus();
+              break;
+            case 27: // Escape key
+              $this.removeClass("open");
+              $this.focus();
+              break;
+          }
+        });
+
+        $('.dropdown-menu a').bind('keydown', function(evt) {
+          console.log(evt);
+          var $this = $(this);
+
+          function selectPrevious() {
+            $this.parent('li').prev().find('a').focus();
+            evt.stopPropagation();
+          }
+
+          function selectNext() {
+            $this.parent('li').next().find('a').focus();
+            evt.stopPropagation();
+          }
+
+          switch (evt.keyCode) {
+            case 13: // Enter key
+            case 32: // Space bar
+              $this.click();
+              $this.closest('.dropdown').removeClass('open');
+              evt.stopPropagation();
+              break;
+            case 9: // Tab key
+              if (evt.shiftKey) {
+                selectPrevious();
+              }
+              else {
+                selectNext();
+              }
+              evt.preventDefault();
+              break;
+            case 38: // Up arrow
+              selectPrevious();
+              break;
+            case 40: // Down arrow
+              selectNext();
+              break;
+          }
+        });
       }
     };
   })();
@@ -599,6 +655,7 @@ var SMC = (function() {
     setupApp: function() {
       SMCSetup.bindEventHandlers();
       SMCSetup.loadPreferences();
+//      SMCSetup.enableKeyboardNavigationForDropdowns();
       SMCRequest.loadSMCUser();
     },
     enableLogging: function() {
