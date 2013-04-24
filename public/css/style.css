@@ -110,7 +110,6 @@ span#span-dollar {
 img.loading-image {
   margin-left: auto;
   margin-right: auto;
-  visibility: hidden;
 }
 
 img.smc-logo {}
@@ -182,14 +181,14 @@ input::-webkit-inner-spin-button {
 }
 
 
-#loading-image-container {
+.loading-image-container {
   margin-left: auto;
   margin-right: auto;
   width: 32px;
   margin-top: 15px;
 }
 
-#user-info-alert {
+.info-stuff {
   width: 40%;
   margin-right: auto;
   margin-left: auto;
@@ -333,4 +332,13 @@ form {
   max-height: 243px;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.qa-block {
+  padding: 7px;
+}
+
+#more-button {
+  margin-left: 17px;
+  margin-top: 10px;
 }

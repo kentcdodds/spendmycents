@@ -2,18 +2,19 @@
 
 <html>
   <head>
-    <meta charset='utf-8'>
     <title>SpendMyCents.com</title>
+    <meta name="title" content="Spend My Cents. Reverse Product Search.">
+    <meta name="description" content="Reverse Product Search: search by price! Easily search Amazon by price. With Amazon's huge database of products, you'll be surprised what you can find!">
+    <meta name="keywords" content="search by price,search amazon by price,amazon search by price,reverse product search,search products by price,spend my cents,price,buy,search">
+    <meta name="author" content="Kent Dodds and Mack Cope">
+    <meta charset="UTF-8">
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
     <link rel='stylesheet' href='../public/bootstrap/css/bootstrap.min.css' media='screen'>
     <link rel='stylesheet' href='../public/css/style.css' type='text/css'>
     <link rel='stylesheet' href='../public/lib/zocial/zocial.css' type='text/css'>
     <link rel='stylesheet' href='../public/fontawesome/css/font-awesome.min.css' type='text/css' media='screen'>
-
-
   </head>
-
   <body>
     <div id='page-level-container' class='row-fluid'>
       <div id='user-buttons-container'>
@@ -24,8 +25,8 @@
             <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5></li>
             <li class='login divider'></li>
             <li class='login'><span><a href='/auth/facebook'  id='login-facebook' class='zocial facebook'>Sign In With Facebook</a></span></li>
-            <li class='login'><span> <a href='/auth/google' id='login-google' class='zocial google'>Sign In With Google</a></span></li>
-            <li class='login'><span> <a href='/auth/twitter' id='login-twitter' class='zocial twitter'>Sign In With Twitter</a></span></li>
+            <li class='login'><span><a href='/auth/google' id='login-google' class='zocial google'>Sign In With Google</a></span></li>
+            <li class='login'><span><a href='/auth/twitter' id='login-twitter' class='zocial twitter'>Sign In With Twitter</a></span></li>
           </ul>
         </div>
       </div>
@@ -47,13 +48,11 @@
             </div>
           </div>
         </div>
+        <div id='top-info-stuff' class='info-stuff'></div>
         <div id='results-container' class='container'>
           <div id='product-container'></div>
         </div>
-        <div id='loading-image-container'>
-          <img src='../public/img/ajax-loader-light.gif' class='loading-image'>
-        </div>
-        <div id='user-info-alert'><div id='alert-template' class='template alert fade in out'>Woo!!</div></div>
+        <div id='bottom-info-stuff' class='info-stuff'></div>
         <div id='footer' class='container'>
           <hr />
           <div id='social-media'>
@@ -81,6 +80,38 @@
           </div>
           <div class='answer'>
             <strong>Answer:</strong> If you look around that product, you will find that one of the specific items is actually for sale at the price you entered. Amazon will not let us search on only listed price.
+          </div>
+        </div>
+        <div class='qa-block'>
+          <div class='question'>
+            <strong>Question:</strong> Why is it that sometimes I see a lot of the same product?
+          </div>
+          <div class='answer'>
+            <strong>Answer:</strong> Actually, if you look at the product on Amazon, you'll find it's slightly different. At least, it's a different product on Amazon. We have limited control over what Amazon's sending us based on your query, but if you feel like we could do better, don't hesitate to <a href="mailto:info@spendmycents.com" target="_blank">contact us</a>.
+          </div>
+        </div>
+        <div class='qa-block'>
+          <div class='question'>
+            <strong>Question:</strong> Who are you guys?
+          </div>
+          <div class='answer'>
+            <strong>Answer:</strong> We're <a href="https://plus.google.com/116057372925539820462" target="_blank">Mack</a> and <a href="https://plus.google.com/114245123507194646768" target="_blank">Kent</a>! We made this as part of a school project. We're studying at <a href="http://www.byu.edu" target="_blank">BYU</a> to get our Masters of Information Systems Management. And we're both <a href="http://www.mormon.org" target="_blank">Mormons</a>.
+          </div>
+        </div>
+        <div class='qa-block'>
+          <div class='question'>
+            <strong>Question:</strong> I love your app and have a recommendation! What do I do?
+          </div>
+          <div class='answer'>
+            <strong>Answer:</strong> We're glad you love our app! Please send all suggestions to <a href='mailto:info+suggestion@spendmycents.com' target="_blank">our suggestion box</a>. Thanks for the feedback!
+          </div>
+        </div>
+        <div class='qa-block'>
+          <div class='question'>
+            <strong>Question:</strong> I have a question not answered here, how do I get a hold of you guys?
+          </div>
+          <div class='answer'>
+            <strong>Answer:</strong> Email us at <a href='mailto:info@spendmycents.com' target="_blank">info@spendmycents.com</a>
           </div>
         </div>
       </div>
