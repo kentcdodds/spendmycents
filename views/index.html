@@ -10,10 +10,13 @@
     <meta charset="UTF-8">
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 
-    <link rel='stylesheet' href='../public/bootstrap/css/bootstrap.min.css' media='screen'>
-    <link rel='stylesheet' href='../public/css/style.css' type='text/css'>
-    <link rel='stylesheet' href='../public/lib/zocial/zocial.css' type='text/css'>
-    <link rel='stylesheet' href='../public/fontawesome/css/font-awesome.min.css' type='text/css' media='screen'>
+    <link rel="image_src" href="http://www.spendmycents.com/thumbnail.png" />
+    
+    <link rel='stylesheet' href='/public/bootstrap/css/bootstrap.min.css' media='screen'>
+    <link rel='stylesheet' href='/public/css/style.css' type='text/css'>
+    <link rel='stylesheet' href='/public/lib/zocial/zocial.css' type='text/css'>
+    <link rel='stylesheet' href='/public/fontawesome/css/font-awesome.min.css' type='text/css' media='screen'>
+
   </head>
   <body>
     <div id='page-level-container' class='row-fluid'>
@@ -24,19 +27,19 @@
           <ul id='login-dropdown' class='dropdown-menu'>
             <li class='login'><h5>Want to save your favorites? Sign in. <br/> Don't worry, we don't want to spam you.</h5></li>
             <li class='login divider'></li>
-            <li class='login'><span><a href='/auth/facebook'  id='login-facebook' class='zocial facebook'>Sign In With Facebook</a></span></li>
-            <li class='login'><span><a href='/auth/google' id='login-google' class='zocial google'>Sign In With Google</a></span></li>
-            <li class='login'><span><a href='/auth/twitter' id='login-twitter' class='zocial twitter'>Sign In With Twitter</a></span></li>
+            <li class='login'><span><a href='/auth/facebook'  id='login-facebook' class='zocial facebook' style='cursor: pointer; width:94%'>Sign In With Facebook</a></span></li>
+            <li class='login'><span><a href='/auth/google' id='login-google' class='zocial google' style='cursor: pointer; width:94%'>Sign In With Google</a></span></li>
+            <li class='login'><span><a href='/auth/twitter' id='login-twitter' class='zocial twitter' style='cursor: pointer; width:94%'>Sign In With Twitter</a></span></li>
           </ul>
         </div>
       </div>
       <div id='app-content-container' class='container'>
         <div id='logo-container'>
-          <a href='/'><img class='smc-logo' src='../public/img/logo.png' width='512' height='349' alt='Logo'></a>
+          <a href='/'><img class='smc-logo' src='/public/img/logo.png' width='512' height='349' alt='Logo'></a>
         </div>
         <div id='search-bar'>      
           <div class='user-input input-prepend input-append'>
-            <span id='span-dollar' class='add-on'><img id='input-icon' src='../public/img/dollar.png'></span>
+            <span id='span-dollar' class='add-on'><img id='input-icon' src='/public/img/dollar.png'></span>
             <input class='user-input' id='user-input-price' type='text' pattern='[0-9]+\.[0-9]{0,2}|[0-9]+|favorites|Favorites'>
             <div id='search-button-group' class='btn-group pull-right'>
               <button id='search-button' class='btn'>Search</button>
@@ -56,12 +59,12 @@
         <div id='footer' class='container'>
           <hr />
           <div id='social-media'>
-            <span class='st_facebook_large' title='Facebook'></span>
-            <span class='st_googleplus_large' title='Google +'></span>
-            <span class='st_twitter_large' title='Tweet'></span>
-            <span class='st_linkedin_large' title='LinkedIn'></span>
-            <span class='st_pinterest_large' title='Pinterest'></span>
-            <span class='st_sharethis_large' title='ShareThis'></span>
+            <span><a href='http://www.facebook.com/sharer.php?u=http://www.spendmycents.com' class='share zocial icon facebook' title='Facebook' target='_blank'></a></span>
+            <span><a href='http://plus.google.com/share?url=http://www.spendmycents.com' class='share zocial icon googleplus' title='Google +' target='_blank'></a></span>
+            <span><a href='http://www.twitter.com/share?url=www.spendmycents.com' class='share zocial icon twitter' title='Tweet' target='_blank'></a></span>
+            <span><a href='http://www.linkedin.com/cws/share?url=www.spendmycents.com' class='share zocial icon linkedin' title='LinkedIn' target='_blank'></a></span>
+            <span><a href="http://pinterest.com/pin/create/button/?url=http://www.spendmycents.com" class='share zocial icon pinterest' title='Pin it' target='_blank'></a></span>
+            <span><a href='mailto:?subject=Spend%20My%20Cents.com' class='share zocial icon email' title='Email' target='_blank'></a></span>
           </div>
           <a href='#faq-modal' data-toggle='modal'>FAQ</a>
           &nbsp;&nbsp;|&nbsp;&nbsp;<a href='mailto:info@spendmycents.com'>Contact Us</a>
@@ -76,31 +79,39 @@
       <div class='modal-body'>
         <div class='qa-block'>
           <div class='question'>
-            <strong>Question:</strong> When I go to Amazon sometimes the list price is different from the price I entered. Why?
+            When I go to Amazon sometimes the list price is different from the price I entered. Why?
           </div>
           <div class='answer'>
-            <strong>Answer:</strong> If you look around that product, you will find that one of the specific items is actually for sale at the price you entered. Amazon will not let us search on only listed price.
+            If you look around that product, you will find that one of the specific items is actually for sale at the price you entered. Amazon will not let us search on only listed price.
           </div>
         </div>
         <div class='qa-block'>
           <div class='question'>
-            <strong>Question:</strong> Why is it that sometimes I see a lot of the same product?
+            Why is it that sometimes I see a lot of the same product?
           </div>
           <div class='answer'>
-            <strong>Answer:</strong> Actually, if you look at the product on Amazon, you'll find it's slightly different. At least, it's a different product on Amazon. We have limited control over what Amazon's sending us based on your query, but if you feel like we could do better, don't hesitate to <a href="mailto:info@spendmycents.com" target="_blank">contact us</a>.
+            Actually, if you look at the product on Amazon, you'll find it's slightly different. At least, it's a different product on Amazon. We have limited control over what Amazon's sending us based on your query, but if you feel like we could do better, don't hesitate to <a href="mailto:info@spendmycents.com" target="_blank">contact us</a>.
           </div>
         </div>
         <div class='qa-block'>
           <div class='question'>
-            <strong>Question:</strong> Who are you guys?
+            I love your web app! How can I help?
           </div>
           <div class='answer'>
-            <strong>Answer:</strong> We're <a href="https://plus.google.com/116057372925539820462" target="_blank">Mack</a> and <a href="https://plus.google.com/114245123507194646768" target="_blank">Kent</a>! We made this as part of a school project. We're studying at <a href="http://www.byu.edu" target="_blank">BYU</a> to get our Masters of Information Systems Management. And we're both <a href="http://www.mormon.org" target="_blank">Mormons</a>.
+            We actually are Amazon associates, so next time you need to spend money on amazon, make sure to find it through our site and click on our links. We'll get commission from anything purchased through our site.
           </div>
         </div>
         <div class='qa-block'>
           <div class='question'>
-            <strong>Question:</strong> I love your app and have a recommendation! What do I do?
+            Who are you guys?
+          </div>
+          <div class='answer'>
+            We're <a href="https://plus.google.com/116057372925539820462" target="_blank">Mack</a> and <a href="https://plus.google.com/114245123507194646768" target="_blank">Kent</a>! We made this as part of a school project. We're studying at <a href="http://www.byu.edu" target="_blank">BYU</a> to get our Masters of Information Systems Management. And we're both <a href="http://www.mormon.org" target="_blank">Mormons</a>.
+          </div>
+        </div>
+        <div class='qa-block'>
+          <div class='question'>
+            I love your app and have a recommendation! What do I do?
           </div>
           <div class='answer'>
             <strong>Answer:</strong> We're glad you love our app! Please send all suggestions to <a href='mailto:info+suggestion@spendmycents.com' target="_blank">our suggestion box</a>. Thanks for the feedback!
@@ -108,10 +119,10 @@
         </div>
         <div class='qa-block'>
           <div class='question'>
-            <strong>Question:</strong> I have a question not answered here, how do I get a hold of you guys?
+            I have a question not answered here, how do I get a hold of you guys?
           </div>
           <div class='answer'>
-            <strong>Answer:</strong> Email us at <a href='mailto:info@spendmycents.com' target="_blank">info@spendmycents.com</a>
+            Email us at <a href='mailto:info@spendmycents.com' target="_blank">info@spendmycents.com</a>
           </div>
         </div>
       </div>
@@ -119,10 +130,10 @@
         <a href='#' data-dismiss='modal' class='btn'>Close</a>
       </div>
     </div>        
-    <script src='../public/lib/jquery/jquery-1.9.1.min.js' type='text/javascript'></script>
-    <script src='../public/lib/bootstrap/js/bootstrap.min.js' type='text/javascript'></script>
-    <script src='../public/js/lib/underscore-min.js' type='text/javascript' charset='utf-8'></script>
-    <script src='../public/js/smcscript.js' type='text/javascript' charset='utf-8'></script>
+    <script src='/public/lib/jquery/jquery-1.9.1.min.js' type='text/javascript'></script>
+    <script src='/public/lib/bootstrap/js/bootstrap.min.js' type='text/javascript'></script>
+    <script src='/public/js/lib/underscore-min.js' type='text/javascript' charset='utf-8'></script>
+    <script src='/public/js/smcscript.js' type='text/javascript' charset='utf-8'></script>
     <script type='text/javascript'>
 
       var _gaq = _gaq || [];
@@ -139,9 +150,5 @@
       })();
 
     </script>
-    <script type='text/javascript'>var switchTo5x = true;</script>
-    <script type='text/javascript' src='http://w.sharethis.com/button/buttons.js'></script>
-    <script type='text/javascript'>stLight.options({publisher: '7b19e3f7-6525-4905-b064-2b86839ffc86', doNotHash: false, doNotCopy: false, hashAddressBar: true});</script>
-
   </body>
 </html>

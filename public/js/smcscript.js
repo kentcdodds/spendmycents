@@ -716,6 +716,66 @@ var SMC = (function() {
           FavoritesSetup.setup();
         }
       },
+      setupSocialMedia: function() {
+        var applyToLink, setupFacebook, setupGoogle, setupLinkedIn, setupPinterest, setupEmail;
+        var title = 'Spend My Cents';
+        var url = encodeURIComponent('http://www.spendmycents.com');
+        var image = encodeURIComponent('http://www.spendmycents.com/thumbnail.png');
+        var description = encodeURIComponent($('meta[name=description]').attr('content'));
+
+        setupFacebook = function() {
+          var fUrl = encodeURIComponent('p[url]') + '=' + url;
+          var fTitle = encodeURIComponent('p[title]') + '=' + title;
+          var fSummary = encodeURIComponent('p[summary]') + '=' + description;
+          var fImages = encodeURIComponent('p[images][0]') + '=' + image;
+          var uri = 'http://www.facebook.com/sharer.php?s=100';
+          applyToLink('facebook', uri, [fUrl, fTitle, fSummary, fImages]);
+          //http://www.facebook.com/sharer/sharer.php?s=100&p%5Btitle%5D=Daddy+Design&p%5Bsummary%5D=Become+a+fan+of+Daddy+Design%21&p%5Burl%5D=http%3A%2F%2Fwww.facebook.com%2Fwordpressdesign&p%5Bimages%5D%5B0%5D=http%3A%2F%2Fwww.daddydesign.com%2FClientsTemp%2FTutorials%2Fcustom-iframe-share-button%2Fimages%2Fthumbnail.jpg&
+        };
+
+        setupTwitter = function() {
+          var tUrl = 'url=' + url;
+          var tSummary = 'text=' + encodeURIComponent('Checkout @spendmycents, the new reverse product search web app. Search @amazon by price.');
+          var uri = 'http://twitter.com/intent/tweet?';
+          applyToLink('twitter', uri, [tUrl, tSummary]);
+        };
+
+        setupLinkedIn = function() {
+          var lUrl = 'url=' + url;
+          var lTitle = 'title=' + title;
+          var lSummary = 'summary=' + description;
+          var lSource = 'source=' + url;
+          var uri = 'http://www.linkedin.com/shareArticle?mini=true';
+          applyToLink('linkedin', uri, [lUrl, lTitle, lSummary, lSource]);
+          //http://www.linkedin.com/shareArticle?mini=true&url=http://bit.ly/adaptxt-beta-android&title=http://bit.ly/adaptxt-beta-android&summary=http://bit.ly/adaptxt-beta-android&source=http://bit.ly/adaptxt-beta-android
+        };
+
+        setupPinterest = function() {
+          var pUrl = 'url=' + url;
+          var pMedia = 'media=' + image;
+          var pDescription = 'description=' + description;
+          var uri = 'http://pinterest.com/pin/create/button/?';
+          applyToLink('pinterest', uri, [pUrl, pMedia, pDescription]);
+          //<a href="http://pinterest.com/pin/create/button/?url=<?php the_permalink();?>&media=<?php echo gangmei_get_the_post_thumbnail_url($post->ID, 'large'); ?>&description=<?php echo get_the_excerpt(); ?>" onclick="window.open(this.href); return false;">Pinterest</a>
+        };
+
+        setupEmail = function() {
+          var eSubject = 'subject=' + title;
+          var eBody = 'body=' + description;
+          var uri = 'mailto:?';
+          applyToLink('email', uri, [eSubject, eBody]);
+        };
+
+        applyToLink = function(platform, uri, uriComponents) {
+          $('a.share.' + platform).attr('href', uri + '&' + uriComponents.join('&'));
+        };
+
+        setupFacebook();
+        setupTwitter();
+        setupLinkedIn();
+        setupPinterest();
+        setupEmail();
+      },
       enableKeyboardNavigationForDropdowns: function() {
         $('.dropdown').bind('keydown', function(evt) {
           var $this = $(this);
@@ -816,6 +876,7 @@ var SMC = (function() {
     setupApp: function() {
       SMCSetup.bindEventHandlers();
       SMCSetup.loadPreferences();
+      SMCSetup.setupSocialMedia();
 //      SMCSetup.enableKeyboardNavigationForDropdowns();
       SMCRequest.loadSMCUser();
     },

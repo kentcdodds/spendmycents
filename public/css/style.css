@@ -1,3 +1,7 @@
+
+/*
+ * Overall
+ */
 body {
   padding-top: 10px;
   background-image: url('../img/background-texture-gray.png');
@@ -7,6 +11,9 @@ a {
   color: #00b7ff;
 }
 
+/*
+ * Product Panels
+ */
 i.icon-star-empty {
   font-size: 20pt;
   color: rgb(78, 78, 78);
@@ -16,10 +23,6 @@ i.icon-star {
   font-size: 20pt;
   color: rgb(227, 207, 122);
 } 
-
-a.favorites-link:hover {
-  text-decoration: none;
-}
 
 #favorites-button {
   display: none;
@@ -112,8 +115,6 @@ img.loading-image {
   margin-right: auto;
 }
 
-img.smc-logo {}
-
 span.product-manufacturer {
   font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
   font-weight: bold;
@@ -141,12 +142,7 @@ span.logout  h5{
     margin-left: auto;
     margin-right: auto;
   }
-  /*
-    div#search-bar {
-      width: auto;
-      margin-left: 34%;
-    }*/
-
+  
   div.user-buttons {
     margin-left: 16.6%;
   }
@@ -179,7 +175,6 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
-
 
 .loading-image-container {
   margin-left: auto;
@@ -336,6 +331,18 @@ form {
 
 .qa-block {
   padding: 7px;
+}
+
+.question:before {
+  content: 'Question: ';
+  font-weight: bold;
+  color: rgb(209, 53, 53);
+}
+
+.answer:before {
+  content: 'Answer: ';
+  font-weight: bold;
+  color: rgb(53, 185, 53);
 }
 
 #more-button {
