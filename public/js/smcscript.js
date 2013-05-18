@@ -614,13 +614,13 @@ var SMC = (function() {
           onHover, offHover, onClick;
 
         checkItem = function(obj) {
-          obj.addClass('icon-check');
-          obj.removeClass('icon-check-empty');
+          obj.addClass('icon-circle');
+          obj.removeClass('icon-circle-blank');
         };
 
         uncheckItem = function(obj) {
-          obj.addClass('icon-check-empty');
-          obj.removeClass('icon-check');
+          obj.addClass('icon-circle-blank');
+          obj.removeClass('icon-circle');
         };
 
         isSelected = function(obj) {
@@ -656,10 +656,10 @@ var SMC = (function() {
           for (i = 0; i < preferences.length; i++) {
             listItem = listItemTemplate.clone();
 
-            listItem.html('<a class=\'icon-check-empty\' data-selected=\'false\' data-search-index=\'' + preferences[i] + '\'> ' + preferences[i] + '</a>');
+            listItem.html('<a class=\'icon-circle-blank\' data-selected=\'false\' data-search-index=\'' + preferences[i] + '\'> ' + preferences[i] + '</a>');
             listParent.append(listItem);
             listItem.click(function() {
-              listParent.find('a').data('selected', false).removeClass('icon-check').addClass('icon-check-empty');
+              listParent.find('a').data('selected', false).removeClass('icon-circle').addClass('icon-circle-blank');
               onClick($(this).find('a'));
             });
             listItem.hover(function() {
@@ -761,7 +761,7 @@ var SMC = (function() {
 
         setupEmail = function() {
           var eSubject = 'subject=' + title;
-          var eBody = 'body=' + description;
+          var eBody = 'body=' + description + encodeURIComponent(' - Check it out at http://www.spendmycents.com');
           var uri = 'mailto:?';
           applyToLink('email', uri, [eSubject, eBody]);
         };
