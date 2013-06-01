@@ -1,0 +1,22 @@
+#user-buttons-container
+  #user-buttons.btn-group.pull-right
+    button#favorites-button.btn Favorites
+    button#user-status-button.btn.sign-in-button.dropdown-toggle(data-toggle='dropdown')
+      | Sign In &nbsp;
+      span.caret
+    ul#login-dropdown.dropdown-menu
+      li.login
+        h5
+          | Want to save your favorites? Sign in.
+          br
+          | Don't worry, we don't want to spam you.
+      li.login.divider
+      li.login
+        span
+          a#login-facebook.zocial.facebook(href='/auth/facebook', style='cursor: pointer; width: 94%;') Sign In With Facebook
+      li.login
+        span
+          a#login-google.zocial.google(href='/auth/google', style='cursor: pointer; width: 94%;') Sign In With Google
+      li.login
+        span
+          a#login-twitter.zocial.twitter(href='/auth/twitter', style='cursor: pointer; width: 94%;') Sign In With Twitter

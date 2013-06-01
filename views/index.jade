@@ -3,118 +3,16 @@ extends layout
 block body
   img(itemprop='image', src='/thumbnail.png', style='display: none;')
   #page-level-container.row-fluid
-    #user-buttons-container
-      #user-buttons.btn-group.pull-right
-        button#favorites-button.btn Favorites
-        button#user-status-button.btn.sign-in-button.dropdown-toggle(data-toggle='dropdown')
-          | Sign In
-          span.caret
-        ul#login-dropdown.dropdown-menu
-          li.login
-            h5
-              | Want to save your favorites? Sign in.
-              br
-              | Don't worry, we don't want to spam you.
-          li.login.divider
-          li.login
-            span
-              a#login-facebook.zocial.facebook(href='/auth/facebook', style='cursor: pointer; width: 94%;') Sign In With Facebook
-          li.login
-            span
-              a#login-google.zocial.google(href='/auth/google', style='cursor: pointer; width: 94%;') Sign In With Google
-          li.login
-            span
-              a#login-twitter.zocial.twitter(href='/auth/twitter', style='cursor: pointer; width: 94%;') Sign In With Twitter
+    include user-buttons-dropdown
     #app-content-container.container
       #logo-container
         a(href='/')
           img.smc-logo(src='/img/logo.png', width='512', height='349', alt='Logo')
       #search-bar
-        .user-input.input-prepend.input-append
-          span#span-dollar.add-on
-            img#input-icon(src='/img/dollar.png')
-          input#user-input-price.user-input(type='text', pattern='[0-9]+\.[0-9]{0,2}|[0-9]+|favorites|Favorites')
-          #search-button-group.btn-group.pull-right
-            button#search-button.btn Search
-            button#search-index-button.btn.dropdown-toggle(data-toggle='dropdown', data-search-index='All')
-              | All
-              span.caret
-            ul#search-index-list.dropdown-menu
+        include search-bar
       #top-info-stuff.info-stuff
       #results-container.container
         #product-container
       #bottom-info-stuff.info-stuff
-      #footer.container
-        hr
-        #social-media
-          span
-            a.share.zocial.icon.facebook(href='http://www.facebook.com/sharer.php?u=http://www.spendmycents.com', title='Facebook', target='_blank')
-          span
-            a.share.zocial.icon.googleplus(href='http://plus.google.com/share?url=http://www.spendmycents.com', title='Google +', target='_blank')
-          span
-            a.share.zocial.icon.twitter(href='http://www.twitter.com/share?url=www.spendmycents.com', title='Tweet', target='_blank')
-          span
-            a.share.zocial.icon.linkedin(href='http://www.linkedin.com/cws/share?url=www.spendmycents.com', title='LinkedIn', target='_blank')
-          span
-            a.share.zocial.icon.pinterest(href='http://pinterest.com/pin/create/button/?url=http://www.spendmycents.com', title='Pin it', target='_blank')
-          span
-            a.share.zocial.icon.email(href='mailto:?subject=Spend%20My%20Cents&body=www.spendmycents.com', title='Email', target='_blank')
-        a(href='#faq-modal', data-toggle='modal') FAQ
-        | |
-        a(href='mailto:info@spendmycents.com') Contact Us
-  #faq-modal.modal.hide.fade
-    .modal-header
-      button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-      h3 Spend My Cents FAQ
-    .modal-body
-      .qa-block
-        .question
-          | When I go to Amazon sometimes the list price is different from the price I entered. Why?
-        .answer
-          | If you look around that product, you will find that one of the specific items is actually for sale at the price you entered. Amazon will not let us search on only listed price.
-      .qa-block
-        .question
-          | Why is it that sometimes I see a lot of the same product?
-        .answer
-          | Actually, if you look at the product on Amazon, you'll find it's slightly different. At least, it's a different product on Amazon. We have limited control over what Amazon's sending us based on your query, but if you feel like we could do better, don't hesitate to
-          a(href='mailto:info@spendmycents.com', target='_blank') contact us
-          | .
-      .qa-block
-        .question
-          | I love your web app! How can I help?
-        .answer
-          | We actually are Amazon associates, so next time you need to spend money on amazon, make sure to find it through our site and click on our links. We'll get commission from anything purchased through our site.
-      .qa-block
-        .question
-          | Who are you guys?
-        .answer
-          | We're
-          a(href='https://plus.google.com/116057372925539820462', target='_blank') Mack
-          | and
-          a(href='https://plus.google.com/114245123507194646768', target='_blank') Kent
-          | ! We made this as part of a school project. We're studying at
-          a(href='http://www.byu.edu', target='_blank') BYU
-          | to get our Masters of Information Systems Management. And we're both
-          a(href='http://www.mormon.org', target='_blank') Mormons
-          | .
-      .qa-block
-        .question
-          | I love your app and have a recommendation! What do I do?
-        .answer
-          strong Answer:
-          | We're glad you love our app! Please send all suggestions to
-          a(href='mailto:info+suggestion@spendmycents.com', target='_blank') our suggestion box
-          | . Thanks for the feedback!
-      .qa-block
-        .question
-          | I have a question not answered here, how do I get a hold of you guys?
-        .answer
-          | Email us at
-          a(href='mailto:info@spendmycents.com', target='_blank') info@spendmycents.com
-    .modal-footer
-      a.btn(href='#', data-dismiss='modal') Close
-  script(src='/js/lib/jquery-1.9.1.min.js', type='text/javascript', charset='utf-8')
-  script(src='/js/lib/underscore-min.js', type='text/javascript', charset='utf-8')
-  script(src='/js/lib/bootstrap.min.js', type='text/javascript', charset='utf-8')
-  script(src='/js/lib/google-analytics.js', type='text/javascript', charset='utf-8')
-  script(src='/js/smc-script.js', type='text/javascript', charset='utf-8')
+      include footer
+    include bottom-stuff

@@ -108,6 +108,11 @@ img#input-icon {
 
 span#span-dollar {
   height: 50px;
+  color: #387E42;
+  font-size: 57px;
+  line-height: 47px;
+  font-weight: bold;
+  cursor: default;
 }
 
 img.loading-image {
@@ -142,7 +147,7 @@ span.logout  h5{
     margin-left: auto;
     margin-right: auto;
   }
-  
+
   div.user-buttons {
     margin-left: 16.6%;
   }
