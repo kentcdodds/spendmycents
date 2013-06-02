@@ -1,9 +1,7 @@
-/**
- * Module dependencies.
- */
+'use strict';
+
 var express = require('express');
 var http = require('http');
-var path = require('path');
 var passport = require('passport');
 
 var ProductRoutes = require('./routes/ProductRoutes');
@@ -13,7 +11,6 @@ var UserRoutes = require('./routes/UserRoutes');
 var AuthenticationController = require('./controller/AuthenticationController');
 
 var app = express();
-process = process || {env: {}};
 
 app.configure(function() {
   var onLocalHost = !process.env.ENVIRONMENT;
