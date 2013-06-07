@@ -1,3 +1,7 @@
+'use strict';
+var _ = _ || {}; //Because Webstorm
+var $ = $ || {}; //Doesn't like these...
+
 var SMC = (function() {
 
   //Libraries within the library
@@ -14,9 +18,9 @@ var SMC = (function() {
         itemsParent = data.ItemLookupResponse;
       }
       if (itemsParent) {
-        if (itemsParent.hasOwnProperty('Items')
-          && itemsParent.Items.length > 0
-          && itemsParent.Items[0].Item) {
+        if (itemsParent.hasOwnProperty('Items') &&
+          itemsParent.Items.length > 0 &&
+          itemsParent.Items[0].Item) {
           amazonReponseItem = itemsParent.Items[0].Item;
         }
       }
@@ -48,8 +52,10 @@ var SMC = (function() {
 
     loadUserFavorites = function(index, appending) {
       index = index || 0;
+      var totalFavorites;
+      var $moreButton;
       if (SMC.user && SMC.user.favorites) {
-        var totalFavorites = SMC.user.favorites.length;
+        totalFavorites = SMC.user.favorites.length;
         if (totalFavorites < 1) {
           SMCUtil.show.info.alert.noFavorites();
           return;
@@ -62,7 +68,7 @@ var SMC = (function() {
         SMCUtil.show.info.alert.noFavorites();
       }
       if (totalFavorites > index) {
-        var $moreButton = SMCTemplate.moreButton();
+        $moreButton = SMCTemplate.moreButton();
         $moreButton.click(function() {
           loadUserFavorites(index + 10, true);
         });
@@ -133,12 +139,6 @@ var SMC = (function() {
     };
 
     return {
-      sendProductRequest: function(req, requestAttempt, moreButton, location, appending) {
-        sendProductRequest(req, requestAttempt, moreButton, location, appending);
-      },
-      loadUserFavorites: function(index, appending) {
-        loadUserFavorites(index, appending);
-      },
       onSearch: function() {
         var userInput = $('#user-input-price').val();
         if (/^[0-9]+\.[0-9]{0,2}$|^[0-9]+$|^Favorites$|^favorites$/.test(userInput)) {
@@ -162,9 +162,9 @@ var SMC = (function() {
             if (data.hasOwnProperty('_id') && responseIsSuccess(xhr)) {
               SMC.user = data;
               SMCSetup.setupForUser();
-              $('#favorites-button').show();
+              SMCUtil.showFavoritesButton();
             } else {
-              $('#favorites-button').hide();
+              SMCUtil.hideFavoritesButton();
             }
           },
           error: function(e) {
@@ -257,11 +257,12 @@ var SMC = (function() {
       SMCUtil.doShowAlert(position, type, (exclamation ? '<strong>' + exclamation + '</strong> ' : '') + text);
     };
     showLoadingGif = function(position) {
-      var loadingGif = [
+      var loadingGif;
+      loadingGif = [
         '<div class=\'loading-image-container\'>',
-        '<img src=\'../public/img/ajax-loader-light.gif\' class=\'loading-image\'>',
+        '<img src=\'/img/ajax-loader-light.gif\' class=\'loading-image\'>',
         '</div>'
-      ].join('\n');
+      ].join('');
       addElementToInfoStuff(position, loadingGif);
     };
 
@@ -270,13 +271,6 @@ var SMC = (function() {
     };
 
     return {
-      validateUserInput: function(userInput) {
-        this.log(userInput)
-        if (((userInput || userInput === '') && !_.isFinite(userInput)) || userInput.toString().toLowerCase() === 'favorites') {
-          return false;
-        }
-        return true;
-      },
       removeMoreButton: function() {
         $('#more-button').remove();
       },
@@ -299,6 +293,22 @@ var SMC = (function() {
       removeProductPanels: function() {
         $('.product-panel').remove();
       },
+      hideFavoritesButton: function() {
+        $('#favorites-button').fadeTo('slow',0.35);
+
+
+        $('#favorites-button').click(function() {
+          SMCUtil.show.info.alert.custom('top','You must login to view favorites');
+        });
+      },
+      showFavoritesButton: function() {
+        $('#favorites-button').fadeTo('slow',1);
+
+        $('#favorites-button').click(function() {
+          $('#user-input-price').val('Favorites');
+          SMCRequest.onSearch();
+        });
+      },
       show: {
         normal: {
           alert: {
@@ -314,10 +324,10 @@ var SMC = (function() {
               showAlertWithRandomExclamation(position, 'error', text);
             },
             maxRequestRetriesReachedOnTop: function() {
-              maxRequestRetriesReached('top');
+              this.maxRequestRetriesReached('top');
             },
             maxRequestRetriesReachedOnBottom: function() {
-              maxRequestRetriesReached('bottom');
+              this.maxRequestRetriesReached('bottom');
             },
             maxRequestRetriesReached: function(position) {
               showAlertWithRandomExclamation(position, 'error', 'We tried and tried, but couldn\'t get any results for you!' + this.contactUs);
@@ -336,9 +346,6 @@ var SMC = (function() {
             },
             unknownProblemOnTop: function() {
               this.unknownProblem('top');
-            },
-            unknownProblemOnBottom: function() {
-              this.unknownProblem('bottom');
             },
             unknownProblem: function(position) {
               showAlertWithRandomExclamation(position, 'error', 'Something weird happened... Not totally sure what.' + this.contactUs);
@@ -385,12 +392,12 @@ var SMC = (function() {
         }
       },
       doShowAlert: function(position, type, text) {
-        var alertId, $alert
+        var alertId = 'current-alert-' + position;
+        var $alert = $('<div id="' + alertId + '" class="alert alert-' + type + '" style="display=none;">' +
+          '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+          text + '</div>');
 
-        alertId = 'current-alert-' + position;
         $('#' + alertId).remove();
-        $alert = $('<div id="' + alertId + '" class="alert alert-' + type + '" style="display=none;">' + text + '</div>');
-
         addElementToInfoStuff(position, $alert);
         $alert.fadeIn();
 
@@ -414,8 +421,7 @@ var SMC = (function() {
       MAX_TITLE_LENGTH: 125,
       MAX_ITEM_PAGES: 5,
       DEFAULT_TITLE: 'Title not provided',
-      DEFAULT_MANUFACTURER: 'Unknown',
-      DEFAULT_AMAZON_LINK_TEXT: 'URL not available'
+      DEFAULT_MANUFACTURER: 'Unknown'
     };
   })();
 
@@ -449,28 +455,12 @@ var SMC = (function() {
 
       getProductManufacturer = function(product) {
         var manufacturer = SMCConstants.DEFAULT_MANUFACTURER;
-        if (product.ItemAttributes[0].hasOwnProperty('Manufacturer')
-          && product.ItemAttributes[0].Manufacturer.length > 0) {
+        if (product.ItemAttributes[0].hasOwnProperty('Manufacturer') &&
+          product.ItemAttributes[0].Manufacturer.length > 0) {
 
           manufacturer = product.ItemAttributes[0].Manufacturer[0];
         }
         return manufacturer;
-      };
-
-      getProductDetails = function(product) {
-        var detailPageUrl = '';
-        var detailPageUrlDescription = SMCConstants.DEFAULT_AMAZON_LINK_TEXT;
-        if (product.hasOwnProperty('DetailPageURL') && product.DetailPageURL.length > 0) {
-          detailPageUrl = product.DetailPageURL[0];
-          detailPageUrlDescription = 'See on Amazon';
-        } else {
-          detailPageUrl = '';
-          detailPageUrlDescription = 'URL Unavailable';
-        }
-        return {
-          detailPageUrl: detailPageUrl,
-          detailPageUrlDescription: detailPageUrlDescription
-        };
       };
 
       getASIN = function(product) {
@@ -483,10 +473,10 @@ var SMC = (function() {
 
       return {
         getProductFromAmazonResponsePortion: function(product) {
-          var imageUrl, title, manufacturer, details, detailPageUrl, detailPageUrlDescription,
-            ASIN;
+          var imageUrl, title, manufacturer, url,  ASIN;
+
           if (!product) {
-            return;
+            return {};
           }
 
           imageUrl = getProductImageUrl(product);
@@ -499,9 +489,9 @@ var SMC = (function() {
             manufacturer = SMCConstants.DEFAULT_MANUFACTURER;
           }
 
-          details = getProductDetails(product);
-          detailPageUrl = details.detailPageUrl;
-          detailPageUrlDescription = details.detailPageUrlDescription;
+          if (product.hasOwnProperty('DetailPageURL') && product.DetailPageURL.length > 0) {
+            url = product.DetailPageURL[0];
+          }
 
           ASIN = getASIN(product);
 
@@ -510,18 +500,16 @@ var SMC = (function() {
             imageUrl: imageUrl,
             title: title,
             manufacturer: manufacturer,
-            detailPageUrl: detailPageUrl,
-            detailPageUrlDescription: detailPageUrlDescription
+            url: url
           };
         }
-      }
+      };
     })();
 
     FavoritesSetup = (function() {
-      var onHover, offHover, onClick, isFavorite, getProductId, starOn, starOff;
+      var init, onHover, offHover, onClick, isFavorite, starOn, starOff;
       var fullStarClass = 'icon-star';
       var emptyStarClass = 'icon-star-empty';
-      var productIdData = 'product-id';
       var isFavoriteData = 'is-favorite';
 
       starOn = function(obj) {
@@ -532,10 +520,6 @@ var SMC = (function() {
       starOff = function(obj) {
         obj.removeClass(fullStarClass);
         obj.addClass(emptyStarClass);
-      };
-
-      getProductId = function(obj) {
-        return obj.data(productIdData);
       };
 
       isFavorite = function(obj) {
@@ -572,7 +556,7 @@ var SMC = (function() {
           obj.removeClass(emptyStarClass);
           obj.attr('title', 'Remove from favorites');
         }
-      }
+      };
 
       return {
         setup: function() {
@@ -600,11 +584,6 @@ var SMC = (function() {
         });
 
         $('#search-button').click(function() {
-          SMCRequest.onSearch();
-        });
-
-        $('#favorites-button').click(function() {
-          $('#user-input-price').val('Favorites');
           SMCRequest.onSearch();
         });
       },
@@ -644,29 +623,42 @@ var SMC = (function() {
         };
 
         onClick = function(obj) {
+          var searchIndexButton = $('#search-index-button');
           checkItem(obj);
           obj.data('selected', true);
-          $('#search-index-button').data('search-index', obj.data('search-index'));
-          $('#search-index-button').html(obj.data('search-index') + ' <span class=\'caret\'></span>');
+
+          searchIndexButton.data('search-index', obj.data('search-index'));
+          searchIndexButton.html(obj.data('search-index') + ' <span class=\'caret\'></span>');
         };
 
         SMCRequest.getAvailablePreferences(function(preferences) {
+          var onListItemClick;
+          var onListItemHover;
+          var offListItemHover;
+
           listParent = $('#search-index-list');
           listItemTemplate = $('<li class=\'search-index-item\'></li>');
+
+          onListItemClick = function() {
+            listParent.find('a').data('selected', false).removeClass('icon-circle').addClass('icon-circle-blank');
+            onClick($(this).find('a'));
+          };
+
+          onListItemHover = function() {
+            onHover($(this).find('a'));
+          };
+
+          offListItemHover = function() {
+            offHover($(this).find('a'));
+          };
+
           for (i = 0; i < preferences.length; i++) {
             listItem = listItemTemplate.clone();
 
             listItem.html('<a class=\'icon-circle-blank\' data-selected=\'false\' data-search-index=\'' + preferences[i] + '\'> ' + preferences[i] + '</a>');
             listParent.append(listItem);
-            listItem.click(function() {
-              listParent.find('a').data('selected', false).removeClass('icon-circle').addClass('icon-circle-blank');
-              onClick($(this).find('a'));
-            });
-            listItem.hover(function() {
-              onHover($(this).find('a'));
-            }, function() {
-              offHover($(this).find('a'));
-            });
+            listItem.click(onListItemClick);
+            listItem.hover(onListItemHover, offListItemHover);
             if (i < 1) {
               listItem.click();
             }
@@ -682,7 +674,7 @@ var SMC = (function() {
         });
       },
       setupForUser: function() {
-        $('#user-status-button').html(SMC.user['name'] + '  &nbsp;<span class=\'caret\'></span>');
+        $('#user-status-button').html(SMC.user.name + '  &nbsp;<span class=\'caret\'></span>');
         $('li.login').remove();
 
         var logoutHTML = '<li class="logout"><span class="logout"><h5>All done? Click below to sign out.</h5></span></li>' +
@@ -714,159 +706,194 @@ var SMC = (function() {
         }
         if (SMC.user) {
           FavoritesSetup.setup();
+        } else {
+          $('.login-link').click(function(e) {
+            if (e && e.stopPropagation) {
+              e.stopPropagation();
+            }
+            if (!$('.login').is(':visible')) {
+              $('#user-status-button').dropdown('toggle');
+            }
+          });
         }
       },
       setupSocialMedia: function() {
-        var applyToLink, setupFacebook, setupGoogle, setupLinkedIn, setupPinterest, setupEmail;
-        var title = 'Spend My Cents';
-        var url = encodeURIComponent('http://www.spendmycents.com');
-        var image = encodeURIComponent('http://www.spendmycents.com/thumbnail.png');
-        var description = encodeURIComponent($('meta[name=description]').attr('content'));
-
-        setupFacebook = function() {
-          var fUrl = encodeURIComponent('p[url]') + '=' + url;
-          var fTitle = encodeURIComponent('p[title]') + '=' + title;
-          var fSummary = encodeURIComponent('p[summary]') + '=' + description;
-          var fImages = encodeURIComponent('p[images][0]') + '=' + image;
-          var uri = 'http://www.facebook.com/sharer.php?s=100';
-          applyToLink('facebook', uri, [fUrl, fTitle, fSummary, fImages]);
-          //http://www.facebook.com/sharer/sharer.php?s=100&p%5Btitle%5D=Daddy+Design&p%5Bsummary%5D=Become+a+fan+of+Daddy+Design%21&p%5Burl%5D=http%3A%2F%2Fwww.facebook.com%2Fwordpressdesign&p%5Bimages%5D%5B0%5D=http%3A%2F%2Fwww.daddydesign.com%2FClientsTemp%2FTutorials%2Fcustom-iframe-share-button%2Fimages%2Fthumbnail.jpg&
-        };
-
-        setupTwitter = function() {
-          var tUrl = 'url=' + url;
-          var tSummary = 'text=' + encodeURIComponent('Checkout @spendmycents, the new reverse product search web app. Search @amazon by price.');
-          var uri = 'http://twitter.com/intent/tweet?';
-          applyToLink('twitter', uri, [tUrl, tSummary]);
-        };
-
-        setupLinkedIn = function() {
-          var lUrl = 'url=' + url;
-          var lTitle = 'title=' + title;
-          var lSummary = 'summary=' + description;
-          var lSource = 'source=' + url;
-          var uri = 'http://www.linkedin.com/shareArticle?mini=true';
-          applyToLink('linkedin', uri, [lUrl, lTitle, lSummary, lSource]);
-          //http://www.linkedin.com/shareArticle?mini=true&url=http://bit.ly/adaptxt-beta-android&title=http://bit.ly/adaptxt-beta-android&summary=http://bit.ly/adaptxt-beta-android&source=http://bit.ly/adaptxt-beta-android
-        };
-
-        setupPinterest = function() {
-          var pUrl = 'url=' + url;
-          var pMedia = 'media=' + image;
-          var pDescription = 'description=' + description;
-          var uri = 'http://pinterest.com/pin/create/button/?';
-          applyToLink('pinterest', uri, [pUrl, pMedia, pDescription]);
-          //<a href="http://pinterest.com/pin/create/button/?url=<?php the_permalink();?>&media=<?php echo gangmei_get_the_post_thumbnail_url($post->ID, 'large'); ?>&description=<?php echo get_the_excerpt(); ?>" onclick="window.open(this.href); return false;">Pinterest</a>
-        };
-
-        setupEmail = function() {
-          var eSubject = 'subject=' + title;
-          var eBody = 'body=' + description + encodeURIComponent(' - Check it out at http://www.spendmycents.com');
-          var uri = 'mailto:?';
-          applyToLink('email', uri, [eSubject, eBody]);
-        };
-
-        applyToLink = function(platform, uri, uriComponents) {
-          $('a.share.' + platform).attr('href', uri + '&' + uriComponents.join('&'));
-        };
-
-        setupFacebook();
-        setupTwitter();
-        setupLinkedIn();
-        setupPinterest();
-        setupEmail();
-      },
-      enableKeyboardNavigationForDropdowns: function() {
-        $('.dropdown').bind('keydown', function(evt) {
-          var $this = $(this);
-          switch (evt.keyCode) {
-            case 13: // Enter key
-            case 32: // Space bar
-            case 38: // Up arrow
-            case 40: // Down arrow
-              $this.addClass("open");
-              $this.find('.dropdown-menu a:first').focus();
-              break;
-            case 27: // Escape key
-              $this.removeClass("open");
-              $this.focus();
-              break;
-          }
+        var socialLinks = SMCTemplate.getSocialLinks({
+          title: 'Spend My Cents',
+          url: 'http://www.spendmycents.com',
+          image: 'http://www.spendmycents.com/thumbnail.png',
+          description: $('meta[name=description]').attr('content') + ' - Check it out at http://www.spendmycents.com',
+          twitterSummary: 'Checkout @spendmycents, the new reverse product search web app. Search @amazon by price.'
         });
 
-        $('.dropdown-menu a').bind('keydown', function(evt) {
-          var $this = $(this);
+        var keys = _.keys(socialLinks);
+        for (var i = 0; i < keys.length; i++) {
+          var key = keys[i];
+          $('a.share.' + key).attr('href', socialLinks[key]);
+        }
 
-          function selectPrevious() {
-            $this.parent('li').prev().find('a').focus();
-            evt.stopPropagation();
-          }
-
-          function selectNext() {
-            $this.parent('li').next().find('a').focus();
-            evt.stopPropagation();
-          }
-
-          switch (evt.keyCode) {
-            case 13: // Enter key
-            case 32: // Space bar
-              $this.click();
-              $this.closest('.dropdown').removeClass('open');
-              evt.stopPropagation();
-              break;
-            case 9: // Tab key
-              if (evt.shiftKey) {
-                selectPrevious();
-              }
-              else {
-                selectNext();
-              }
-              evt.preventDefault();
-              break;
-            case 38: // Up arrow
-              selectPrevious();
-              break;
-            case 40: // Down arrow
-              selectNext();
-              break;
-          }
-        });
       }
     };
   })();
 
   SMCTemplate = (function() {
+
+    var createUrl, getFacebookLink, getTwitterLink, getGoogleLink, getLinkedInLink, getPinterestLink, getEmailLink,
+      getSocialButtons;
+
+    createUrl = function(uri, uriComponents) {
+      if (!_.isArray(uriComponents)) {
+        uriComponents = [uriComponents];
+      }
+      return uri + '&' + uriComponents.join('&');
+    };
+
+
+    getFacebookLink = function(options) {
+      var fUrl = encodeURIComponent('p[url]') + '=' + options.url;
+      var fTitle = encodeURIComponent('p[title]') + '=' + options.title;
+      var fSummary = encodeURIComponent('p[summary]') + '=' + options.description;
+      var fImages = encodeURIComponent('p[images][0]') + '=' + options.image;
+      var uri = 'http://www.facebook.com/sharer.php?s=100';
+
+      return createUrl(uri, [fUrl, fTitle, fSummary, fImages]);
+    };
+
+    getTwitterLink = function(options) {
+      var tUrl = 'url=' + options.url;
+      var tSummary = 'text=' + options.twitterSummary;
+      var uri = 'http://twitter.com/intent/tweet?';
+
+      return createUrl(uri, [tUrl, tSummary]);
+    };
+
+    getGoogleLink = function(options) {
+      var gUrl = 'url=' + options.url;
+      var uri = 'http://plus.google.com/share?';
+
+      return createUrl(uri, gUrl);
+    };
+
+    getLinkedInLink = function(options) {
+      var lUrl = 'url=' + options.url;
+      var lTitle = 'title=' + options.title;
+      var lSummary = 'summary=' + options.description;
+      var lSource = 'source=' + options.sourceUrl || 'http://www.spendmycents.com';
+      var uri = 'http://www.linkedin.com/shareArticle?mini=true';
+
+      return createUrl(uri, [lUrl, lTitle, lSummary, lSource]);
+    };
+
+    getPinterestLink = function(options) {
+      var pUrl = 'url=' + options.url;
+      var pMedia = 'media=' + options.image;
+      var pDescription = 'description=' + options.description;
+      var uri = 'http://pinterest.com/pin/create/button/?';
+
+      return createUrl(uri, [pUrl, pMedia, pDescription]);
+    };
+
+    getEmailLink = function(options) {
+      var eSubject = 'subject=' + options.title;
+      var eBody = 'body=' + options.description + encodeURIComponent('\n\nHere\'s a link:\n') + options.url;
+      var uri = 'mailto:?';
+
+      return createUrl(uri, [eSubject, eBody]);
+    };
+
+    getSocialButtons = function(product) {
+      var $templateButton = $('<a class="zocial icon share-product" target="_blank"></a>');
+      var buttonDiv = $('<div></div>');
+
+      var links = SMCTemplate.getSocialLinks({
+        title: product.title,
+        url: product.url,
+        image: product.imageUrl,
+        description: product.title + ' - Found using http://www.spendmycents.com, the new reverse product search web app.',
+        twitterSummary: 'Found this using @spendmycents, the new reverse product search web app. Search @amazon by price.'
+      });
+      var platforms = _.keys(links);
+
+      for (var i = 0; i < platforms.length; i++) {
+        var platform = platforms[i];
+        var platformDisplay;
+        switch(platform) {
+          case 'googleplus':
+            platformDisplay = 'Google+';
+            break;
+          case 'linkedin':
+            platformDisplay = 'LinkedIn';
+            break;
+          default:
+            platformDisplay = platform.charAt(0).toUpperCase() + platform.slice(1);
+        }
+        var button = $templateButton.clone().
+          addClass(platform).
+          attr('title', 'Share with ' + platformDisplay).
+          attr('href', links[platform]);
+        buttonDiv.append(button).append(' ');
+      }
+
+      return $('<div></div>').
+        append($('<div class="share-product-buttons">Share this product<br /></div>').append(buttonDiv)).
+        html();
+    };
+
     return {
       productPanel: function(product) {
-        var isFavorite, favoritesLinkHtml = '';
+        var isFavorite, favoritesLinkHtml, productLink;
         if (SMC.user && product.ASIN) {
           isFavorite = _.contains(SMC.user.favorites, product.ASIN);
-          favoritesLinkHtml = '<br /><br />' +
-            '<i class="favorites-link icon-star-empty" title="Save to Favorites" data-product-id="'
-            + product.ASIN + '" data-is-favorite="' + isFavorite + '"></i>';
+          favoritesLinkHtml = '<i class="favorites-link icon-star-empty" title="Save to Favorites" data-product-id="' +
+            product.ASIN + '" data-is-favorite="' + isFavorite + '"></i>';
+        } else {
+          favoritesLinkHtml = '<a class="login-link">Login</a> to save as a favorite';
         }
-        return '<div id="' + product.ASIN + '"class="hover product-panel">' +
-          '<div class="front">' +
-          '<img class="product-image thumb" src="' + product.imageUrl + '">' +
-          '</div>' +
-          '<div class="back">' +
-          '<div class="product-info">' +
-          '<p>' +
-          '<span class="product-title">' + SMCUtil.shortenLongTitle(product.title) + '</span>' +
-          '</p>' +
-          '<p>' +
-          '<span class="product-manufacturer"><strong>Made By:</strong> &nbsp;' + product.manufacturer + '</span>' +
-          '</p>' +
-          '<p class="product-link">' +
-          '<a href="' + product.detailPageUrl + '" target="_blank">' + product.detailPageUrlDescription + '</a>' +
-          favoritesLinkHtml +
-          '</p>' +
-          '</div>' +
-          '</div>' +
-          '</div>';
+
+        if (product.url) {
+          productLink = '<a href="' + product.url + '" target="_blank" title="Go to Amazon">See on Amazon <i class="icon-external-link-sign"></i></a> ';
+        } else {
+          productLink = '<i class="icon-frown" title="Try searching Amazon for it?"></i> No URL provided :(';
+        }
+
+        var template = ['<div id="' + product.ASIN + '"class="hover product-panel">',
+          '<div class="front">',
+            '<img class="product-image thumb" src="' + product.imageUrl + '">',
+          '</div>',
+          '<div class="back">',
+            '<div class="product-info">',
+              '<p>',
+                '<span class="product-title">',
+                  SMCUtil.shortenLongTitle(product.title),
+                '</span>',
+                '<br />',
+                '<span class="product-manufacturer">Made By: ' + product.manufacturer + '</span>',
+                '<br />',
+                productLink,
+              '</p>',
+              favoritesLinkHtml,
+              getSocialButtons(product),
+            '</div>',
+          '</div>'].join('');
+        return template;
       },
       moreButton: function() {
         return $('<div id="more-button"><button class="btn">Load more...</button></div>');
+      },
+      getSocialLinks: function(options) {
+        var keys = _.keys(options);
+        for (var i = 0; i < keys.length; i++) {
+          var key = keys[i];
+          options[key] = encodeURIComponent(options[key]);
+        }
+        return {
+          facebook: getFacebookLink(options),
+          googleplus: getGoogleLink(options),
+          twitter: getTwitterLink(options),
+          linkedin: getLinkedInLink(options),
+          pinterest: getPinterestLink(options),
+          email: getEmailLink(options)
+        };
       }
     };
   })();
@@ -877,14 +904,13 @@ var SMC = (function() {
       SMCSetup.bindEventHandlers();
       SMCSetup.loadPreferences();
       SMCSetup.setupSocialMedia();
-//      SMCSetup.enableKeyboardNavigationForDropdowns();
       SMCRequest.loadSMCUser();
     },
     enableLogging: function() {
       SMCUtil.logging = true;
       SMCUtil.log('Logging now enabled');
     }
-  }
+  };
 })();
 
 /******** App setup ********/

@@ -9,6 +9,7 @@ body {
 
 a {
   color: #00b7ff;
+  cursor: pointer;
 }
 
 /*
@@ -121,13 +122,12 @@ img.loading-image {
 }
 
 span.product-manufacturer {
-  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
-  font-weight: bold;
+  font: 11px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 span.product-title {
-  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
-
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-weight: bold;
 }
 
 span.logout  h5{
@@ -192,7 +192,7 @@ input::-webkit-inner-spin-button {
   width: 40%;
   margin-right: auto;
   margin-left: auto;
-  display: bock;
+  display: block;
   margin-top: 15px;
 }
 
@@ -211,6 +211,7 @@ input::-webkit-inner-spin-button {
 
 .product-panel .front {
   float: none;
+  line-height: 249px;
   position: absolute;
   top: 0;
   left: 0;
@@ -307,6 +308,18 @@ form {
 
 #social-media {
   float: left;
+  text-align: left;
+}
+
+div.share-product-buttons {
+  position: absolute;
+  top: 180px;
+  line-height: 30px;
+  left: 23px;
+}
+
+a.share-product {
+  font-size: 12px;
 }
 
 #logo-container {
@@ -325,7 +338,7 @@ form {
 .search-index-item>a {
   text-align: left !important;
   width: 80% !important;
-  cursor: pointer !important;
+  /*cursor: pointer !important;*/
 }
 
 #search-index-list {
@@ -353,4 +366,17 @@ form {
 #more-button {
   margin-left: 17px;
   margin-top: 10px;
+}
+
+.alert {
+  -moz-box-shadow: 4px 4px 10px #969696;
+  -webkit-box-shadow: 4px 4px 20px #969696;
+  box-shadow: 4px 4px 20px #969696;
+  /* For IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=20, Direction=135, Color='#969696')";
+  /* For IE 5.5 - 7 */
+  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=20, Direction=135, Color='#969696');
+  position: absolute;
+  width: 36%;
+  z-index: 5;
 }
