@@ -1,7 +1,6 @@
 'use strict';
 
 var express = require('express');
-var http = require('http');
 var passport = require('passport');
 
 var ProductRoutes = require('./routes/ProductRoutes');
@@ -9,22 +8,25 @@ var AuthenticationRoutes = require('./routes/AuthenticationRoutes');
 var UserRoutes = require('./routes/UserRoutes');
 
 var AuthenticationController = require('./controller/AuthenticationController');
+var logger = require('winston');
 
 var app = express();
 
 app.configure(function() {
-  var onLocalHost = !process.env.ENVIRONMENT;
+  var onLocalHost = !process.env.OPENSHIFT_APP_DNS;
   var oneWeek = 604800000;
   if (onLocalHost) {
-    require('./config.local').env.setupEnvironmentVariables();
+    require('./config.local').setupEnvironmentVariables();
   }
 
-  app.set('port', process.env.PORT || 3000);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use('/public', express.static(__dirname + '/public'));
+  var homeDir = process.env.OPENSHIFT_REPO_DIR;
 
-  app.use(express.favicon( __dirname + '/public/img/favicon.ico'));
+  app.set('port', process.env.OPENSHIFT_NODEJS_PORT);
+  app.set('views', homeDir + 'views');
+  app.set('view engine', 'jade');
+  app.use('/public', express.static(homeDir + 'public'));
+
+  app.use(express.favicon(homeDir + 'public/img/favicon.ico'));
 
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
@@ -33,7 +35,7 @@ app.configure(function() {
   app.use(express.methodOverride());
   app.use(express.session({secret: 'funny monkey', cookie: {maxAge: oneWeek * 3}}));
 
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(homeDir + 'public'));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
@@ -46,16 +48,15 @@ if (!process.env.ENVIRONMENT || process.env.ENVIRONMENT === 'DEV') {
   });
 }
 
-
 /*
  * Setup Routes
  */
-
 app.get('/', function(req, res) {
   res.render('index', {
     title: 'Spend My Cents!'
   });
 });
+
 app.get('/partials/:name', function(req, res) {
   var name = req.params.name;
   res.render('partials/' + name);
@@ -73,6 +74,12 @@ AuthenticationController.setupPassport();
 /*
  * Start server
  */
-http.createServer(app).listen(app.get('port'), function() {
-  console.log("Express server listening on port " + app.get('port'));
+
+var port = app.get('port');
+var ipAddress = process.env.OPENSHIFT_NODEJS_IP;
+
+console.log(process.env.BASE_URL);
+
+app.listen(port, ipAddress, function() {
+  logger.info(Date(Date.now()) + ': Node server started on ' + ipAddress + ':' + port);
 });

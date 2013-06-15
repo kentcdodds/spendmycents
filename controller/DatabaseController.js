@@ -6,14 +6,12 @@ var DatabaseController = (function() {
   var deleteObjectByQuery;
 
   getOrCreateClient = function(callback) {
-    var services = JSON.parse(process.env.VCAP_SERVICES);
-    var dbInfo = services['mongodb-1.8'][0];
-    var server = new mongo.Server(dbInfo.credentials.host, dbInfo.credentials.port, {auto_reconnect: false});
-    var username = dbInfo.credentials.username;
-    var password = dbInfo.credentials.password;
+    var server = new mongo.Server(process.env.OPENSHIFT_MONGODB_DB_HOST, process.env.OPENSHIFT_MONGODB_DB_PORT, {auto_reconnect: false});
+    var username = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
+    var password = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
     var finishClientSetup, addAdminUser, authenticateToClient;
 
-    var client = new mongo.Db(dbInfo.name, server, {w: 1, strict: true});
+    var client = new mongo.Db(process.env.OPENSHIFT_MONGODB_DB_NAME, server, {w: 1, strict: true});
 
     logger.info('Client created');
 
@@ -44,7 +42,7 @@ var DatabaseController = (function() {
 
     addAdminUser = function(openedClient) {
       logger.info('No user found. Adding user.');
-      openedClient.addUser(dbInfo.credentials.username, password, function(error, result) {
+      openedClient.addUser(username, password, function(error, result) {
         if (!result || error) {
           logger.warn('Error adding admin user to client!');
           logger.error(error);
