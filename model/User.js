@@ -1,3 +1,5 @@
+'use strict';
+
 var User = function(userInfo) {
   var logger = require('winston');
   var UserController = require('../controller/UserController');
@@ -37,11 +39,11 @@ var User = function(userInfo) {
       }
     }
     return UserController.convertPreferenceNumberToPreferences(this.preferenceNum);
-  }
+  };
 
   this.id = function() {
     return (this.hasOwnProperty('_id') ? this._id.toString() : null);
-  }
+  };
 
   this.getObject = function() {
     return {
@@ -55,8 +57,8 @@ var User = function(userInfo) {
       favorites: this.favorites,
       preferences: this.preferences(),
       lastLogin: this.lastLogin
-    }
-  }
+    };
+  };
 };
 
 module.exports = User;

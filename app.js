@@ -1,12 +1,12 @@
 'use strict';
 
 var express = require('express');
-var passport = require('passport');
+//var passport = require('passport');
 var _ = require('underscore');
 
 var ProductRoutes = require('./routes/ProductRoutes');
-var AuthenticationRoutes = require('./routes/AuthenticationRoutes');
-var UserRoutes = require('./routes/UserRoutes');
+//var AuthenticationRoutes = require('./routes/AuthenticationRoutes');
+//var UserRoutes = require('./routes/UserRoutes');
 
 var AuthenticationController = require('./controller/AuthenticationController');
 var logger = require('winston');
@@ -37,16 +37,8 @@ app.configure(function() {
   app.use(express.session({secret: 'funny monkey', cookie: {maxAge: oneWeek * 3}}));
 
   app.use(express.static(homeDir + 'public'));
-  console.log('Initializing passport');
-  console.log('Keys of process.env');
-  console.log(_.keys(process.env));
-  if (process.env.BASE_URL) {
-    console.log('************************* BASE_URL = ' + process.env.BASE_URL + ' ************************');
-  } else {
-    console.log('BASE_URL NOT AVAILABLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-  }
-  app.use(passport.initialize());
-  app.use(passport.session());
+//  app.use(passport.initialize());
+//  app.use(passport.session());
   app.use(app.router);
 
 });
@@ -72,8 +64,8 @@ app.get('/partials/:name', function(req, res) {
 });
 
 ProductRoutes.setupRoutes(app);
-AuthenticationRoutes.setupRoutes(app);
-UserRoutes.setupRoutes(app);
+//AuthenticationRoutes.setupRoutes(app);
+//UserRoutes.setupRoutes(app);
 
 /*
  * Configure authentication
@@ -86,10 +78,6 @@ AuthenticationController.setupPassport();
 
 var port = app.get('port');
 var ipAddress = process.env.OPENSHIFT_NODEJS_IP;
-
-
-
-console.log(process.env.BASE_URL);
 
 app.listen(port, ipAddress, function() {
   logger.info(Date(Date.now()) + ': Node server started on ' + ipAddress + ':' + port);

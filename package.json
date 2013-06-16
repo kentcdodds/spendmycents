@@ -10,12 +10,16 @@
     "express": "3.1.0",
     "jade": "*",
     "stylus": "*",
-    "passport": "*",
     "apac": "*",
+
+    "passport": "*",
     "passport-facebook": "*",
     "passport-twitter": "*",
     "passport-google-oauth": "*",
+
     "mongodb": "*",
+    "mongoose": "*",
+
     "winston": "*",
     "underscore": "*"
   }

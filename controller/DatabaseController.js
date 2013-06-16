@@ -1,3 +1,5 @@
+'use strict';
+
 var DatabaseController = (function() {
   var mongo = require('mongodb');
   var logger = require('winston');

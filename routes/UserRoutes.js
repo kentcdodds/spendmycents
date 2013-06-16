@@ -1,6 +1,9 @@
+'use strict';
+
 var UserRoutes = (function() {
   var saveUserRoute;
   var isPrivilaged;
+  var handleAuthorization;
   var sendUnauthorizedError;
   var handleUserId;
   var idIsMe;
@@ -14,10 +17,6 @@ var UserRoutes = (function() {
   var ErrorController = require('../controller/ErrorController');
   var UserController = require('../controller/UserController');
 
-  saveUserRoute = function(req, res) {
-    handleAuthorization(req, res, false);
-    UserController.saveUser(req, res);
-  };
 
   handleAuthorization = function(req, res, asUser, callback) {
     if (!isPrivilaged(req)) {
@@ -25,8 +24,13 @@ var UserRoutes = (function() {
     } else {
       callback(req, res);
     }
-  }
+  };
 
+  saveUserRoute = function(req, res) {
+    handleAuthorization(req, res, false);
+    UserController.saveUser(req, res);
+  };
+  
   isPrivilaged = function(req) {
     if (userIdOrIdParamExist(req)) {
       return userIsAdmin(req) || idEqualsUserId(req);
@@ -47,7 +51,7 @@ var UserRoutes = (function() {
 
   idIsMe = function(req) {
     return req.params.id.toLowerCase() === UserController.ME;
-  }
+  };
 
   idEqualsUserId = function(req) {
     return idParamExists(req) && userIdExists(req) && req.params.id === req.user._id.toString();
@@ -67,7 +71,7 @@ var UserRoutes = (function() {
 
   userPrivilagesExists = function(req) {
     return req.hasOwnProperty('user') && req.user.hasOwnProperty('privilages');
-  }
+  };
 
   userIdAndIdParamExist = function(req) {
     return idParamExists(req) && userIdExists(req);
@@ -145,7 +149,7 @@ var UserRoutes = (function() {
       app.del('/users/:id/favorites', function(req, res) {
         handleUserId(req);
         handleAuthorization(req, res, true, UserController.deleteUserFavoritesNumbers);
-      })
+      });
     }
   };
 })();
