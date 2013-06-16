@@ -42,6 +42,8 @@ app.configure(function() {
   console.log(_.keys(process.env));
   if (process.env.BASE_URL) {
     console.log('************************* BASE_URL = ' + process.env.BASE_URL + ' ************************');
+  } else {
+    console.log('BASE_URL NOT AVAILABLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   }
   app.use(passport.initialize());
   app.use(passport.session());
