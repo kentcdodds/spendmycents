@@ -1,3 +1,5 @@
+'use strict';
+
 var AuthenticationController = (function() {
   var logger = require('winston');
   var passport = require('passport');
@@ -46,7 +48,7 @@ var AuthenticationController = (function() {
         failureRedirect: '/google-failure'
       })(req, res, next);
     }
-  }
+  };
 
 
   handleAuthenticatedUser = function(accessToken, refreshToken, profile, done) {
@@ -59,7 +61,7 @@ var AuthenticationController = (function() {
         done(null, user);
       }
     });
-  }
+  };
 
   configure = {
     facebook: function() {
@@ -90,13 +92,13 @@ var AuthenticationController = (function() {
       },
       handleAuthenticatedUser));
     }
-  }
+  };
 
   sendUnsupportedPartyError = function(res, provider) {
     var message = 'The third-party provider "' + provider + '" is not supported';
     var code = 400;
     ErrorController.sendErrorJson(res, code, message);
-  }
+  };
 
   return {
     setupPassport: function() {
@@ -130,7 +132,7 @@ var AuthenticationController = (function() {
         sendUnsupportedPartyError(res, req.params.provider);
       }
     }
-  }
+  };
 })();
 
 module.exports = AuthenticationController;
