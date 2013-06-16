@@ -12,15 +12,17 @@
     "stylus": "*",
     "apac": "*",
 
+
+    "winston": "*",
+    "underscore": "*"
+  },
+  "removedDependencies": {
     "passport": "*",
     "passport-facebook": "*",
     "passport-twitter": "*",
     "passport-google-oauth": "*",
 
     "mongodb": "*",
-    "mongoose": "*",
-
-    "winston": "*",
-    "underscore": "*"
+    "mongoose": "*"
   }
 }
