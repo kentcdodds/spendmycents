@@ -155,83 +155,83 @@ var SMC = (function() {
         }
       },
       loadSMCUser: function() {
-        $.ajax({
-          type: 'GET',
-          url: '/users/me',
-          success: function(data, textStatus, xhr) {
-            SMC.response = data;
-            if (data.hasOwnProperty('_id') && responseIsSuccess(xhr)) {
-              SMC.user = data;
-              SMCSetup.setupForUser();
-              SMCUtil.showFavoritesButton();
-            } else {
-              SMCUtil.hideFavoritesButton();
-            }
-          },
-          error: function(e) {
-            //User is not logged in.
-            SMCUtil.log(e);
-          }
-        });
+//        $.ajax({
+//          type: 'GET',
+//          url: '/users/me',
+//          success: function(data, textStatus, xhr) {
+//            SMC.response = data;
+//            if (data.hasOwnProperty('_id') && responseIsSuccess(xhr)) {
+//              SMC.user = data;
+//              SMCSetup.setupForUser();
+//              SMCUtil.showFavoritesButton();
+//            } else {
+//              SMCUtil.hideFavoritesButton();
+//            }
+//          },
+//          error: function(e) {
+//            //User is not logged in.
+//            SMCUtil.log(e);
+//          }
+//        });
       },
       addFavorite: function(item) {
-        $.ajax({
-          type: 'PUT',
-          url: '/users/me/favorites?ids=' + item.data('product-id'),
-          success: function(data, textStatus, xhr) {
-            SMC.response = data;
-            if (responseIsSuccess(xhr)) {
-              SMC.user.favorites = data;
-              item.data('is-favorite', true);
-              item.attr('title', 'Remove from favorites');
-              SMCUtil.show.success.alert.favoriteAdded();
-            } else {
-              SMCUtil.show.error.alert.unknownProblemOnTop();
-            }
-          },
-          error: function(e) {
-            SMCUtil.show.error.alert.unknownProblemOnTop();
-            SMCUtil.log(e);
-          }
-        });
+//        $.ajax({
+//          type: 'PUT',
+//          url: '/users/me/favorites?ids=' + item.data('product-id'),
+//          success: function(data, textStatus, xhr) {
+//            SMC.response = data;
+//            if (responseIsSuccess(xhr)) {
+//              SMC.user.favorites = data;
+//              item.data('is-favorite', true);
+//              item.attr('title', 'Remove from favorites');
+//              SMCUtil.show.success.alert.favoriteAdded();
+//            } else {
+//              SMCUtil.show.error.alert.unknownProblemOnTop();
+//            }
+//          },
+//          error: function(e) {
+//            SMCUtil.show.error.alert.unknownProblemOnTop();
+//            SMCUtil.log(e);
+//          }
+//        });
       },
       removeFavorite: function(item) {
-        $.ajax({
-          type: 'DELETE',
-          url: '/users/me/favorites?ids=' + item.data('product-id'),
-          success: function(data, textStatus, xhr) {
-            SMC.response = data;
-            if (responseIsSuccess(xhr)) {
-              SMCUtil.show.success.alert.favoriteRemoved();
-              SMC.user.favorites = data;
-              if (SMC.location === 'favorites') {
-                item.parents('.product-panel').remove();
-              }
-              item.data('is-favorite', false);
-              item.attr('title', 'Save to favorites');
-            } else {
-              SMCUtil.show.error.alert.unknownProblemOnTop();
-            }
-          },
-          error: function(e) {
-            SMCUtil.show.error.alert.unknownProblemOnTop();
-            SMCUtil.log(e);
-          }
-        });
+//        $.ajax({
+//          type: 'DELETE',
+//          url: '/users/me/favorites?ids=' + item.data('product-id'),
+//          success: function(data, textStatus, xhr) {
+//            SMC.response = data;
+//            if (responseIsSuccess(xhr)) {
+//              SMCUtil.show.success.alert.favoriteRemoved();
+//              SMC.user.favorites = data;
+//              if (SMC.location === 'favorites') {
+//                item.parents('.product-panel').remove();
+//              }
+//              item.data('is-favorite', false);
+//              item.attr('title', 'Save to favorites');
+//            } else {
+//              SMCUtil.show.error.alert.unknownProblemOnTop();
+//            }
+//          },
+//          error: function(e) {
+//            SMCUtil.show.error.alert.unknownProblemOnTop();
+//            SMCUtil.log(e);
+//          }
+//        });
       },
       getAvailablePreferences: function(callback) {
-        $.ajax({
-          type: 'GET',
-          url: '/users/preferences',
-          success: function(data, testStatus, xhr) {
-            SMC.response = data;
-            if (responseIsSuccess(xhr)) {
-              callback(data);
-            } else {
-              SMCUtil.show.error.alert.unableToLoadCategories();
-            }
-          }
-        });
+//        $.ajax({
+//          type: 'GET',
+//          url: '/users/preferences',
+//          success: function(data, testStatus, xhr) {
+//            SMC.response = data;
+//            if (responseIsSuccess(xhr)) {
+//              callback(data);
+//            } else {
+//              SMCUtil.show.error.alert.unableToLoadCategories();
+//            }
+//          }
+//        });
       }
     };
   })();
@@ -675,16 +675,16 @@ var SMC = (function() {
         });
       },
       setupForUser: function() {
-        $('#user-status-button').html(SMC.user.name + '  &nbsp;<span class=\'caret\'></span>');
-        $('li.login').remove();
-
-        var logoutHTML = '<li class="logout"><span class="logout"><h5>All done? Click below to sign out.</h5></span></li>' +
-          '<li class="logout divider"></li>' +
-          '<li class="logout"><span><a href="/auth/logout" id="logout-button" class="btn">' +
-          'Sign Out' +
-          '</a></span></li>';
-
-        $('#login-dropdown').append(logoutHTML);
+//        $('#user-status-button').html(SMC.user.name + '  &nbsp;<span class=\'caret\'></span>');
+//        $('li.login').remove();
+//
+//        var logoutHTML = '<li class="logout"><span class="logout"><h5>All done? Click below to sign out.</h5></span></li>' +
+//          '<li class="logout divider"></li>' +
+//          '<li class="logout"><span><a href="/auth/logout" id="logout-button" class="btn">' +
+//          'Sign Out' +
+//          '</a></span></li>';
+//
+//        $('#login-dropdown').append(logoutHTML);
       },
       setupProductView: function(amazonProductsResponse, $moreButton) {
         var i, $productContainer;
@@ -705,18 +705,18 @@ var SMC = (function() {
             $productContainer.append($moreButton);
           }
         }
-        if (SMC.user) {
-          FavoritesSetup.setup();
-        } else {
-          $('.login-link').click(function(e) {
-            if (e && e.stopPropagation) {
-              e.stopPropagation();
-            }
-            if (!$('.login').is(':visible')) {
-              $('#user-status-button').dropdown('toggle');
-            }
-          });
-        }
+//        if (SMC.user) {
+//          FavoritesSetup.setup();
+//        } else {
+//          $('.login-link').click(function(e) {
+//            if (e && e.stopPropagation) {
+//              e.stopPropagation();
+//            }
+//            if (!$('.login').is(':visible')) {
+//              $('#user-status-button').dropdown('toggle');
+//            }
+//          });
+//        }
       },
       setupSocialMedia: function() {
         var socialLinks = SMCTemplate.getSocialLinks({
@@ -843,13 +843,13 @@ var SMC = (function() {
     return {
       productPanel: function(product) {
         var isFavorite, favoritesLinkHtml, productLink;
-        if (SMC.user && product.ASIN) {
-          isFavorite = _.contains(SMC.user.favorites, product.ASIN);
-          favoritesLinkHtml = '<i class="favorites-link icon-star-empty" title="Save to Favorites" data-product-id="' +
-            product.ASIN + '" data-is-favorite="' + isFavorite + '"></i>';
-        } else {
-          favoritesLinkHtml = '<a class="login-link">Login</a> to save as a favorite';
-        }
+//        if (SMC.user && product.ASIN) {
+//          isFavorite = _.contains(SMC.user.favorites, product.ASIN);
+//          favoritesLinkHtml = '<i class="favorites-link icon-star-empty" title="Save to Favorites" data-product-id="' +
+//            product.ASIN + '" data-is-favorite="' + isFavorite + '"></i>';
+//        } else {
+//          favoritesLinkHtml = '<a class="login-link">Login</a> to save as a favorite';
+//        }
 
         if (product.url) {
           productLink = '<a href="' + product.url + '" target="_blank" title="Go to Amazon">See on Amazon <i class="icon-external-link-sign"></i></a> ';
@@ -872,7 +872,7 @@ var SMC = (function() {
                 '<br />',
                 productLink,
               '</p>',
-              favoritesLinkHtml,
+//              favoritesLinkHtml,
               getSocialButtons(product),
             '</div>',
           '</div>'].join('');
