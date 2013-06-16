@@ -36,6 +36,9 @@ app.configure(function() {
   app.use(express.session({secret: 'funny monkey', cookie: {maxAge: oneWeek * 3}}));
 
   app.use(express.static(homeDir + 'public'));
+  console.log('Initializing passport');
+  console.log('Keys of process.env');
+  console.log(_.keys(process.env));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
@@ -77,6 +80,8 @@ AuthenticationController.setupPassport();
 
 var port = app.get('port');
 var ipAddress = process.env.OPENSHIFT_NODEJS_IP;
+
+
 
 console.log(process.env.BASE_URL);
 
