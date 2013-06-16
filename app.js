@@ -8,7 +8,7 @@ var ProductRoutes = require('./routes/ProductRoutes');
 //var AuthenticationRoutes = require('./routes/AuthenticationRoutes');
 //var UserRoutes = require('./routes/UserRoutes');
 
-var AuthenticationController = require('./controller/AuthenticationController');
+//var AuthenticationController = require('./controller/AuthenticationController');
 var logger = require('winston');
 
 var app = express();
@@ -70,7 +70,7 @@ ProductRoutes.setupRoutes(app);
 /*
  * Configure authentication
  */
-AuthenticationController.setupPassport();
+//AuthenticationController.setupPassport();
 
 /*
  * Start server
