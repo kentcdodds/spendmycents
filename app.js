@@ -2,6 +2,7 @@
 
 var express = require('express');
 var passport = require('passport');
+var _ = require('underscore');
 
 var ProductRoutes = require('./routes/ProductRoutes');
 var AuthenticationRoutes = require('./routes/AuthenticationRoutes');
