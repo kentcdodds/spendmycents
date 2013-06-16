@@ -40,6 +40,9 @@ app.configure(function() {
   console.log('Initializing passport');
   console.log('Keys of process.env');
   console.log(_.keys(process.env));
+  if (process.env.BASE_URL) {
+    console.log('************************* BASE_URL = ' + process.env.BASE_URL + ' ************************');
+  }
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
