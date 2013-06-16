@@ -142,7 +142,7 @@ var SMC = (function() {
       onSearch: function() {
         var userInput = $('#user-input-price').val();
         //if (/^[0-9]+\.[0-9]{0,2}$|^[0-9]+$|^Favorites$|^favorites$/.test(userInput)) {
-        if (/^[0-9]*\.[0-9]{0,2}$|^[0-9]+$/.test(userInput)) {
+        if (/^[0-9]*\.[0-9]{0,2}$|^[0-9]+$|\.[0-9]{1,2}/.test(userInput)) {
           if (_.isFinite(userInput)) {
             searchWithPrice(Math.round(userInput * 100), $('#search-index-button').data('search-index').replace(/ /g, ''), 1);
           } else if (userInput.toLowerCase() === 'favorites') {
