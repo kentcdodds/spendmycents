@@ -1,3 +1,5 @@
+'use strict';
+
 var ErrorController = (function() {
   var getCodeError;
   var getErrorJSON;
@@ -11,15 +13,15 @@ var ErrorController = (function() {
       default:
         return null;
     }
-  }
+  };
 
   getErrorJSON = function(code, message) {
     return {
       code: code,
       error: getCodeError(code),
       message: message
-    }
-  }
+    };
+  };
 
   return {
     sendErrorJson: function(res, code, message) {

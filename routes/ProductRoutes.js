@@ -1,4 +1,5 @@
 'use strict';
+
 var ProductRoutes = (function() {
   var ProductController = require('../controller/ProductController');
   return {
