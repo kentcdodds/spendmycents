@@ -3,6 +3,7 @@
 var express = require('express');
 var logger = require('winston');
 var app = express();
+var ProductController = require('./controller/ProductController');
 
 app.configure(function() {
   var onLocalHost = !process.env.OPENSHIFT_APP_DNS;
@@ -35,9 +36,17 @@ app.get('/', function(req, res) {
   res.render('index', {
     title: 'Spend My Cents!'
   });
+app.get('/products', function(req, res) {
+  if (req.query.hasOwnProperty('ids') && req.query.ids) {
+    ProductController.getProducts(req, res);
+  } else {
+    ProductController.searchProducts(req, res);
+  }
+});
+app.get('/searchIndices', function(req, res) {
+  ProductController.getSearchIndices(req, res);
 });
 
-require('./routes/ProductRoutes').setupRoutes(app);
 
 var port = app.get('port');
 var ipAddress = process.env.OPENSHIFT_NODEJS_IP;
