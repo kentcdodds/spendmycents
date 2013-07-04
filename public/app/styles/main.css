@@ -4,7 +4,7 @@
  */
 body {
   padding-top: 10px;
-  background-image: url('../img/background-texture-gray.png');
+  background-image: url('../image/background-texture-gray.png');
 }
 
 a {
@@ -23,13 +23,13 @@ i.icon-star-empty {
 i.icon-star {
   font-size: 20pt;
   color: rgb(227, 207, 122);
-} 
+}
 
 #favorites-button {
   display: none;
 }
 
-.dropdown-menu a:hover {  
+.dropdown-menu a:hover {
   cursor: default;
 }
 
