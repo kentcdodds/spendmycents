@@ -1,3 +1,5 @@
+'use strict';
+
 var ProductController = (function() {
   var OperationHelper = require('apac').OperationHelper;
   var ErrorController = require('./ErrorController');
@@ -7,6 +9,64 @@ var ProductController = (function() {
   var searchInputIsValid;
   var ifEachExistsAreValidNumbers;
   var defaultResponseGroups = 'Small,OfferSummary,Images';
+  var backupSearchIndexes = [
+    "All",
+    "Apparel",
+    "Appliances",
+    "ArtsAndCrafts",
+    "Automotive",
+    "Baby",
+    "Beauty",
+    "Blended",
+    "Books",
+    "Classical",
+    "Collectibles",
+    "DVD",
+    "DigitalMusic",
+    "Electronics",
+    "GiftCards",
+    "GourmetFood",
+    "Grocery",
+    "HealthPersonalCare",
+    "HomeGarden",
+    "Industrial",
+    "Jewelry",
+    "KindleStore",
+    "Kitchen",
+    "LawnAndGarden",
+    "Marketplace",
+    "MP3Downloads",
+    "Magazines",
+    "Miscellaneous",
+    "Music",
+    "MusicTracks",
+    "MusicalInstruments",
+    "MobileApps",
+    "OfficeProducts",
+    "OutdoorLiving",
+    "PCHardware",
+    "PetSupplies",
+    "Photo",
+    "Shoes",
+    "Software",
+    "SportingGoods",
+    "Tools",
+    "Toys",
+    "UnboxVideo",
+    "VHS",
+    "Video",
+    "VideoGames",
+    "Watches",
+    "Wireless",
+    "WirelessAccessories"
+  ];
+  var specialCaseCapitals = {
+    "DVD": "DVD",
+    "VHS": "VHS",
+    "MP3Downloads": "MP3 Downloads",
+    "PCHardware": "PC Hardware",
+    "ArtsAndCrafts": "Arts and Crafts"
+  };
 
   getOpHelper = function() {
     if (!instanceOpHelper) {
@@ -87,8 +147,35 @@ var ProductController = (function() {
           res.send(results);
         }
       });
+    },
+    getSearchIndices: function(req, res) {
+      getOpHelper().execute('ItemSearch', {
+        SearchIndex: 'INVALID',
+        Keywords: ' '
+      }, function(error, results) {
+        var arryToSend = backupSearchIndexes;
+        if (!error) {
+          try {
+            var message = results.ItemSearchResponse.Items[0].Request[0].Errors[0].Error[0].Message[0];
+            var start = message.indexOf('[');
+            var end = message.indexOf(']') + 1;
+            var arryString = message.substring(start, end).replace(/'/g, '"').replace(/,,/g, ',');
+            arryToSend = JSON.parse(arryString); 
+          } catch (e) {
+          }
+        }
+        //Add spaces where necessary
+        for (var i = 0; i < arryToSend.length; i++) {
+          var fixedVersion = specialCaseCapitals[arryToSend[i]];
+          if (!fixedVersion) {
+            fixedVersion = arryToSend[i].replace(/.([A-Z])/g, ' $1');
+          }
+          arryToSend[i] = fixedVersion;
+        }
+        res.send(arryToSend);
+      });
     }
-  }
+  };
 })();
 
 module.exports = ProductController;

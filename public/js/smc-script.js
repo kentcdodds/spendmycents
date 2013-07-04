@@ -220,18 +220,18 @@ var SMC = (function() {
 //        });
       },
       getAvailablePreferences: function(callback) {
-//        $.ajax({
-//          type: 'GET',
-//          url: '/users/preferences',
-//          success: function(data, testStatus, xhr) {
-//            SMC.response = data;
-//            if (responseIsSuccess(xhr)) {
-//              callback(data);
-//            } else {
-//              SMCUtil.show.error.alert.unableToLoadCategories();
-//            }
-//          }
-//        });
+        $.ajax({
+          type: 'GET',
+          url: '/searchIndices',
+          success: function(data, testStatus, xhr) {
+            SMC.response = data;
+            if (responseIsSuccess(xhr)) {
+              callback(data);
+            } else {
+              SMCUtil.show.error.alert.unableToLoadCategories();
+            }
+          }
+        });
       }
     };
   })();

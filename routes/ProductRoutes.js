@@ -1,3 +1,4 @@
+'use strict';
 var ProductRoutes = (function() {
   var ProductController = require('../controller/ProductController');
   return {
@@ -9,8 +10,11 @@ var ProductRoutes = (function() {
           ProductController.searchProducts(req, res);
         }
       });
+      app.get('/searchIndices', function(req, res) {
+          ProductController.getSearchIndices(req, res);
+      });
     }
-  }
+  };
 })();
 
 module.exports = ProductRoutes;
