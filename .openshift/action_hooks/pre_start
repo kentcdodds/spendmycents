@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "########################################################"
-echo "Running pre_start_nodejs-0.6"
+echo "Running pre_start"
 source "${OPENSHIFT_DATA_DIR}/.envvars"
 echo "${OPENSHIFT_DATA_DIR}/.envvars"
 cat ${OPENSHIFT_DATA_DIR}/.envvars
