@@ -22,7 +22,7 @@ app.configure(function() {
 
   console.log('************************* Amazon Associate Stuff *****************************');
   console.log('Key code:' + !!process.env.AMZ_ACCESS_KEY_CODE);
-  console.log('Secret Access Key' + !!process.env.AMZ_SECRET_ACCESS_KEY);
+  console.log('Secret Access Key: ' + !!process.env.AMZ_SECRET_ACCESS_KEY);
   console.log('Associate ID: ' + process.env.AMZ_ASSOCIATE_ID);
   console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
 

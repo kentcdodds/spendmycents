@@ -69,14 +69,11 @@ var ProductController = (function() {
   };
 
   getOpHelper = function() {
-    if (!instanceOpHelper) {
-      instanceOpHelper = new OperationHelper({
+    return new OperationHelper({
         awsId: process.env.AMZ_ACCESS_KEY_CODE,
         awsSecret: process.env.AMZ_SECRET_ACCESS_KEY,
         assocId: process.env.AMZ_ASSOCIATE_ID
       });
-    }
-    return instanceOpHelper;
   };
 
   searchInputIsValid = function(req) {
