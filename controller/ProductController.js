@@ -165,7 +165,7 @@ var ProductController = (function() {
         for (var i = 0; i < arryToSend.length; i++) {
           var fixedVersion = specialCaseCapitals[arryToSend[i]];
           if (!fixedVersion) {
-            fixedVersion = arryToSend[i].replace(/.([A-Z])/g, ' $1');
+            fixedVersion = arryToSend[i].replace(/(.)([A-Z])/g, '$1 $2');
           }
           arryToSend[i] = fixedVersion;
         }
