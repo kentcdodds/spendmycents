@@ -3,11 +3,10 @@ extends layout
 block body
   img(itemprop='image', src='/thumbnail.png', style='display: none;')
   #page-level-container.row-fluid
-    //include user-buttons-dropdown
     #app-content-container.container
       #logo-container
         a(href='/')
-          img.smc-logo(src='/img/logo.png', width='512', height='349', alt='Spend My Cents Logo')
+          img.smc-logo(src='/img/logo.png', alt='Spend My Cents Logo')
       #search-bar
         include search-bar
       #top-info-stuff.info-stuff
