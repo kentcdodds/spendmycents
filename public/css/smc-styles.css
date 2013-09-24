@@ -15,28 +15,6 @@ a {
 /*
  * Product Panels
  */
-i.icon-star-empty {
-  font-size: 20pt;
-  color: rgb(78, 78, 78);
-}
-
-i.icon-star {
-  font-size: 20pt;
-  color: rgb(227, 207, 122);
-} 
-
-#favorites-button {
-  display: none;
-}
-
-.dropdown-menu a:hover {  
-  cursor: default;
-}
-
-#login-dropdown {
-  padding-left: 4px;
-  padding-right: 4px;
-}
 
 div.product-info {
   padding: 15px;
@@ -58,12 +36,8 @@ div.product-info p {
   width: 95%;
   margin-top: 20px;
   padding-bottom: 20px;
+  text-align: center;
 }
-
-li.login {
-  padding: 4px;
-}
-
 
 input.user-input {
   height: 50px;
@@ -72,9 +46,6 @@ input.user-input {
 
 div#search-bar {
   margin-top: 40px;
-  margin-left:auto;
-  margin-right:auto;
-  width: 402px;
 }
 
 div#user-buttons-container {
@@ -128,11 +99,6 @@ span.product-manufacturer {
 span.product-title {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   font-weight: bold;
-}
-
-span.logout  h5{
-  margin-left: 5px;
-  margin-right: 5px;
 }
 
 #results-container {
@@ -323,12 +289,7 @@ a.share-product {
 }
 
 #logo-container {
-  margin-left: auto;
-  margin-right: auto;
   margin-top: 20px;
-  width: 400px;
-  height: auto;
-  display: block;
 }
 
 .template {

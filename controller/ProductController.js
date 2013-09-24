@@ -70,9 +70,9 @@ var ProductController = (function() {
 
   getOpHelper = function() {
     return new OperationHelper({
-        awsId: process.env.AMZ_ACCESS_KEY_CODE,
-        awsSecret: process.env.AMZ_SECRET_ACCESS_KEY,
-        assocId: process.env.AMZ_ASSOCIATE_ID
+        awsId: "AKIAIZJAGS6K4VTM3ZNA",
+        awsSecret: "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",
+        assocId: "spmyce-20"
       });
   };
 
