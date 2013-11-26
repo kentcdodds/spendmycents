@@ -116,14 +116,19 @@ var ProductController = (function() {
         MinimumPrice: req.query.price || req.query.minPrice || req.query.maxPrice || 1000,
         ResponseGroup: req.query.responseGroup || defaultResponseGroups,
         ItemPage: itemPage
-      }, function(error, results) {
-        if (error) {
+      }, {
+        useXml: !!req.query.xml
+      }, function(results) {
+        if (!results) {
           ErrorController.sendErrorJson(res, 500, error);
         } else {
           if (_.isEmpty(results) && itemPage !== 1 && !req.query.hasOwnProperty('itemPage')) {
             req.query.itemPage = 1;
             this.searchProducts(req, res);
           } else {
+            if (req.query.xml) {
+              res.set('Content-Type', 'application/xml');
+            }
             res.send(results);
           }
         }
