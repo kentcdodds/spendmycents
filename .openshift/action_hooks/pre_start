@@ -1,4 +1,0 @@
-#!/bin/bash
-
-echo "Running pre_start"
-source "${OPENSHIFT_DATA_DIR}.envvars"
