@@ -3,6 +3,7 @@
 var ProductController = (function() {
   var OperationHelper = require('apac').OperationHelper;
   var ErrorController = require('./ErrorController');
+  var js2xmlparser = require('js2xmlparser');
   var _ = require('underscore');
   var getOpHelper;
   var searchInputIsValid;
@@ -221,6 +222,12 @@ var ProductController = (function() {
           } else {
             if (req.query.xml) {
               res.set('Content-Type', 'application/xml');
+              if (req.query.simplifyResponse) {
+                resultsJSON = getSimplifiedResponse(resultsJSON);
+                resultsXML = js2xmlparser('root', {
+                  product: resultsJSON
+                });
+              }
               res.send(resultsXML);
             } else {
               if (req.query.simplifyResponse) {
